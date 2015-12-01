@@ -16,7 +16,7 @@
         {
             var sites = $('#Act_card_id');
             var selected = sites.val();
-            var html = '<option value=""> - все -</option>';
+            var html = '';
             $.each(data, function(i,e){
                 html += '<option value="'+e[0]+'">'+e[1]+'</option>';
             });
