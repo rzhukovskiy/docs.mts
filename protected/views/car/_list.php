@@ -53,21 +53,9 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'class' => 'CButtonColumn',
-            'template' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? '{update}{delete}{history}' : '{history}',
+            'template' => '{history}',
             'header' => '',
-            'updateButtonUrl' => 'Yii::app()->createUrl("/car/update", array("id" => $data->id))',
-            'deleteButtonUrl' => 'Yii::app()->createUrl("/car/delete", array("id" => $data->id))',
             'buttons' => array(
-                'update' => array(
-                    'label' => '',
-                    'imageUrl' => false,
-                    'options' => array('class' => 'update')
-                ),
-                'delete' => array(
-                    'label' => '',
-                    'imageUrl' => false,
-                    'options' => array('class' => 'delete')
-                ),
                 'history' => array(
                     'label' => '',
                     'imageUrl' => false,

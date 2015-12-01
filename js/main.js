@@ -32,7 +32,6 @@ $(document).ready(function() {
         } else {
             url = window.location.href + '?' + name + '=' + value;
         }
-        console.log(url);
         $.ajax({
             type: "GET",
             url: url,
@@ -69,6 +68,23 @@ $(document).ready(function() {
             $('.scope_num').each(function(num, value) {
                 $(this).text(num);
             });
+        }
+    })
+
+    $('body').on('click','.show-act-details', function(e) {
+        e.preventDefault();
+        detailedAct = $(this).parents('tr');
+        if(!detailedAct.next().hasClass('act-details')) {
+            $.ajax({
+                type: "GET",
+                url: $(this).attr('href'),
+                success: function(data) {
+                    detailedAct.after(data);
+                    detailedAct.next().fadeToggle();
+                }
+            });
+        } else {
+            detailedAct.next().fadeToggle();
         }
     })
 });

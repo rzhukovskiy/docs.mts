@@ -26,6 +26,13 @@ tr.highlight { background: #75A3CC; color: #333; }
 .back-to-top:hover {
     background-color: #3071a9;
 }
+
+.ui-autocomplete.ui-widget-content {
+    background: #fff;
+    color: #000;
+}
+
+.act-details {display: none}
 /***** LOGIN PAGE *****/
 .loginbox { background: #dededc; }
 .loginboxinner { 

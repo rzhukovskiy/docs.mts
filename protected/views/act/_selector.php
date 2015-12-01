@@ -6,7 +6,7 @@
  */
 ?>
 <tr>
-    <th colspan="6">
+    <th colspan="5">
         <?php
         $form = $this->beginWidget('CActiveForm', array(
             'method' => 'get',
@@ -16,14 +16,14 @@
             'htmlOptions' => array('class'=>'stdform', 'novalidate'=>'novalidate'),
         ));
         ?>
-            <?=CHtml::label('Выбор периода', '')?>
-            <?=$form->textField($model, 'month')?>
+            Выбор периода
+            <?=$form->textField($model, 'month', array('style' => ' margin-left: 20px;'))?>
             <?=CHtml::submitButton('Показать', array('class' => 'submit radius2 date-send', 'style' => 'display: none; opacity: 1;')); ?>
         <?php
         $this->endWidget();
         ?>
     </th>
-    <th colspan="2">
+    <th colspan="3">
         <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
             <?php
             $form = $this->beginWidget('CActiveForm', array(
@@ -34,8 +34,8 @@
                 'htmlOptions' => array('class'=>'stdform', 'novalidate'=>'novalidate'),
             ));
             ?>
-                <?=CHtml::label('Пересчет цен', '')?>
-                <?=CHtml::submitButton('Исправить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
+                Пересчет цен
+                <?=CHtml::submitButton('Исправить', array('class' => 'submit radius2', 'style' => 'opacity: 1; margin-left: 20px;')); ?>
             <?php
             $this->endWidget();
             ?>

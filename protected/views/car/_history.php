@@ -65,5 +65,19 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'cssClassExpression' => '$data->income ? "" : "error"',
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
+        array(
+            'class' => 'CButtonColumn',
+            'template' => '{details}',
+            'header' => '',
+            'cssClassExpression' => '$data->company->type == Company::CARWASH_TYPE? "hidden" : ""',
+            'buttons' => array(
+                'details' => array(
+                    'label' => '',
+                    'imageUrl' => false,
+                    'url' => 'Yii::app()->createUrl("actScope/ajaxList", array("actId" => $data->id))',
+                    'options' => array('class' => 'update show-act-details')
+                ),
+            ),
+        ),
     ),
 ));

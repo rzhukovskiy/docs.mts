@@ -23,6 +23,7 @@
  * @property int $old_income
  * @property string $day
  * @property string $month
+ * @property int $period
  */
 class Act extends CActiveRecord
 {
@@ -31,7 +32,9 @@ class Act extends CActiveRecord
     public $old_income;
     public $companyType;
     public $showCompany;
+    public $period = 0;
 
+    public static $periodList = array('месяц', 'квартал', 'полгода', 'год');
     public static $carwashList = array(
         'снаружи',
         'внутри',
@@ -79,7 +82,7 @@ class Act extends CActiveRecord
         return array(
             array('type_id, card_id, number, mark_id', 'required'),
             array('check', 'unique'),
-            array('month, day, check, company_service, old_expense, old_income, month, company_id, service, company_service, service_date, profit, income, expense, check_image', 'safe'),
+            array('period, month, day, check, company_service, old_expense, old_income, month, company_id, service, company_service, service_date, profit, income, expense, check_image', 'safe'),
             array('company_id, id, number, mark_id, type_id, card_id, service_date', 'safe', 'on' => 'search'),
         );
     }
@@ -233,6 +236,19 @@ class Act extends CActiveRecord
         $criteria = new CDbCriteria;
 
         $criteria->compare('number', $this->number);
+        switch ($this->period) {
+            case 1:
+                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-3 month", time())), date('Y-m-d', time()));
+                break;
+            case 2:
+                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-6 month", time())), date('Y-m-d', time()));
+                break;
+            case 3:
+                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-12 month", time())), date('Y-m-d', time()));
+                break;
+            default:
+                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-1 month", time())), date('Y-m-d', time()));
+        }
 
         $sort = new CSort;
         $sort->defaultOrder = 'service_date';

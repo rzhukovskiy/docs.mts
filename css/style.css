@@ -1588,9 +1588,12 @@ a.btn_table { background-position: -82px -480px; }
 .my-grid td.button-column a {
 	/*display: none;*/
 }
+.my-grid td.button-column.hidden a {
+    display: none;
+}
 
 .my-grid table tbody tr:hover td.button-column a{
-	display: inline-block;
+	/*display: inline-block;*/
 }
 .my-grid th.button-column a{
 	display: block;

@@ -171,11 +171,13 @@ class ActController extends Controller
             }
 
             if ($model->save()) {
+                $oldScopes = CHtml::listData($model->scope, 'id', 'id');
                 if (isset($_POST['Scope'])) {
                     $scopeList = $_POST['Scope'];
                     for ($i = 0; $i < count($scopeList['sum']) || $i < count($scopeList['description']); $i++) {
                         if ($scopeList['id'][$i]) {
                             $scope = ActScope::model()->findByPk($scopeList['id'][$i]);
+                            unset($oldScopes[$scopeList['id'][$i]]);
                         } else {
                             $scope = new ActScope();
                             $scope->act_id = $model->id;
@@ -185,6 +187,9 @@ class ActController extends Controller
                         $scope->amount = $scopeList['amount'][$i];
                         $scope->save();
                     }
+                }
+                foreach ($oldScopes as $scope) {
+                    $scope->delete();
                 }
 
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : Yii::app()->createUrl('act/carwash'));

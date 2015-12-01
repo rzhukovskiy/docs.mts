@@ -101,7 +101,9 @@ $form = $this->beginWidget('CActiveForm', array(
     </div>
 <?php } ?>
 
-<?php if(Yii::app()->user->checkAccess(User::ADMIN_ROLE) || !$model->is_closed) { $this->renderPartial('_scope', array('model' => $model)); } ?>
+<?php if((Yii::app()->user->checkAccess(User::ADMIN_ROLE) || !$model->is_closed) && $model->companyType != Company::CARWASH_TYPE) {
+    $this->renderPartial('_scope', array('model' => $model));
+} ?>
 
 <div class="row">
     <span class="field">

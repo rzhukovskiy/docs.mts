@@ -1,30 +1,16 @@
 <script>
     $(function() {
-        var availableTags = [
-            "ActionScript",
-            "AppleScript",
-            "Asp",
-            "BASIC",
-            "C",
-            "C++",
-            "Clojure",
-            "COBOL",
-            "ColdFusion",
-            "Erlang",
-            "Fortran",
-            "Groovy",
-            "Haskell",
-            "Java",
-            "JavaScript",
-            "Lisp",
-            "Perl",
-            "PHP",
-            "Python",
-            "Ruby",
-            "Scala",
-            "Scheme"
-        ];
-        $( ".numberfill" ).autocomplete({
+        var availableTags = <?php
+            $result = array();
+            foreach (Car::model()->findAll() as $row)
+            {
+                $result[] = htmlentities($row->number);
+            }
+
+            echo json_encode($result);
+        ?>;
+
+        $( ".number_fill" ).autocomplete({
             source: availableTags
         });
     });
