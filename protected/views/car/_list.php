@@ -28,6 +28,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'width: 60px; text-align:center;'),
             'value' => '$data->company->name',
             'filter' => CHtml::listData(Company::model()->findAll('type = :type', array(':type' => Company::COMPANY_TYPE)), 'id', 'name'),
+            'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
         ),
         array(
             'name' => 'mark_id',
