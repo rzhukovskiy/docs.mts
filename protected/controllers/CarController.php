@@ -32,6 +32,44 @@ class CarController extends Controller
         ));
     }
 
+    public function actionCreate()
+    {
+        $model = new Car();
+
+        if (isset($_POST['Car'])) {
+            $model->attributes = $_POST['Car'];
+            $this->performAjaxValidation($model);
+            $model->save();
+        }
+
+        $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('car/list'));
+    }
+
+    public function actionUpdate($id)
+    {
+        $model = Car::model()->findByPk((int)$id);
+
+        if (isset($_POST['Car'])) {
+            $model->attributes = $_POST['Car'];
+            $this->performAjaxValidation($model);
+            if ($model->save()) {
+                $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : Yii::app()->createUrl('car/list'));
+            }
+        }
+
+        $this->render('update', array(
+            'model' => $model
+        ));
+    }
+
+    public function actionDelete($id)
+    {
+        $this->loadModel($id)->delete();
+
+        if (!isset($_GET['ajax']))
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('/'));
+    }
+
     public function loadModel($id)
     {
         $model = Car::model()->findByPk((int)$id);
