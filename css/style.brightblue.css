@@ -1,0 +1,300 @@
+
+/***** GENERAL STYLES *****/
+body {background: #dededc;}
+body.login { background: #dededc; }
+body.errorpage { background: #dededc; }
+h1, h2, h3 { color: #283038; }
+th {color: #069;}
+
+tr.highlight { background: #75A3CC; color: #333; }
+.stdtable tbody tr.total td {border-bottom: 2px solid #ddd;}
+.stdtable tbody tr.header td {background: #428bca; color: #fff;}
+.back-to-top {
+    position: fixed;
+    bottom: 2em;
+    right: 40px;
+    text-decoration: none;
+    color: #000000;
+    background-color: #428bca;
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: 0.8;
+    padding: 1em;
+    display: none;
+}
+
+.back-to-top:hover {
+    background-color: #3071a9;
+}
+/***** LOGIN PAGE *****/
+.loginbox { background: #dededc; }
+.loginboxinner { 
+	background: #dededc; border: none; -moz-box-shadow: none;
+	-webkit-box-shadow: none; box-shadow: none;
+}
+.loginbox h1 { color: #4b6178; text-shadow: 1px 1px #202d3c; }
+
+.loginbox input {     
+	background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    color: #000;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.loginbox input:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+.loginbox input:-moz-placeholder {
+    color: #aaaaaa;
+    opacity: 1;
+}
+
+.loginbox input:-ms-input-placeholder {
+    color: #aaaaaa;
+}
+
+.loginbox input:-webkit-input-placeholder {
+    color: #aaaaaa;
+}
+.loginbox input.error{border: 1px solid #FF6600;}
+.loginbox button {	
+    color: #ffffff;
+    background-color: #428bca;
+    border-color: #357ebd;
+    -moz-box-shadow: none; 
+    -webkit-box-shadow: none; 
+    box-shadow: none; 
+}
+.loginbox button:hover {
+    background-color: #3071a9;
+    border-color: #285e8e;
+}
+.loginbox button.default { background: #4b6178; color: #a3b8cd; }
+.loginbox button.hover { background: #384d63; color: #fff; }
+.loginbox button:active { background: #4b6178; color: #fff; }
+
+/***** FOOTER STYLES *****/
+.footer {
+    text-align: center;
+}
+.footer a {
+    background: url('../images/logo.png') 40px 0 no-repeat;
+    display: inline-block;
+    font-size: 16px;
+    height: 120px;
+    line-height: 240px;
+    margin-top: 50px;
+    width: 200px;
+}
+
+/***** HEADER STYLES *****/
+.header {
+    background: none;
+    border: none;
+	-moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none;
+    padding: 0;
+}
+.header .logo {
+    background: none;
+    color: #0330B3;
+    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    padding: 0 20px 0 150px;
+    text-transform: uppercase;
+}
+.headercolumn { border-right: 1px solid #2c363e; border-left: 1px solid #404d58; }
+.searchbox input { 
+	background: #283038 url(../images/loginputbg.blue.png) repeat-x top left; 
+	-moz-box-shadow: 0 1px 0 #404d58; -webkit-box-shadow: 0 1px 0 #404d58; box-shadow: 0 1px 0 #404d58;
+}
+.headright .userinfo {
+    color: #ffffff;
+    background-color: #428bca;
+    border-color: #357ebd;
+}
+.headright .userinfo:hover {
+    background-color: #3071a9;
+    border-color: #285e8e; }
+.headright .userinfodrop { 
+	background: #fff url(../images/arrow.png) no-repeat right -87px; color: #333; border: 1px solid #fff; height: 29px;
+	-moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none;
+}
+.headright .userinfodrop:hover { background-color: #fff; color: #333; border: 1px solid #fff; }
+
+.userinfomenu .userinfo { display: inline-block; border: 1px solid #1f262d; background-color: #283038; }
+.userinfomenu .userinfo:hover { text-decoration: none; border: 1px solid #1f262d; background-color: #363f49; }
+.userinfomenu .userinfo span { display: inline-block; padding: 0 10px; }
+
+.userinfomenu .userinfodrop { 
+	background: #fff url(../images/arrow.png) no-repeat right -87px; color: #333; z-index: 20; border: 1px solid #ccc;
+	border-bottom: 0; height: 29px; -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none;
+}
+.userinfomenu .userinfodrop:hover { background-color: #fff; color: #333; border: 1px solid #ccc; border-bottom: 0; }
+
+.stdtable tbody tr:hover td, .stdtable tbody tr.selected td { color: #75A3CC; }
+
+.stdform input[type=submit], .stdtable input[type=submit], .stdform input[type=button], .stdtable input[type=button] {
+    color: #ffffff;
+    background-color: #428bca;
+    border-color: #357ebd;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.stdform input[type=submit]:hover, .stdtable input[type=submit]:hover {
+    background-color: #3071a9;
+    border-color: #285e8e;
+    color: #ffffff;
+}
+.stdform td input {
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    color: #000;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.stdform td input:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+.stdform td select {
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    color: #000;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.stdform td select:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+.stdform input {
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    color: #000;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.stdform input:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+.stdform select {
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    color: #000;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.stdform select:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+#export-button {
+    color: #ffffff;
+    background-color: #428bca;
+    border-color: #357ebd;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+#export-button button:hover {
+    background-color: #3071a9;
+    border-color: #285e8e;
+}
+/***** LEFT MENU STYLES *****/
+.leftmenu {border: 4px solid #fff;border-radius: 4px;}
+.leftmenu ul li.current a { background-color: #3071a9; border: 1px solid #3071a9; border-bottom: 0; }
+.leftmenu ul li.current a span { background-color: #428bca; border-left: 1px solid #3071a9; }
+.leftmenu ul li.current a.active { background-color: #283038; border: 1px solid #2c363e; }
+.leftmenu ul li.current a.active span { background-color: #3b4650; border-left: 1px solid #404d58; }
+.leftmenu ul li.current a.menudrop:hover span { background-color: #3b4650; }
+.leftmenu ul li.current ul li a { border-bottom: 1px solid #2c363e; }
+.leftmenu ul li.current ul li a:hover span { background: #37414b; }
+
+/***** WIDGET LIST *****/
+/***** dashboard.html *****/
+.widgetlist li a.default { background-color: #bbb; }
+.widgetlist li a.hover { background-color: #283038; }
+
+/***** WIDGET BOX *****/
+.widgetbox .title { background-color: #283038; }
+.widgetbox .title h2 span { background-color: #3b4650; border-left: 1px solid #404d58; }
+.contenttitle { background: #3071a9; border-radius: 4px 4px 0 0;}
+.contenttitle h2 { background: none; padding: 0; }
+.contenttitle h2 span { margin-left: 0; background: #428bca; border-left: 1px solid #285e8e; border-radius: 4px 4px 0 0;}
+
+/***** FORM STYLES *****/
+.stdform button { background-color: #3b4650; }
+.stdform button:hover { background-color: #283038; }
+
+/***** CALENDARD STYLES *****/
+.ui-datepicker-inline .ui-datepicker-calendar td.ui-datepicker-today a { background-color: #3b4650; }
+
+/***** MAIN CONTENT STYLES *****/
+.maintabmenu li.current a { color: #3b4650; }
+
+/***** TABLE STYLES *****/
+.dataTables_paginate .paginate_active { background-color: #283038; }
+
+/***** ELEMENT STYLES *****/
+.pagination li a.current { background-color: #283038; }
+
+/***** WIZARD STYLES *****/
+.actionBar a { background-color: #3b4650; }
+.actionBar a:hover { background-color: #283038; }
+.wizard .hormenu li a.selected h2, .wizard .hormenu li a.selected span.label { color: #3b4650; }
+.verwizard .verticalmenu a.selected { background-color: #3b4650; }
+.verwizard .verticalmenu a.done { background-color: #283038; }
+
+/***** AUTO COMPLETE *****/
+.ui-menu { background: #283038; }
+.ui-menu .ui-menu-item a { border-bottom: 1px solid #1a2027; }
+.ui-menu .ui-menu-item a.ui-state-hover,
+.ui-menu .ui-menu-item a.ui-state-active { background: #3c4a58; }
+
+@media screen and (max-width: 580px) {
+	.headerinner { border-bottom: 1px solid #1f262d; }
+	.headerinner2 { border-top: 1px solid #3f4954; }
+	.headercolumn {  }
+}

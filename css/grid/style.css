@@ -1,0 +1,146 @@
+.grid-view{
+	padding: 3px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	clear: both;
+	background-color: #F5F5F5;
+}
+.grid-view table{border: 1px solid #ccc;}
+.grid-view table.items{
+	background: #fefed9;
+	border-collapse: collapse;
+	width: 100%;
+	border: 1px #D0E3EF solid;
+}
+.grid-view table thead{
+	background-color: #F6F6F6;
+	font-weight: bold;
+}
+.grid-view table.items th, .grid-view table.items td{
+	font-size: 0.9em;
+	border: 1px white solid;
+	padding: 0.3em;
+    vertical-align: middle !important;
+}
+
+.grid-view table.items th{
+	color: #666;
+	/*background-image: linear-gradient(#29aeec, #1d85b6);
+	background-color: #1d85b6;*/
+	text-align: center;
+}
+
+.grid-view table.items th a
+{
+	font-weight: bold;
+	text-decoration: none;
+	color: #666;
+}
+
+.grid-view table.items th a:hover
+{
+}
+
+.grid-view table.items th a.asc{
+	text-decoration: underline;
+}
+
+.grid-view table.items th a.desc{
+    text-decoration: underline;
+}
+
+.grid-view table.items tr.even
+{
+	background: #f6f6f6;
+}
+
+.grid-view table.items tr.odd
+{
+	background: #fff;
+}
+
+.grid-view table.items tr.selected
+{
+}
+
+.grid-view table.items tr:hover.selected
+{
+}
+
+.grid-view table.items tbody tr:hover
+{
+}
+
+.grid-view table.items tr.red
+{
+    border: 1px solid #f00;
+}
+
+.grid-view .link-column img
+{
+	border: 0;
+}
+
+.grid-view .button-column
+{
+	text-align: center;
+	width: 80px;
+}
+.grid-view .button-column a.ui-icon{
+	background-image: url(../../images/ui-icons_228ef1_256x240.png);
+	}
+	.grid-view .button-column a{
+	opacity: 0;
+	height: 16px;
+	width: 16px;
+	margin: 2px;
+	display: inline-block;
+}
+.grid-view tr:hover .button-column a{opacity: 1;}
+.grid-view .button-column a.update { background-position: -64px -112px; }
+.grid-view .button-column a.delete { background-position: -176px -96px; }
+.grid-view .button-column a.view{ background-position: -160px -112px; }
+
+.checkItem{visibility: hidden;}
+
+.grid-view .checkbox-column
+{
+	width: 15px;
+}
+
+.grid-view .summary
+{
+	margin: 5px 0;
+	text-align: right;
+}
+
+.grid-view .pager
+{
+	margin: 5px 0 0 0;
+	text-align: right;
+}
+
+.grid-view .empty{
+	background: #fff;
+	text-align: center;
+	color: #F9C;
+}
+
+.grid-view .filters input,
+.grid-view .filters select
+{
+	width: 99%;
+	border: 1px solid #ccc;
+    margin: 0 auto;
+}
+
+/* [View] */
+table.detail-view .null{color: #2c2c2c;}
+table.detail-view{background: white; border-collapse: collapse; width: 100%; margin-bottom: 20px;}
+table.detail-view th, table.detail-view td{ font-size: 0.9em; border: 1px #ccc solid; padding: 0.5em 0.8em; vertical-align: top;}
+table.detail-view th{text-align: right; width: 200px; font-weight: bold;}
+table.detail-view tr.odd{background: #fff;}
+table.detail-view tr.even{background: #f6f6f6;}
+table.detail-view tr.odd th{}
+table.detail-view tr.even th{}
+/* end[View] */
