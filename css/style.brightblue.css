@@ -8,7 +8,7 @@ th {color: #069;}
 
 tr.highlight { background: #75A3CC; color: #333; }
 .stdtable tbody tr.total td {border-bottom: 2px solid #ddd;}
-.stdtable tbody tr.header td {background: #428bca; color: #fff;}
+.stdtable tr.header td {background: #428bca; color: #fff;}
 .back-to-top {
     position: fixed;
     bottom: 2em;
@@ -272,7 +272,8 @@ tr.highlight { background: #75A3CC; color: #333; }
 .ui-datepicker-inline .ui-datepicker-calendar td.ui-datepicker-today a { background-color: #3b4650; }
 
 /***** MAIN CONTENT STYLES *****/
-.maintabmenu li.current a { color: #3b4650; }
+.maintabmenu li.current a { color: #069; }
+.maintabmenu li a { color: #069; }
 
 /***** TABLE STYLES *****/
 .dataTables_paginate .paginate_active { background-color: #283038; }

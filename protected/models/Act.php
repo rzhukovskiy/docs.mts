@@ -48,6 +48,13 @@ class Act extends CActiveRecord
         'ремонт',
         'шиномонтаж',
     );
+    public static $shortList = array(
+        'мойка',
+        'мойка',
+        'мойка',
+        'ремонт',
+        'шиномонтаж',
+    );
 
     protected $month;
     protected $day;

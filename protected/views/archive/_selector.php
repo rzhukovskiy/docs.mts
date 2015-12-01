@@ -14,12 +14,19 @@ $form = $this->beginWidget('CActiveForm', array(
 ));
 ?>
 <table cellspacing="0" cellpadding="0" border="0" class="stdtable">
-    <tr>
-		<td style="width: 120px">Выбор месяца</td>
-		<td style="width: 120px"><?=$form->textField($model, 'month')?></td>
-		<td style="width: 120px"><?=CHtml::submitButton('Показать', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?></td>
-		<td>&nbsp;</td>
-    </tr>
+    <thead>
+        <tr>
+            <th style="width: 250px">
+                <?=CHtml::label('Выбор периода', '')?>
+                <?=$form->textField($model, 'month')?>
+                <?=CHtml::submitButton('Показать', array('class' => 'submit radius2 date-send', 'style' => 'display: none; opacity: 1;')); ?>
+            </th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr class="header">
+            <td colspan="3">&nbsp;</td>
+        </tr>
+    </thead>
 </table>
 <?php
 $this->endWidget();

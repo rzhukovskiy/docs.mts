@@ -44,7 +44,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'service',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => ' Act::$fullList[$data->company_service]',
+            'value' => ' Act::$shortList[$data->company_service]',
         ),
         array(
             'name' => 'city',
