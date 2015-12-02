@@ -232,9 +232,15 @@ class Act extends CActiveRecord
      */
     public function cars()
     {
+        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+            $this->is_closed = 1;
+            $this->showCompany = 1;
+        }
+
         $criteria = new CDbCriteria;
 
         $criteria->compare('number', $this->number);
+        $criteria->compare('is_closed', $this->is_closed);
         switch ($this->period) {
             case 1:
                 $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-3 month", time())), date('Y-m-d', time()));
