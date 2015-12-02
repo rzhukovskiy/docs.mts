@@ -197,7 +197,6 @@ class Act extends CActiveRecord
 
         if ($this->showCompany) {
             $criteria->compare('card.company_id', $this->company_id);
-            $criteria->together = 1;
             $sort->defaultOrder = 'card.company_id, t.service_date';
         } else {
             $criteria->compare('t.company_id', $this->company_id);

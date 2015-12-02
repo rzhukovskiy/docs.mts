@@ -22,7 +22,7 @@ $row = 0;
                     <td><?=++$row?></td>
                     <td><?=$data->description?></td>
                     <td><?=$data->amount?></td>
-                    <td><?=$data->sum?></td>
+                    <td><?=$data->income?></td>
                 </tr>
             <?php } ?>
             </tbody>
