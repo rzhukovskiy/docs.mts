@@ -54,6 +54,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'name' => 'company_id',
+            'header' => 'Исполнитель',
             'htmlOptions' => array('style' => ''),
             'value' => '$data->card->company->name',
             'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),

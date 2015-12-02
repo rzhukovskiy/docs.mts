@@ -52,9 +52,9 @@ class Act extends CActiveRecord
         'шиномонтаж',
     );
     public static $shortList = array(
-        'мойка',
-        'мойка',
-        'мойка',
+        'мойка снаружи',
+        'мойка внутри',
+        'мойка снаружи+внутри',
         'ремонт',
         'шиномонтаж',
     );
@@ -127,7 +127,7 @@ class Act extends CActiveRecord
             $this->company_service = $this->service;
         }
 
-        if (!$this->income
+        if (($this->isNewRecord && !$this->income)
             || ($this->company->type == Company::CARWASH_TYPE && $this->old_income == $this->income)
         ) {
             $washPrice = Price::model()->find('company_id = :company_id AND type_id = :type_id',
@@ -149,7 +149,7 @@ class Act extends CActiveRecord
             }
         }
 
-        if (!$this->expense
+        if (($this->isNewRecord && !$this->expense)
             || ($this->company->type == Company::CARWASH_TYPE && $this->old_expense == $this->expense)
         ) {
             $washPrice = Price::model()->find('company_id = :company_id AND type_id = :type_id',
@@ -198,7 +198,7 @@ class Act extends CActiveRecord
         if ($this->showCompany) {
             $criteria->compare('card.company_id', $this->company_id);
             $criteria->together = 1;
-            $sort->defaultOrder = 'card.company_id';
+            $sort->defaultOrder = 'card.company_id, t.service_date';
         } else {
             $criteria->compare('t.company_id', $this->company_id);
             $sort->defaultOrder = 't.company_id, t.service_date';

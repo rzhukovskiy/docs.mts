@@ -112,7 +112,7 @@ $form = $this->beginWidget('CActiveForm', array(
         <tr class="scope example">
             <td><?=CHtml::textField('Scope[description][]')?></td>
             <td><?=CHtml::numberField('Scope[amount][]', 1)?></td>
-            <td><?=CHtml::textField('Scope[sum][]')?></td>
+            <td><?=CHtml::textField('Scope[expense][]')?></td>
             <td>
                 <?=CHtml::button('+', array('class' => 'add_scope', 'style' => 'float: left; margin-right: 10px'))?>
                 <?=CHtml::button('-', array('class' => 'remove_scope', 'style' => 'float: left'))?>
@@ -121,7 +121,7 @@ $form = $this->beginWidget('CActiveForm', array(
         <tr class="scope">
             <td><?=CHtml::textField('Scope[description][]')?></td>
             <td><?=CHtml::numberField('Scope[amount][]', 1)?></td>
-            <td><?=CHtml::textField('Scope[sum][]')?></td>
+            <td><?=CHtml::textField('Scope[expense][]')?></td>
             <td>
                 <?=CHtml::button('+', array('class' => 'add_scope', 'style' => 'float: left; margin-right: 10px'))?>
                 <?=CHtml::button('-', array('class' => 'remove_scope', 'style' => 'float: left'))?>

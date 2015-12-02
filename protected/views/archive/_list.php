@@ -35,7 +35,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'service_date',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value'=>'date("d-m-Y", strtotime($data->service_date))',
+            'value' => 'date("d-m-Y", strtotime($data->service_date))',
         ),
         array(
             'name' => 'card_id',
@@ -63,6 +63,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'name' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? 'service' : 'company_service',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? 'Act::$fullList[$data->service]' : 'Act::$fullList[$data->company_service]',
+            'visible' => $model->companyType == Company::CARWASH_TYPE,
         ),
         array(
             'header' => 'Сумма',
@@ -75,6 +76,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'check',
             'htmlOptions' => array('style' => 'text-align:center;'),
+            'visible' => $model->companyType == Company::CARWASH_TYPE,
         ),
         array(
             'name' => 'check_image',
@@ -83,6 +85,22 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                       .'CHtml::link("image", "/files/checks/" . $data->check_image,'
                       .'array("class"=>"preview")) : "no image"',
             'htmlOptions' => array('style' => 'width: 40px;'),
+            'visible' => $model->companyType == Company::CARWASH_TYPE,
+        ),
+        array(
+            'class' => 'CButtonColumn',
+            'template' => '{details}',
+            'header' => '',
+            'cssClassExpression' => '$data->company->type == Company::CARWASH_TYPE? "hidden" : ""',
+            'buttons' => array(
+                'details' => array(
+                    'label' => '',
+                    'imageUrl' => false,
+                    'url' => 'Yii::app()->createUrl("actScope/ajaxList", array("actId" => $data->id))',
+                    'options' => array('class' => 'update show-act-details')
+                ),
+            ),
+            'visible' => $model->companyType != Company::CARWASH_TYPE,
         ),
     ),
 ));

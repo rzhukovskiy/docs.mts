@@ -26,7 +26,7 @@ $form = $this->beginWidget('CActiveForm', array(
 <div class="row">
     <?=$form->labelEx($model, 'password'); ?>
     <span class="field">
-        <?=$form->textField($model, 'password', array('class' => 'span5')); ?>
+        <?=CHtml::textField('User[password]', '', array('class' => 'span5')); ?>
         <?=$form->error($model, 'password'); ?>
     </span>
 </div>

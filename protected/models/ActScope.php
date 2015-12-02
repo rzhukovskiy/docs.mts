@@ -6,7 +6,8 @@
  * @property int $id
  * @property int $act_id
  * @property string $description
- * @property int $sum
+ * @property int $expense
+ * @property int $income
  * @property int $amount
  */
 class ActScope extends CActiveRecord
@@ -30,8 +31,8 @@ class ActScope extends CActiveRecord
     public function rules()
     {
         return array(
-            array('sum, description, act_id, amount', 'required'),
-            array('sum, description, act_id, amount', 'safe', 'on' => 'search'),
+            array('expense, description, act_id, amount', 'required'),
+            array('expense, description, act_id, amount', 'safe', 'on' => 'search'),
         );
     }
 
@@ -53,14 +54,11 @@ class ActScope extends CActiveRecord
 
         $criteria = new CDbCriteria;
 
-        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $this->company_id = Yii::app()->user->model->company_id;
-        }
-
         $criteria->compare('id', $this->id);
         $criteria->compare('act_id', $this->act_id);
         $criteria->compare('description', $this->description, true);
-        $criteria->compare('sum', $this->sum);
+        $criteria->compare('expense', $this->expense);
+        $criteria->compare('income', $this->income);
 
         return new CActiveDataProvider(get_class($this), array(
             'criteria' => $criteria,
@@ -74,7 +72,8 @@ class ActScope extends CActiveRecord
             'id' => 'ID',
             'act_id' => 'Акт',
             'description' => 'Вид работ',
-            'sum' => 'Сумма',
+            'expense' => 'Сумма',
+            'income' => 'Сумма',
             'amount' => 'Количество',
         );
     }

@@ -49,38 +49,6 @@ class ActController extends Controller
 
     }
 
-    public function actionCompany()
-    {
-        $model = new Act('search');
-        $model->unsetAttributes();
-
-        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $clientScript = Yii::app()->getClientScript();
-            $clientScript->registerScriptFile('/js/sticker.js');
-        }
-
-        if (isset($_GET['Act'])) {
-            $model->attributes = $_GET['Act'];
-            $model->day = isset($_GET['Act']['day']) ? str_pad($_GET['Act']['day'], 2, '0', STR_PAD_LEFT) : false;
-        }
-
-        $model->service_date = date('Y-m-d', time() - 30 * 24 * 3600);
-
-        if ($this->isExportRequest()) {
-            $time = strtotime($model->service_date);
-            $model->updateAll(array('is_closed' => 1), 'date_format(service_date, "%Y-%m") = :date', array(':date' => date('Y-m', $time)));
-            $this->exportCSV($time, Company::COMPANY_TYPE);
-
-            $this->render('company/acts', array(
-                'model' => $model,
-            ));
-        } else {
-            $this->render('company', array(
-                'model' => $model,
-            ));
-        }
-    }
-
     public function actionFix()
     {
         $models = Act::model()->findAll();
@@ -127,7 +95,7 @@ class ActController extends Controller
                     $scope = new ActScope();
                     $scope->act_id = $model->id;
                     $scope->description = $scopeList['description'][$i];
-                    $scope->sum = $scopeList['sum'][$i];
+                    $scope->expense = $scope->income = $scopeList['sum'][$i];
                     $scope->amount = $scopeList['amount'][$i];
                     $scope->save();
                 }
@@ -161,29 +129,31 @@ class ActController extends Controller
             }
             $this->performAjaxValidation($model);
 
+            $sumName = $model->showCompany ? 'income' : 'expense';
             if (isset($_POST['Scope'])) {
                 $scopeList = $_POST['Scope'];
                 $total = 0;
-                for ($i = 0; $i < count($scopeList['sum']) || $i < count($scopeList['amount']); $i++) {
-                    $total += abs($scopeList['sum'][$i]) * abs($scopeList['amount'][$i]);
+                for ($i = 0; $i < count($scopeList[$sumName]) || $i < count($scopeList['amount']); $i++) {
+                    $total += abs($scopeList[$sumName][$i]) * abs($scopeList['amount'][$i]);
                 }
-                $model->income = $model->expense = $total;
+                $model->$sumName = $total;
             }
 
             if ($model->save()) {
                 $oldScopes = CHtml::listData($model->scope, 'id', 'id');
                 if (isset($_POST['Scope'])) {
                     $scopeList = $_POST['Scope'];
-                    for ($i = 0; $i < count($scopeList['sum']) || $i < count($scopeList['description']); $i++) {
+                    for ($i = 0; $i < count($scopeList[$sumName]) || $i < count($scopeList['description']); $i++) {
                         if ($scopeList['id'][$i]) {
                             $scope = ActScope::model()->findByPk($scopeList['id'][$i]);
+                            $scope->$sumName = $scopeList[$sumName][$i];
                             unset($oldScopes[$scopeList['id'][$i]]);
                         } else {
                             $scope = new ActScope();
                             $scope->act_id = $model->id;
+                            $scope->income = $scope->expense = $scopeList[$sumName][$i];
                         }
                         $scope->description = $scopeList['description'][$i];
-                        $scope->sum = $scopeList['sum'][$i];
                         $scope->amount = $scopeList['amount'][$i];
                         $scope->save();
                     }

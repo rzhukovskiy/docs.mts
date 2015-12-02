@@ -57,7 +57,7 @@
             <?php } ?>
             <td style="width: 75px;" class="button-column">
                     <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) || !$data->is_closed) { ?>
-                        <a class="update" title="" href="/act/update?id=<?=$data->id?>"></a>
+                        <a class="update" title="" href="<?=Yii::app()->createUrl('act/update', array('id' => $data->id,'showCompany' => 1))?>"></a>
                         <a class="delete" title="" href="/act/delete?id=<?=$data->id?>&returnUrl=<?='/act/carwash?Act[month]=' . $model->month?>"></a>
                     <?php } ?>
             </td>

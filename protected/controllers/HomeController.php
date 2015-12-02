@@ -16,7 +16,7 @@ class HomeController extends Controller
                     $this->redirect(Yii::app()->createUrl('act/' . Yii::app()->user->model->company->type));
                 }
                 if (Yii::app()->user->role == User::WATCHER_ROLE) {
-                    $this->redirect(Yii::app()->createUrl('archive/list'));
+                    $this->redirect(Yii::app()->createUrl('archive/' . Company::CARWASH_TYPE));
                 }
                 $this->redirect(Yii::app()->createUrl('company/list'));
             }

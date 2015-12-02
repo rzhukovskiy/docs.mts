@@ -62,7 +62,7 @@ class WMenu extends CWidget
                     'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) || Yii::app()->user->model->company->type != Company::COMPANY_TYPE,
                 ),
                 'car' => array(
-                    'title'  => 'Машины',
+                    'title'  => 'История машин',
                     'class'  => 'empty',
                     'action' => 'list',
                     'role'   => User::WATCHER_ROLE,
@@ -75,7 +75,7 @@ class WMenu extends CWidget
                     'role'   => User::MANAGER_ROLE,
                 ),
                 'archive' => array(
-                    'title'  => 'Архив',
+                    'title'  => !Yii::app()->user->checkAccess(User::ADMIN_ROLE)&& Yii::app()->user->model->company->type == Company::COMPANY_TYPE ? 'Услуги' : 'Архив',
                     'class'  => 'empty',
                     'action' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) || Yii::app()->user->model->company->type == Company::COMPANY_TYPE ? Company::CARWASH_TYPE : Yii::app()->user->model->company->type,
                     'role'   => User::GUEST_ROLE,

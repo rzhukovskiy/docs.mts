@@ -251,7 +251,8 @@ tr.highlight { background: #75A3CC; color: #333; }
 }
 /***** LEFT MENU STYLES *****/
 .leftmenu {border: 4px solid #fff;border-radius: 4px;}
-.leftmenu ul li.current a { background-color: #3071a9; border: 1px solid #3071a9; border-bottom: 0; }
+.leftmenu ul li a {color: #069;}
+.leftmenu ul li.current a { background-color: #3071a9; border: 1px solid #3071a9; border-bottom: 0; color: #fff;}
 .leftmenu ul li.current a span { background-color: #428bca; border-left: 1px solid #3071a9; }
 .leftmenu ul li.current a.active { background-color: #283038; border: 1px solid #2c363e; }
 .leftmenu ul li.current a.active span { background-color: #3b4650; border-left: 1px solid #404d58; }

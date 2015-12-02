@@ -5,8 +5,8 @@
  */
 
 $this->tabs = array(
-    'carwash' => array('url' => Yii::app()->createUrl('act/carwash'), 'name' => 'Акты'),
-    'update' => array('url' => '#', 'name' => 'Редактирование акта мойки'),
+    'list' => array('url' => Yii::app()->createUrl("act/$model->companyType", array('showCompany' => $model->showCompany)), 'name' => 'Акты'),
+    'update' => array('url' => '#', 'name' => 'Редактирование акта'),
 );
 
-$this->renderPartial('carwash/_full_form', array('model'=>$model));
+$this->renderPartial('company/_full_form', array('model'=>$model));

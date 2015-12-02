@@ -106,7 +106,7 @@ class User extends CActiveRecord
 
     public function beforeSave()
     {
-        if ($this->isNewRecord) {
+        if ($this->isNewRecord || $this->password) {
             $salt = self::randomSalt();
             $this->password = self::hashPassword($this->password, $salt);
             $this->salt = $salt;

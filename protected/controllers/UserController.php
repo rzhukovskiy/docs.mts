@@ -29,7 +29,7 @@ class UserController extends Controller
             $model->save();
         }
 
-        $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : Yii::app()->createUrl("/user/list", array('type' => $model->companyType)));
+        $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : Yii::app()->createUrl("/user/" . $model->company->type));
     }
 
     public function actionUpdate($id)

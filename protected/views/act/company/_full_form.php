@@ -8,7 +8,7 @@ $this->renderPartial('_autoselect');
 $attributes = $model->attributeLabels();
 $form = $this->beginWidget('CActiveForm', array(
         'id' => 'action-form',
-        'action' => array($model->isNewRecord ? Yii::app()->createUrl("/act/create") : Yii::app()->createUrl("/act/update", array("id" => $model->id))),
+        'action' => array($model->isNewRecord ? Yii::app()->createUrl("/act/create") : Yii::app()->createUrl("/act/update", array("id" => $model->id, 'showCompany' => $model->showCompany))),
         'errorMessageCssClass' => 'help-inline',
         'enableAjaxValidation' => true,
         'clientOptions' => array('validateOnSubmit' => true),
@@ -27,7 +27,7 @@ $form = $this->beginWidget('CActiveForm', array(
     <div class="row">
         <?=$form->labelEx($model, 'company_id'); ?>
         <span class="field">
-            <?=$form->dropDownList($model, 'company_id', CHtml::listData(Company::model()->findAll('type = :type', array(':type' => Company::CARWASH_TYPE)), 'id', 'name')); ?>
+            <?=$form->dropDownList($model, 'company_id', CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name')); ?>
             <?=$form->error($model, 'company_id'); ?>
         </span>
     </div>

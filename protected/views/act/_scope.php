@@ -3,6 +3,7 @@
  * @var $this ActController
  * @var $model Act
  */
+$sumName = $model->showCompany ? 'income' : 'expense';
 ?>
 <div class="row">
     <?=CHtml::label("Состав работ:", "")?>
@@ -20,7 +21,7 @@
     <?=CHtml::label("", "", array('class' => 'scope_num'))?>
     <?=CHtml::textField('Scope[description][]', '', array('class' => 'smallinput', 'style' => 'float: left; margin-right: 20px; width: 500px;')); ?>
     <?=CHtml::numberField('Scope[amount][]', '', array('class' => 'smallinput', 'style' => 'float: left; margin-right: 20px; width: 50px;')); ?>
-    <?=CHtml::textField('Scope[sum][]', '', array('class' => 'smallinput', 'style' => 'width: 60px;')); ?>
+    <?=CHtml::textField("Scope[$sumName][]", '', array('class' => 'smallinput', 'style' => 'width: 60px;')); ?>
     <?=CHtml::hiddenField('Scope[id][]', ''); ?>
     <?=CHtml::button('+', array('class' => 'add_scope', 'title' => 'Добавить вид работ')); ?>
     <?=CHtml::button('-', array('class' => 'remove_scope', 'title' => 'Добавить вид работ')); ?>
@@ -31,7 +32,7 @@
         <?=CHtml::label("$num", "", array('class' => 'scope_num'))?>
         <?=CHtml::textField('Scope[description][]', $scope->description, array('class' => 'smallinput', 'style' => 'float: left; margin-right: 20px; width: 500px;')); ?>
         <?=CHtml::numberField('Scope[amount][]', $scope->amount, array('class' => 'smallinput', 'style' => 'float: left; margin-right: 20px; width: 50px;')); ?>
-        <?=CHtml::textField('Scope[sum][]', $scope->sum, array('class' => 'smallinput', 'style' => 'width: 60px;')); ?>
+        <?=CHtml::textField("Scope[$sumName][]", $scope->$sumName, array('class' => 'smallinput', 'style' => 'width: 60px;')); ?>
         <?=CHtml::hiddenField('Scope[id][]', $scope->id); ?>
         <?=CHtml::button('-', array('class' => 'remove_scope', 'title' => 'Добавить вид работ')); ?>
     </div>
@@ -41,7 +42,7 @@
     <?=CHtml::label(count($model->scope) + 1, "", array('class' => 'scope_num'))?>
     <?=CHtml::textField('Scope[description][]', '', array('class' => 'smallinput', 'style' => 'float: left; margin-right: 20px; width: 500px;')); ?>
     <?=CHtml::numberField('Scope[amount][]', '', array('class' => 'smallinput', 'style' => 'float: left; margin-right: 20px; width: 50px;')); ?>
-    <?=CHtml::textField('Scope[sum][]', '', array('class' => 'smallinput', 'style' => 'width: 60px;')); ?>
+    <?=CHtml::textField("Scope[$sumName][]", '', array('class' => 'smallinput', 'style' => 'width: 60px;')); ?>
     <?=CHtml::hiddenField('Scope[id][]', ''); ?>
     <?=CHtml::button('+', array('class' => 'add_scope', 'title' => 'Добавить вид работ')); ?>
     <?=CHtml::button('-', array('class' => 'remove_scope', 'title' => 'Добавить вид работ')); ?>

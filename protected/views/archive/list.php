@@ -5,9 +5,9 @@
  */
 if (Yii::app()->user->model->company->type == Company::COMPANY_TYPE) {
     $this->tabs = array(
-        $model->companyType != Company::CARWASH_TYPE ? Company::CARWASH_TYPE : 'list' => array('url' => Yii::app()->createUrl('archive/' . Company::CARWASH_TYPE), 'name' => 'Акты моек'),
-        $model->companyType != Company::SERVICE_TYPE ? Company::SERVICE_TYPE : 'list' => array('url' => Yii::app()->createUrl('archive/' . Company::SERVICE_TYPE), 'name' => 'Акты сервисов'),
-        $model->companyType != Company::TIRES_TYPE ? Company::TIRES_TYPE : 'list' => array('url' => Yii::app()->createUrl('archive/' . Company::TIRES_TYPE), 'name' => 'Акты шиномонтажа'),
+        $model->companyType != Company::CARWASH_TYPE ? Company::CARWASH_TYPE : 'list' => array('url' => Yii::app()->createUrl('archive/' . Company::CARWASH_TYPE), 'name' => 'Мойка'),
+        $model->companyType != Company::SERVICE_TYPE ? Company::SERVICE_TYPE : 'list' => array('url' => Yii::app()->createUrl('archive/' . Company::SERVICE_TYPE), 'name' => 'Сервис'),
+        $model->companyType != Company::TIRES_TYPE ? Company::TIRES_TYPE : 'list' => array('url' => Yii::app()->createUrl('archive/' . Company::TIRES_TYPE), 'name' => 'Шиномонтаж'),
     );
 } else {
     $this->tabs = array(
