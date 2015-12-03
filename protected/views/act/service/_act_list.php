@@ -7,12 +7,12 @@
 $time = strtotime($model->month . '-01 00:00:00');
 $path = "acts/" . date('m-Y', $time);
 
-if(file_exists("$path/" . Company::CARWASH_TYPE . ".zip")) {
-    echo '<strong>' . CHtml::link('Скачать одним файлом', "/$path/" . Company::CARWASH_TYPE . ".zip") . '</strong><br /><br />';
+if(file_exists("$path/$model->companyType.zip")) {
+    echo '<strong>' . CHtml::link('Скачать одним файлом', "/$path/$model->companyType.zip") . '</strong><br /><br />';
 }
 foreach(Company::model()->findAll(array(
     'condition' => 'type = :type',
-    'params' => array(':type' => Company::CARWASH_TYPE),
+    'params' => array(':type' => $model->companyType),
     'order' => 'type DESC'
 )) as $company) {
     $filename = "Акт $company->name от " . date('m-Y', $time) . ".xls";

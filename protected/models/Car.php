@@ -92,9 +92,6 @@ class Car extends CActiveRecord
         $criteria->together = true;
         $criteria->select = '*, count(act.id) as service_count';
         $criteria->group = 't.id';
-        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $criteria->compare('act.is_closed', 1);
-        }
         $criteria->compare('t.id', $this->id);
         $criteria->compare('t.number', $this->number, true);
         $criteria->compare('t.company_id', $this->company_id);

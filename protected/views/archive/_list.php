@@ -38,6 +38,12 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => 'date("d-m-Y", strtotime($data->service_date))',
         ),
         array(
+            'name' => 'city',
+            'header' => 'Город',
+            'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => '$data->company->address',
+        ),
+        array(
             'name' => 'card_id',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->card->num',

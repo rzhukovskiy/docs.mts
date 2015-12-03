@@ -6,7 +6,7 @@
 
 $this->tabs = array(
     'list' => array('url' => Yii::app()->createUrl('car/list'), 'name' => 'Машины'),
-    'history' => array('url' => '#', 'name' => 'История машины ' . $model->number . ' за ' . Act::$periodList[$model->period]),
+    'history' => array('url' => '#', 'name' => 'История машины ' . $model->number),
 );
 ?>
     <div class="contenttitle radiusbottom0">

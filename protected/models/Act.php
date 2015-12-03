@@ -171,6 +171,7 @@ class Act extends CActiveRecord
             }
         }
 
+        $this->is_closed = 1;
         $this->profit = $this->income - $this->expense;
 
         return true;
@@ -209,7 +210,6 @@ class Act extends CActiveRecord
         $criteria->compare('t.card_id', $this->card_id);
         $criteria->compare('t.number', $this->number, true);
         $criteria->compare('t.mark_id', $this->mark_id);
-        $criteria->compare('t.is_closed', $this->is_closed);
         if($this->day) {
             $criteria->compare('date_format(t.service_date, "%Y-%m-%d")', "$this->month-$this->day");
         } elseif($this->month) {
@@ -232,16 +232,18 @@ class Act extends CActiveRecord
      */
     public function cars()
     {
-        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $this->is_closed = 1;
-            $this->showCompany = 1;
-        }
-
         $criteria = new CDbCriteria;
 
+        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+            $this->showCompany = 1;
+            $this->is_closed = 1;
+        }
+
         $criteria->compare('number', $this->number);
-        $criteria->compare('is_closed', $this->is_closed);
         switch ($this->period) {
+            case 0:
+                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-1 month", time())), date('Y-m-d', time()));
+                break;
             case 1:
                 $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-3 month", time())), date('Y-m-d', time()));
                 break;
@@ -252,7 +254,6 @@ class Act extends CActiveRecord
                 $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-12 month", time())), date('Y-m-d', time()));
                 break;
             default:
-                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-1 month", time())), date('Y-m-d', time()));
         }
 
         $sort = new CSort;
