@@ -4,7 +4,7 @@
  * @var $model Act
  */
 
-$time = strtotime($model->service_date);
+$time = strtotime($model->month . '-01 00:00:00');
 $path = "acts/" . date('m-Y', $time);
 
 if(file_exists("$path/" . Company::CARWASH_TYPE . ".zip")) {

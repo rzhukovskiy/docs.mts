@@ -7,6 +7,8 @@ class ExportableGridBehavior extends CBehavior
     /** @var PHPExcel $objPHPExcel */
     public $objPHPExcel = null;
     private $headersSent = false;
+    private $showCompany = false;
+    private $companyType = Company::CARWASH_TYPE;
     private $time = null;
     
 
@@ -16,75 +18,60 @@ class ExportableGridBehavior extends CBehavior
     public function exportCSV($actModel)
     {
         if ($this->isExportRequest()) {
-            $this->time = $actModel->service_date;
-            //$this->sendHeaders();
+            $this->time = strtotime($actModel->month . '-01 00:00:00');
+            $this->showCompany = $actModel->showCompany;
+            $this->companyType = $actModel->companyType;
 
             spl_autoload_unregister(array('YiiBase','autoload'));
             Yii::import("ext.PHPExcel.Classes.PHPExcel", true);
             spl_autoload_register(array('YiiBase','autoload'));
 
             $zip = new ZipArchive();
-            $filename = "acts/" . date('m-Y', $this->time) . "/$actModel->companyType.zip";
+            $filename = "acts/$actModel->month/$actModel->companyType.zip";
 
             if ($zip->open($filename, ZipArchive::OVERWRITE) !== TRUE) {
                 $zip = null;
             }
+
             /** @var Company $company */
             foreach(Company::model()->findAll(array(
                 'condition' => 'type = :type',
-                'params' => array(':type' => $actModel->companyType),
+                'params' => array(':type' => $this->showCompany ? Company::COMPANY_TYPE : $actModel->companyType),
                 'order' => 'type DESC'
             )) as $company) {
                 $actModel->company_id = $company->id;
-                $this->fillCompanyAct($company, $zip);
+                $this->fillAct($actModel, $company, $zip);
             }
             if ($zip) $zip->close();
         }
     }
 
     /**
+     * @param Act $actModel
      * @param Company $company
+     * @param ZipArchive $zip
      */
-    private function fillCompanyAct($company, &$zip)
+    private function fillAct($actModel, $company, &$zip)
     {
-        if ($company->type == Company::CARWASH_TYPE) {
-            $actList = Act::model()->findAll(array(
-                'order' => 'service_date',
-                'condition' => 'company_id = :company_id AND date_format(service_date, "%Y-%m") = :date',
-                'params' => array(
-                    ':date' => date('Y-m', $this->time),
-                    ':company_id' => $company->id,
-                )
-            ));
-
-            if (!$actList) {
-                return;
-            }
-
-            $this->generateCarwashAct($company, $actList, $zip);
-        } else {
-            $actList = Act::model()->with('card')->findAll(array(
-                'order' => 'service_date',
-                'condition' => 'card.company_id = :company_id AND date_format(service_date, "%Y-%m") = :date',
-                'params' => array(
-                    ':date' => date('Y-m', $this->time),
-                    ':company_id' => $company->id,
-                )
-            ));
-            if (!$actList) {
-                return;
-            }
-
-            $this->generateCompanyAct($company, $actList, $zip);
+        switch ($this->companyType) {
+            case Company::CARWASH_TYPE:
+                $actList = $actModel->search()->getData();
+                break;
         }
+
+        if (!$actList) {
+            return;
+        }
+
+        $this->generateAct($company, $actList, $zip);
     }
 
     /**
      * @param Company $company
-     * @param Act $actList
+     * @param Act $dataList
      * @param ZipArchive $zip
      */
-    private function generateCompanyAct($company, $actList, &$zip)
+    private function generateAct($company, $dataList, &$zip)
     {
         $this->objPHPExcel = new PHPExcel();
         $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
@@ -119,6 +106,7 @@ class ExportableGridBehavior extends CBehavior
         $monthName = StringNum::getMonthName($this->time);
         $date = date_create(date('Y-m-d', $this->time));
         date_add($date, date_interval_create_from_date_string("1 month"));
+        $currentMonthName = StringNum::getMonthName($date->getTimestamp());
 
         $companyWorkSheet->getStyle('B2:I4')->applyFromArray(array(
             'alignment' => array(
@@ -142,12 +130,21 @@ class ExportableGridBehavior extends CBehavior
             )
         ));
         $companyWorkSheet->mergeCells('H5:I5');
-        $companyWorkSheet->setCellValue('H5', date("t ", $this->time) . $monthName[1] . date(' Y', $this->time));
+        if ($this->showCompany) {
+            $companyWorkSheet->setCellValue('H5', date("t ", $this->time) . $monthName[1] . date(' Y', $this->time));
+        } else {
+            $companyWorkSheet->setCellValue('H5', date('d ') . $currentMonthName[1] . date(' Y'));
+        }
 
         $companyWorkSheet->mergeCells('B8:I8');
-        $companyWorkSheet->setCellValue('B8', "Исполнитель: ООО «Международный Транспортный Сервис»");
         $companyWorkSheet->mergeCells('B7:I7');
-        $companyWorkSheet->setCellValue('B7', "Заказчик: $company->name");
+        if ($this->showCompany) {
+            $companyWorkSheet->setCellValue('B8', "Исполнитель: ООО «Международный Транспортный Сервис»");
+            $companyWorkSheet->setCellValue('B7', "Заказчик: $company->name");
+        } else {
+            $companyWorkSheet->setCellValue('B7', "Исполнитель: $company->name");
+            $companyWorkSheet->setCellValue('B8', "Заказчик: ООО «Международный Транспортный Сервис»");
+        }
 
         $companyWorkSheet->mergeCells('B10:I10');
         $companyWorkSheet->getStyle('B10:I10')->getAlignment()->setWrapText(true);
@@ -163,31 +160,28 @@ class ExportableGridBehavior extends CBehavior
 
 
         //main values
-        /** @var Act $act */
+        /** @var Act $data */
         $row = 12;
         $num = 0;
         $total = 0;
-        foreach ($actList as $act) {
+        foreach ($dataList as $data) {
             $row++;
             $num++;
             $column = 1;
-            $date = new DateTime($act->service_date);
+            $date = new DateTime($data->service_date);
             $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $num);
             $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $date->format('j'));
-            $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $act->card->num);
-            $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $act->mark->name);
-            $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $act->number);
-            if ($company->type == Company::CARWASH_TYPE) {
-                $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, Act::$carwashList[$act->service]);
+            $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->card->num);
+            $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->mark->name);
+            $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->number);
+            if ($this->showCompany) {
+                $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, Act::$fullList[$data->company_service]);
+                $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->income);
+                $total += $data->income;
             } else {
-                $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, Act::$carwashList[$act->company_service]);
-            }
-            if ($company->type == Company::CARWASH_TYPE) {
-                $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $act->expense);
-                $total += $act->expense;
-            } else {
-                $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $act->income);
-                $total += $act->income;
+                $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, Act::$fullList[$data->service]);
+                $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->expense);
+                $total += $data->expense;
             }
             $companyWorkSheet->getCellByColumnAndRow($column, $row)
                 ->getStyle()
@@ -195,7 +189,7 @@ class ExportableGridBehavior extends CBehavior
                 ->setFormatCode(
                     PHPExcel_Style_NumberFormat::FORMAT_TEXT
                 );
-            $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, ' ' . $act->check);
+            $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, ' ' . $data->check);
         }
 
         $companyWorkSheet->getStyle('B12:I12')->applyFromArray(array(
@@ -236,21 +230,36 @@ class ExportableGridBehavior extends CBehavior
 
         $row++; $row++;
         $companyWorkSheet->mergeCells("B$row:E$row");
-        $companyWorkSheet->setCellValue("B$row", "Работу сдал");
         $companyWorkSheet->mergeCells("H$row:I$row");
-        $companyWorkSheet->setCellValue("H$row", "Работу принял");
+        if ($this->showCompany) {
+            $companyWorkSheet->setCellValue("B$row", "Работу сдал");
+            $companyWorkSheet->setCellValue("H$row", "Работу принял");
+        } else {
+            $companyWorkSheet->setCellValue("B$row", "Работу принял");
+            $companyWorkSheet->setCellValue("H$row", "Работу сдал");
+        }
 
         $row++; $row++;
         $companyWorkSheet->mergeCells("B$row:E$row");
-        $companyWorkSheet->setCellValue("B$row", "Исполнитель");
         $companyWorkSheet->mergeCells("H$row:I$row");
-        $companyWorkSheet->setCellValue("H$row", "Заказчик");
+        if ($this->showCompany) {
+            $companyWorkSheet->setCellValue("B$row", "Исполнитель");
+            $companyWorkSheet->setCellValue("H$row", "Заказчик");
+        } else {
+            $companyWorkSheet->setCellValue("B$row", "Заказчик");
+            $companyWorkSheet->setCellValue("H$row", "Исполнитель");
+        }
 
         $row++; $row++;
         $companyWorkSheet->mergeCells("B$row:E$row");
-        $companyWorkSheet->setCellValue("B$row", "__________ Мосесян Г.А.");
         $companyWorkSheet->mergeCells("H$row:I$row");
-        $companyWorkSheet->setCellValue("H$row", "__________$company->contact");
+        if ($this->showCompany) {
+            $companyWorkSheet->setCellValue("B$row", "__________ Мосесян Г.А.");
+            $companyWorkSheet->setCellValue("H$row", "__________$company->contact");
+        } else {
+            $companyWorkSheet->setCellValue("B$row", "________Мосесян Г.А.");
+            $companyWorkSheet->setCellValue("H$row", "________$company->contact");
+        }
 
         $row++; $row++;
         $companyWorkSheet->setCellValue("C$row", "М.П.");
@@ -266,6 +275,9 @@ class ExportableGridBehavior extends CBehavior
         $objWriter->save($fullFilename);
         if ($zip) $zip->addFile($fullFilename, iconv('utf-8', 'cp866', $filename));
 
+        if (!$this->showCompany) {
+            return;
+        }
         ///////////// check
         $this->objPHPExcel = new PHPExcel();
         $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
@@ -473,7 +485,7 @@ class ExportableGridBehavior extends CBehavior
         $companyWorkSheet->mergeCells("B$row:E$row");
         $companyWorkSheet->getRowDimension($row)->setRowHeight(40);
         $companyWorkSheet->getStyle("B$row:E$row")->getAlignment()->setWrapText(true);
-        $text = "Всего наименований " .count($actList) . ", на сумму $total (" . StringNum::num2str($total) . "). НДС нет.";
+        $text = "Всего наименований " .count($dataList) . ", на сумму $total (" . StringNum::num2str($total) . "). НДС нет.";
         $companyWorkSheet->setCellValue("B$row", $text);
 
         $row++;
@@ -487,196 +499,6 @@ class ExportableGridBehavior extends CBehavior
             mkdir($path, 0755, 1);
         }
         $filename = "Счет $company->name от " . date('m-Y', $this->time) . ".xls";
-        $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
-        $objWriter->save($fullFilename);
-        if ($zip) $zip->addFile($fullFilename, iconv('utf-8', 'cp866', $filename));
-    }
-
-    /**
-     * @param Company $company
-     * @param Act $actList
-     * @param ZipArchive $zip
-     */
-    private function generateCarwashAct($company, $actList, &$zip)
-    {
-        $this->objPHPExcel = new PHPExcel();
-        $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
-
-        // Creating a workbook
-        $this->objPHPExcel->getProperties()->setCreator('Mtransservice');
-        $this->objPHPExcel->getProperties()->setTitle('Акт');
-        $this->objPHPExcel->getProperties()->setSubject('Акт');
-        $this->objPHPExcel->getProperties()->setDescription('');
-        $this->objPHPExcel->getProperties()->setCategory('');
-        $this->objPHPExcel->removeSheetByIndex(0);
-
-        //adding worksheet
-        $companyWorkSheet = new PHPExcel_Worksheet($this->objPHPExcel, 'Акт');
-        $this->objPHPExcel->addSheet($companyWorkSheet);
-
-        $companyWorkSheet->getPageMargins()->setTop(2);
-        $companyWorkSheet->getRowDimension(1)->setRowHeight(1);
-        $companyWorkSheet->getRowDimension(10)->setRowHeight(100);
-        $companyWorkSheet->getColumnDimension('A')->setWidth(5);
-        $companyWorkSheet->getColumnDimension('B')->setWidth(5);
-        $companyWorkSheet->getColumnDimension('C')->setAutoSize(true);
-        $companyWorkSheet->getColumnDimension('D')->setAutoSize(true);
-        $companyWorkSheet->getColumnDimension('E')->setAutoSize(true);
-        $companyWorkSheet->getColumnDimension('F')->setAutoSize(true);
-        $companyWorkSheet->getColumnDimension('G')->setAutoSize(true);
-        $companyWorkSheet->getColumnDimension('H')->setAutoSize(true);
-        $companyWorkSheet->getColumnDimension('I')->setAutoSize(true);
-        $companyWorkSheet->getDefaultRowDimension()->setRowHeight(20);
-
-
-        //headers;
-        $monthName = StringNum::getMonthName($this->time);
-        $date = date_create(date('Y-m-d', $this->time));
-        date_add($date, date_interval_create_from_date_string("1 month"));
-        $currentMonthName = StringNum::getMonthName($date->getTimestamp());
-
-        $companyWorkSheet->getStyle('B2:I4')->applyFromArray(array(
-            'alignment' => array(
-                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-            )
-        ));
-        $companyWorkSheet->mergeCells('B2:I2');
-        $text = "АКТ СДАЧИ-ПРИЕМКИ РАБОТ (УСЛУГ)";
-        $companyWorkSheet->setCellValue('B2', $text);
-        $companyWorkSheet->mergeCells('B3:I3');
-        $text = "по договору на оказание услуг $company->contract";
-        $companyWorkSheet->setCellValue('B3', $text);
-        $companyWorkSheet->mergeCells('B4:I4');
-        $text = "За услуги, оказанные в $monthName[2] " . date('Y', $this->time) . ".";
-        $companyWorkSheet->setCellValue('B4', $text);
-
-        $companyWorkSheet->setCellValue('B5', 'г.Воронеж');
-        $companyWorkSheet->getStyle('H5:I5')->applyFromArray(array(
-            'alignment' => array(
-                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
-            )
-        ));
-        $companyWorkSheet->mergeCells('H5:I5');
-        $companyWorkSheet->setCellValue('H5', date('d ') . $currentMonthName[1] . date(' Y'));
-
-        $companyWorkSheet->mergeCells('B7:I7');
-        $companyWorkSheet->setCellValue('B7', "Исполнитель: $company->name");
-        $companyWorkSheet->mergeCells('B8:I8');
-        $companyWorkSheet->setCellValue('B8', "Заказчик: ООО «Международный Транспортный Сервис»");
-
-        $companyWorkSheet->mergeCells('B10:I10');
-        $companyWorkSheet->getStyle('B10:I10')->getAlignment()->setWrapText(true);
-        $companyWorkSheet->getStyle('B10:I10')->applyFromArray(array(
-            'alignment' => array(
-                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY,
-            )
-        ));
-        $companyWorkSheet->setCellValue('B10', $company->act_header);
-
-        $headers = array('№', 'Число', '№ Карты', 'Марка ТС', 'Госномер', 'Вид услуги', 'Стоимость', '№ Чека');
-        $companyWorkSheet->fromArray($headers, null, 'B12');
-
-
-        //main values
-        /** @var Act $act */
-        $row = 12;
-        $num = 0;
-        $total = 0;
-        foreach ($actList as $act) {
-            $row++;
-            $num++;
-            $column = 1;
-            $date = new DateTime($act->service_date);
-            $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $num);
-            $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $date->format('j'));
-            $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $act->card->num);
-            $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $act->mark->name);
-            $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $act->number);
-            if ($company->type == Company::CARWASH_TYPE) {
-                $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, Act::$carwashList[$act->service]);
-            } else {
-                $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, Act::$carwashList[$act->company_service]);
-            }
-            if ($company->type == Company::CARWASH_TYPE) {
-                $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $act->expense);
-                $total += $act->expense;
-            } else {
-                $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $act->income);
-                $total += $act->income;
-            }
-            $companyWorkSheet->getCellByColumnAndRow($column, $row)
-                ->getStyle()
-                ->getNumberFormat()
-                ->setFormatCode(
-                    PHPExcel_Style_NumberFormat::FORMAT_TEXT
-                );
-            $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, ' ' . $act->check);
-        }
-
-        $companyWorkSheet->getStyle('B12:I12')->applyFromArray(array(
-                'font' => array(
-                    'bold' => true,
-                    'color' => array('argb' => 'FF006699'),
-                ),
-            )
-        );
-        $companyWorkSheet->getStyle("B12:I$row")
-            ->applyFromArray(array(
-                    'borders' => array(
-                        'allborders' => array(
-                            'style' => PHPExcel_Style_Border::BORDER_THIN,
-                            'color' => array('argb' => 'FF000000'),
-                        ),
-                    ),
-                )
-            );
-
-        //footer
-        $row++;
-        $companyWorkSheet->setCellValue("H$row", "ВСЕГО: $total");
-
-        $row++; $row++;
-        $companyWorkSheet->mergeCells("B$row:I$row");
-        $companyWorkSheet->getRowDimension($row)->setRowHeight(30);
-        $companyWorkSheet->getStyle("B$row:I$row")->getAlignment()->setWrapText(true);
-        $text = "Общая стоимость выполненных услуг составляет: $total (" . StringNum::num2str($total) . ") рублей. НДС нет.";
-        $companyWorkSheet->setCellValue("B$row", $text);
-
-        $row++;
-        $companyWorkSheet->mergeCells("B$row:I$row");
-        $companyWorkSheet->getRowDimension($row)->setRowHeight(30);
-        $companyWorkSheet->getStyle("B$row:I$row")->getAlignment()->setWrapText(true);
-        $text = "Настоящий Акт составлен в 2 (двух) экземплярах, один из которых находится у Исполнителя, второй – у Заказчика.";
-        $companyWorkSheet->setCellValue("B$row", $text);
-
-        $row++; $row++;
-        $companyWorkSheet->mergeCells("B$row:E$row");
-        $companyWorkSheet->setCellValue("B$row", "Работу принял");
-        $companyWorkSheet->mergeCells("H$row:I$row");
-        $companyWorkSheet->setCellValue("H$row", "Работу сдал");
-
-        $row++; $row++;
-        $companyWorkSheet->mergeCells("B$row:E$row");
-        $companyWorkSheet->setCellValue("B$row", "Заказчик");
-        $companyWorkSheet->mergeCells("H$row:I$row");
-        $companyWorkSheet->setCellValue("H$row", "Исполнитель");
-
-        $row++; $row++;
-        $companyWorkSheet->mergeCells("B$row:E$row");
-        $companyWorkSheet->setCellValue("B$row", "________Мосесян Г.А.");
-        $companyWorkSheet->mergeCells("H$row:I$row");
-        $companyWorkSheet->setCellValue("H$row", "________$company->contact");
-
-        $row++; $row++;
-        $companyWorkSheet->setCellValue("C$row", "М.П.");
-        $companyWorkSheet->setCellValue("H$row", "М.П.");
-
-        //saving document
-        $path = "acts/" . date('m-Y', $this->time);
-        if (!is_dir($path)) {
-            mkdir($path, 0755, 1);
-        }
-        $filename = "Акт $company->name от " . date('m-Y', $this->time) . ".xls";
         $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
         $objWriter->save($fullFilename);
         if ($zip) $zip->addFile($fullFilename, iconv('utf-8', 'cp866', $filename));
