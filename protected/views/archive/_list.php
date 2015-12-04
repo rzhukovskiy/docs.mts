@@ -38,12 +38,6 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => 'date("d-m-Y", strtotime($data->service_date))',
         ),
         array(
-            'name' => 'city',
-            'header' => 'Город',
-            'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->company->address',
-        ),
-        array(
             'name' => 'card_id',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->card->num',
@@ -78,6 +72,12 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'cssClassExpression' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? '$data->expense ? "" : "error"' : '$data->income ? "" : "error"',
             'footer' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? $model->totalExpense() : $model->totalIncome(),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
+        ),
+        array(
+            'name' => 'city',
+            'header' => 'Город',
+            'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => '$data->company->address',
         ),
         array(
             'name' => 'check',

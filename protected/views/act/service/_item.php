@@ -23,7 +23,7 @@
                         : ($model->companyType == Company::CARWASH_TYPE || Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 6 : 5); ?>">
                     </td>
                     <td style="text-align:center;"><strong><?=$total?></strong></td>
-                    <td colspan="3"></td>
+                    <td colspan="4"></td>
                 </tr>
 <?php
             }
@@ -32,7 +32,7 @@
             $companyId = $data->company_id;
 ?>
             <tr class="header">
-                <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 12 : 9?>"><strong><?=$data->company->name . ' - ' . $data->company->address?></strong></td>
+                <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 13 : 10?>"><strong><?=$data->company->name . ' - ' . $data->company->address?></strong></td>
             </tr>
 <?php
         }
@@ -51,6 +51,7 @@
                 <td style="width: 80px; text-align:center;"><?=Act::$fullList[$data->service]?></td>
             <?php } ?>
             <td style="width: 60px; text-align:center;" class="<?=$data->expense ? "" : "error"?>"><?=$data->expense?></td>
+            <td style="text-align:center;"><?=$data->company->address?></td>
             <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
                 <td style="width: 60px; text-align:center;" class="<?=!empty($data->check_image) ? "" : "error"?>"><?=$data->check?></td>
                 <td style="width: 40px;"><a class="preview" href="/files/checks/<?=$data->check_image?>"><?=!empty($data->check_image) ? 'image' : ''?></a></td>
@@ -78,7 +79,7 @@
                     : ($model->companyType == Company::CARWASH_TYPE || Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 6 : 5); ?>">
                 </td>
                 <td style="text-align:center;"><strong><?=$total?></strong></td>
-                <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 3 : 1?>"></td>
+                <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 4 : 2?>"></td>
             </tr>
 <?php
         }

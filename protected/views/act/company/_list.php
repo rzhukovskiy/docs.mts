@@ -25,12 +25,13 @@
             <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
                 <th id="act-grid_c7"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=service">Услуга</a></th>
             <?php } ?>
-            <th id="act-grid_c8"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=expense">Сумма</a></th>
+            <th id="act-grid_c8"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=income">Сумма</a></th>
+            <th id="act-grid_c9"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=address">Город</a></th>
             <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
-                <th id="act-grid_c9"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=check">Номер чека</a></th>
-                <th id="act-grid_c10"><a class="sort-link">Чек</a></th>
+                <th id="act-grid_c10"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=check">Номер чека</a></th>
+                <th id="act-grid_c11"><a class="sort-link">Чек</a></th>
             <?php } ?>
-            <th class="button-column" id="act-grid_c11">&nbsp;</th>
+            <th class="button-column" id="act-grid_c12">&nbsp;</th>
         </tr>
         <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
             <tr class="filters">
@@ -48,6 +49,7 @@
                 </td>
                 <td><input name="Act[card_id]" type="text"></td>
                 <td><input name="Act[number]" type="text"></td>
+                <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -69,7 +71,7 @@
                         <?=count($model->search()->getData())?> машин
                     </td>
                     <td style="text-align:center;"><strong><?=$model->totalIncome()?></strong></td>
-                    <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 3 : 1?>"></td>
+                    <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 4 : 2?>"></td>
                 </tr>
             <?php } ?>
         </tbody>

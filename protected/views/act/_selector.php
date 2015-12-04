@@ -6,7 +6,7 @@
  */
 ?>
 <tr>
-    <th colspan="5">
+    <th colspan="6">
         <?php
         $form = $this->beginWidget('CActiveForm', array(
             'method' => 'get',
@@ -53,5 +53,5 @@
     </td>
 </tr>
 <tr class="header">
-    <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 12 : 9?>">&nbsp;</td>
+    <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 13 : 10?>">&nbsp;</td>
 </tr>
