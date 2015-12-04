@@ -6,6 +6,8 @@
  * @var $this CarController
  * @var $model Car
  */
+$this->renderPartial('_selector', array('model' => $model, 'id' => $model->id));
+
 $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'car-grid',
     'htmlOptions' => array('class' => 'my-grid'),

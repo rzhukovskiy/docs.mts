@@ -87,6 +87,14 @@ $(document).ready(function() {
             detailedAct.next().fadeToggle();
         }
     })
+
+    $('body').on('change','.select-period', function(e) {
+        if ($(this).val() == 1) {
+            $('.month-selector').fadeIn();
+        } else {
+            $('.month-selector').fadeOut();
+        }
+    })
 });
 
 function searchHighlight(id, data) {
@@ -141,7 +149,7 @@ function datePickerDays () {
         dateFormat: "yy-mm-dd"
     });
 
-    $( "#Act_month" ).datepicker({
+    $( "#Act_month, #Car_month" ).datepicker({
         changeYear: true,
         changeMonth: true,
         showButtonPanel: true,

@@ -32,9 +32,9 @@ class Act extends CActiveRecord
     public $old_income;
     public $companyType;
     public $showCompany;
-    public $period = 0;
+    public $period;
 
-    public static $periodList = array('месяц', 'квартал', 'полгода', 'год');
+    public static $periodList = array('все время', 'месяц', 'квартал', 'полгода', 'год');
     public static $carwashList = array(
         'снаружи',
         'внутри',
@@ -241,16 +241,18 @@ class Act extends CActiveRecord
 
         $criteria->compare('number', $this->number);
         switch ($this->period) {
-            case 0:
-                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-1 month", time())), date('Y-m-d', time()));
-                break;
             case 1:
-                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-3 month", time())), date('Y-m-d', time()));
+                if($this->month) {
+                    $criteria->compare('date_format(t.service_date, "%Y-%m")', $this->month);
+                }
                 break;
             case 2:
-                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-6 month", time())), date('Y-m-d', time()));
+                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-3 month", time())), date('Y-m-d', time()));
                 break;
             case 3:
+                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-6 month", time())), date('Y-m-d', time()));
+                break;
+            case 4:
                 $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-12 month", time())), date('Y-m-d', time()));
                 break;
             default:

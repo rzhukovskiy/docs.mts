@@ -1,7 +1,7 @@
 <?php
 /**
  * @var $this CarController
- * @var $model Car
+ * @var $model Act
  */
 
 $this->tabs = array(
