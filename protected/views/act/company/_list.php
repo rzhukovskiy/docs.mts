@@ -12,7 +12,7 @@
             $this->renderPartial('_selector', array('model' => $model));
         }
         ?>
-        <tr>
+        <tr class="selector">
             <th id="act-grid_c0">№</th>
             <th id="act-grid_c1"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=service_date">Дата</a></th>
             <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
@@ -65,7 +65,7 @@
         <tbody>
             <?=$this->renderPartial('company/_item', array('model' => $model))?>
             <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
-                <tr>
+                <tr class="total">
                     <td><strong>Общее</strong></td>
                     <td colspan="<?=Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $model->companyType == Company::CARWASH_TYPE ? 7 : (Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 6 : 5); ?>">
                         <?=count($model->search()->getData())?> машин

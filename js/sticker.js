@@ -10,7 +10,7 @@ $(document).ready(function() {
 
             $('tbody tr.even:first td').each(function(id, value) {
                 var etalon = $(value).outerWidth();
-                $('thead th').slice(id).outerWidth(etalon);
+                $('thead .selector th').slice(id).outerWidth(etalon);
             });
 
             $('thead').width($('tbody').width() + 1);

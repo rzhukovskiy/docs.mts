@@ -44,12 +44,31 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'name' => 'name',
-            'htmlOptions' => array(),
+            'htmlOptions' => array('class' => 'type-grid'),
         ),
         array(
             'header' => 'Вид',
             'type' => 'raw',
             'value' => 'CHtml::image("/images/cars/" . $data->id . ".jpg","",array("style"=>"height:100px;"))',
         ),
+        array(
+            'class' => 'CButtonColumn',
+            'template' => '{update}{delete}',
+            'header' => '',
+            'updateButtonUrl' => 'Yii::app()->createUrl("/image/update", array("id" => $data->id))',
+            'deleteButtonUrl' => 'Yii::app()->createUrl("/image/delete", array("id" => $data->id))',
+            'buttons' => array(
+                'update' => array(
+                    'label' => '',
+                    'imageUrl' => false,
+                    'options' => array('class' => 'update')
+                ),
+                'delete' => array(
+                    'label' => '',
+                    'imageUrl' => false,
+                    'options' => array('class' => 'delete')
+                ),
+            ),
+        )
     ),
 ));

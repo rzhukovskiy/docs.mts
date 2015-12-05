@@ -6,7 +6,7 @@
  */
 ?>
 <tr>
-    <th colspan="6">
+    <th colspan="5">
         <?php
         $form = $this->beginWidget('CActiveForm', array(
             'method' => 'get',
@@ -24,7 +24,7 @@
         ?>
     </th>
     <th colspan="3">
-        <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
+        <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $model->companyType == Company::CARWASH_TYPE) { ?>
             <?php
             $form = $this->beginWidget('CActiveForm', array(
                 'method' => 'get',
@@ -41,7 +41,7 @@
             ?>
         <?php } ?>
     </th>
-    <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 4 : 1?>">
+    <th colspan="<?=$model->companyType == Company::CARWASH_TYPE ? ($model->showCompany ? 5 : 4) : ($model->showCompany ? 2 : 1)?>">
         <?php
         if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
             $this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
@@ -50,8 +50,8 @@
             $this->renderExportGridButton('act-grid', 'Выгрузить', array('class' => 'btn-info pull-right'));
         }
         ?>
-    </td>
+    </th>
 </tr>
 <tr class="header">
-    <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 13 : 10?>">&nbsp;</td>
+    <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? ($model->showCompany ? 13 : 12) : ($model->showCompany ? 10 : 9)?>">&nbsp;</td>
 </tr>

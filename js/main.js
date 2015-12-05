@@ -93,6 +93,7 @@ $(document).ready(function() {
             $('.month-selector').fadeIn();
         } else {
             $('.month-selector').fadeOut();
+            $('.date-send').click();
         }
     })
 });
@@ -110,7 +111,7 @@ function pageSearch(selector, query) {
     $(selector).find('span.highlight').parents('tr').addClass('highlight');
     if (!isScrolledIntoView("span.highlight")) {
         $('html, body').animate({
-            scrollTop: $("span.highlight").offset().top - 200
+            scrollTop: $("span.highlight").offset().top - 400
         }, 2000);
     }
     setTimeout(function(){

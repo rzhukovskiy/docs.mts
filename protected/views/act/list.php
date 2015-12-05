@@ -29,7 +29,7 @@ $view = $model->showCompany ? 'company' : 'service';
 if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE) && Yii::app()->user->model->company->type == $model->companyType) {
     $this->renderPartial('service/_form', array('model'=>$model));
 } else {
-    echo '<style>.ui-datepicker-calendar {display: none;}</style>';
+    echo '<style>.ui-datepicker-calendar, .ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current {display: none;}</style>';
 }
 ?>
 

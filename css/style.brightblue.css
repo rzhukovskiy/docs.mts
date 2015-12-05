@@ -6,8 +6,8 @@ body.errorpage { background: #dededc; }
 h1, h2, h3 { color: #283038; }
 th {color: #069;}
 
-tr.highlight { background: #75A3CC; color: #333; }
-.stdtable tbody tr.total td {border-bottom: 2px solid #ddd;}
+tr.highlight td, .stdtable tbody tr.highlight:hover td { background: #75A3CC; color: #fff; }
+.stdtable tbody tr.total td {border-bottom: 2px solid #ddd; color: #069;}
 .stdtable tr.header td {background: #428bca; color: #fff;}
 .back-to-top {
     position: fixed;
@@ -150,6 +150,12 @@ tr.highlight { background: #75A3CC; color: #333; }
 .userinfomenu .userinfodrop:hover { background-color: #fff; color: #333; border: 1px solid #ccc; border-bottom: 0; }
 
 .stdtable tbody tr:hover td, .stdtable tbody tr.selected td { color: #75A3CC; }
+.stdtable .filters input:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
 
 .stdform input[type=submit], .stdtable input[type=submit], .stdform input[type=button], .stdtable input[type=button] {
     color: #ffffff;

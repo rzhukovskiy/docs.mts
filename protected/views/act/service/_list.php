@@ -12,7 +12,7 @@
             $this->renderPartial('_selector', array('model' => $model));
         }
         ?>
-        <tr>
+        <tr class="selector">
             <th id="act-grid_c0">№</th>
             <th id="act-grid_c1"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=service_date">Дата</a></th>
             <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
@@ -26,7 +26,6 @@
                 <th id="act-grid_c7"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=service">Услуга</a></th>
             <?php } ?>
             <th id="act-grid_c8"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=expense">Сумма</a></th>
-            <th id="act-grid_c9"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=address">Город</a></th>
             <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
                 <th id="act-grid_c10"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=check">Номер чека</a></th>
                 <th id="act-grid_c11"><a class="sort-link">Чек</a></th>
@@ -52,7 +51,6 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td>&nbsp;</td>
                 <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
                     <td>&nbsp;</td>
                     <td><input name="Act[check]" type="text"></td>
@@ -65,13 +63,13 @@
         <tbody>
             <?=$this->renderPartial('service/_item', array('model' => $model))?>
             <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
-                <tr>
+                <tr class="total">
                     <td><strong>Общее</strong></td>
                     <td colspan="<?=Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $model->companyType == Company::CARWASH_TYPE ? 7 : (Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 6 : 5); ?>">
                         <?=count($model->search()->getData())?> машин
                     </td>
                     <td style="text-align:center;"><strong><?=$model->totalExpense()?></strong></td>
-                    <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 4 : 2?>"></td>
+                    <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 3 : 1?>"></td>
                 </tr>
             <?php } ?>
         </tbody>

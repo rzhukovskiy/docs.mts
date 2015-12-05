@@ -15,7 +15,7 @@ $this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
 ));
 $this->widget('zii.widgets.grid.CGridView', array(
     'afterAjaxUpdate' => 'function(id, data){searchHighlight(id, data);}',
-    'id' => 'company-grid',
+    'id' => 'type-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
     'pagerCssClass' => 'dataTables_paginate paging_full_numbers',
