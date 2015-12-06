@@ -6,9 +6,11 @@
  * The followings are the available columns in table '{{type}}':
  * @property int $id
  * @property string $name
+ * @property string $image
  */
 class Type extends CActiveRecord
 {
+    public $screen;
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
@@ -43,6 +45,7 @@ class Type extends CActiveRecord
         return array(
             'id' => 'ID',
             'name' => 'Тип ТС',
+            'screen' => 'Загрузка изображения',
         );
     }
 

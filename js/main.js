@@ -71,23 +71,6 @@ $(document).ready(function() {
         }
     })
 
-    $('body').on('click','.show-act-details', function(e) {
-        e.preventDefault();
-        detailedAct = $(this).parents('tr');
-        if(!detailedAct.next().hasClass('act-details')) {
-            $.ajax({
-                type: "GET",
-                url: $(this).attr('href'),
-                success: function(data) {
-                    detailedAct.after(data);
-                    detailedAct.next().fadeToggle();
-                }
-            });
-        } else {
-            detailedAct.next().fadeToggle();
-        }
-    })
-
     $('body').on('change','.select-period', function(e) {
         if ($(this).val() == 1) {
             $('.month-selector').fadeIn();

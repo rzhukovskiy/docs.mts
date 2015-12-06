@@ -24,12 +24,6 @@ class WMenu extends CWidget
                     'action' => 'list',
                     'role'   => User::ADMIN_ROLE
                 ),
-                'card' => array(
-                    'title'  => 'Карты',
-                    'class'  => 'empty',
-                    'action' => 'list',
-                    'role'   => User::ADMIN_ROLE
-                ),
                 'carwash' => array(
                     'title'  => 'Мойки',
                     'class'  => 'empty',
@@ -52,6 +46,12 @@ class WMenu extends CWidget
                     'title'  => 'Пользователи',
                     'class'  => 'empty',
                     'action' => Company::COMPANY_TYPE,
+                    'role'   => User::ADMIN_ROLE
+                ),
+                'card' => array(
+                    'title'  => 'Карты',
+                    'class'  => 'empty',
+                    'action' => 'list',
                     'role'   => User::ADMIN_ROLE
                 ),
                 'type' => array(

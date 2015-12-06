@@ -15,6 +15,7 @@ class TypeController extends Controller
             'model' => $model,
         ));
     }
+
     public function actionCreate()
     {
         $model = new Type();

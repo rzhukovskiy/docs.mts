@@ -5,7 +5,6 @@
  * @var $model Act
  */
 $this->renderPartial('_autoselect');
-$attributes = $model->attributeLabels();
 $form = $this->beginWidget('CActiveForm', array(
         'id' => 'action-form',
         'action' => array($model->isNewRecord ? Yii::app()->createUrl("/act/create") : Yii::app()->createUrl("/act/update", array("id" => $model->id))),
@@ -69,7 +68,7 @@ $form = $this->beginWidget('CActiveForm', array(
         <div class="row">
             <?=$form->labelEx($model, 'service'); ?>
             <span class="field">
-                    <?=$form->dropDownList($model, 'service', $model->company->type == Company::CARWASH_TYPE ? Act::$carwashList : Act::$serviceList); ?>
+                    <?=$form->dropDownList($model, 'service', Act::$carwashList); ?>
                     <?=$form->error($model, 'service'); ?>
                 </span>
         </div>

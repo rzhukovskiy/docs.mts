@@ -276,7 +276,7 @@ class Act extends CActiveRecord
             'check_image' => 'Чек',
             'screen' => 'Загрузка чека',
             'type_id' => 'Тип ТС',
-            'company_id' => 'Мойка',
+            'company_id' => 'Сервис',
             'card_id' => 'Карта',
             'number' => 'Госномер',
             'mark_id' => 'Марка',
@@ -286,8 +286,8 @@ class Act extends CActiveRecord
             'month' => 'Месяц',
             'is_closed' => 'Закрыта',
             'profit' => 'Итого',
-            'income' => 'Цена компании',
-            'expense' => 'Цена мойки',
+            'income' => 'Сумма',
+            'expense' => 'Сумма',
         );
     }
 

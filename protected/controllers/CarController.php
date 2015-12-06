@@ -32,6 +32,16 @@ class CarController extends Controller
         ));
     }
 
+    public function actionDetails($id)
+    {
+        $model = Act::model()->findByPk($id);
+
+        $this->render('details', array(
+            'model' => $model,
+            'id' => $id,
+        ));
+    }
+
     public function actionCreate()
     {
         $model = new Car();

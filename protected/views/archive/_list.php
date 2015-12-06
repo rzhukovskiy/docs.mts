@@ -78,6 +78,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => 'Город',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->company->address',
+            'visible' => $model->showCompany,
         ),
         array(
             'name' => 'check',
@@ -102,7 +103,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 'details' => array(
                     'label' => '',
                     'imageUrl' => false,
-                    'url' => 'Yii::app()->createUrl("actScope/ajaxList", array("actId" => $data->id))',
+                    'url' => 'Yii::app()->createUrl("car/details", array("id" => $data->id))',
                     'options' => array('class' => 'update show-act-details')
                 ),
             ),

@@ -49,7 +49,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'header' => 'Вид',
             'type' => 'raw',
-            'value' => 'CHtml::image("/images/cars/" . $data->id . ".jpg","",array("style"=>"height:100px;"))',
+            'value' => '$data->image ? CHtml::image("/images/cars/" . $data->image,"",array("style"=>"height:100px;")) : "no image"',
         ),
         array(
             'class' => 'CButtonColumn',
@@ -69,6 +69,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
                     'options' => array('class' => 'delete')
                 ),
             ),
+            'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
         )
     ),
 ));

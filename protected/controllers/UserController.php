@@ -40,7 +40,7 @@ class UserController extends Controller
             $model->attributes = $_POST['User'];
             $this->performAjaxValidation($model);
             if ($model->save()) {
-                $this->redirect(Yii::app()->createUrl('user/list'));
+                $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : Yii::app()->createUrl("/user/" . $model->company->type));
             }
         }
 

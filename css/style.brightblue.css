@@ -7,7 +7,8 @@ h1, h2, h3 { color: #283038; }
 th {color: #069;}
 
 tr.highlight td, .stdtable tbody tr.highlight:hover td { background: #75A3CC; color: #fff; }
-.stdtable tbody tr.total td {border-bottom: 2px solid #ddd; color: #069;}
+.stdtable tbody tr.total td, .stdtable tfoot {border-bottom: 2px solid #ddd; color: #069;}
+.total, .stdform input.total { font-weight: bold; color: #069;}
 .stdtable tr.header td {background: #428bca; color: #fff;}
 .back-to-top {
     position: fixed;
@@ -243,7 +244,7 @@ tr.highlight td, .stdtable tbody tr.highlight:hover td { background: #75A3CC; co
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
 
-#export-button {
+a.btn-info {
     color: #ffffff;
     background-color: #428bca;
     border-color: #357ebd;
@@ -251,7 +252,7 @@ tr.highlight td, .stdtable tbody tr.highlight:hover td { background: #75A3CC; co
     -webkit-box-shadow: none;
     box-shadow: none;
 }
-#export-button button:hover {
+a.btn-info:hover {
     background-color: #3071a9;
     border-color: #285e8e;
 }

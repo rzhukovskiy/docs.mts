@@ -17,7 +17,7 @@ if (Yii::app()->user->model->company->type == Company::COMPANY_TYPE) {
 ?>
 
     <style>
-        .ui-datepicker-calendar {
+        .ui-datepicker-calendar, .ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current {
             display: none;
         }
     </style>
