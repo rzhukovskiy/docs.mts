@@ -53,6 +53,8 @@ class ActController extends Controller
     {
         $models = Act::model()->findAll();
         foreach ($models as $model) {
+            $model->old_expense = $model->expense;
+            $model->old_income = $model->income;
             $model->save();
         }
 
