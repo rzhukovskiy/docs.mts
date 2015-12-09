@@ -55,7 +55,7 @@
                 <td style="width: 60px; text-align:center;" class="<?=!empty($data->check_image) ? "" : "error"?>"><?=$data->check?></td>
                 <td style="width: 40px;"><a class="preview" href="/files/checks/<?=$data->check_image?>"><?=!empty($data->check_image) ? 'image' : ''?></a></td>
             <?php } ?>
-            <td style="width: 75px;" class="button-column">
+            <td style="width: 95px;" class="button-column">
                     <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) || !$data->is_closed) { ?>
                         <a class="update" title="" href="<?=Yii::app()->createUrl('/act/update', array('id' => $data->id))?>"></a>
                         <a class="delete"

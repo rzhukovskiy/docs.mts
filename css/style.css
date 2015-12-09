@@ -1576,13 +1576,13 @@ a.btn_table { background-position: -82px -480px; }
 .my-grid .button-column{
 	text-align: center;
 	width: 100px;
-	padding: 4px;
+	padding: 0px;
 }
 .my-grid .button-column a, a.del-img-icon {
 	background-repeat: no-repeat;
 	height: 16px;
 	width: 16px;
-	margin-right: 5px;
+	margin-right: 0;
 	margin-left: 5px;
 	display: inline-block;
 }

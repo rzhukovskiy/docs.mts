@@ -151,6 +151,7 @@ tr.highlight td, .stdtable tbody tr.highlight:hover td { background: #75A3CC; co
 .userinfomenu .userinfodrop:hover { background-color: #fff; color: #333; border: 1px solid #ccc; border-bottom: 0; }
 
 .stdtable tbody tr:hover td, .stdtable tbody tr.selected td { color: #75A3CC; }
+.stdtable tbody tr td {padding: 8px 5px;}
 .stdtable .filters input:focus {
     border-color: #66afe9;
     outline: 0;

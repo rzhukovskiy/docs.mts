@@ -171,7 +171,10 @@ class Act extends CActiveRecord
             }
         }
 
-        $this->is_closed = 1;
+        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+            $this->is_closed = 1;
+        }
+
         $this->profit = $this->income - $this->expense;
 
         return true;
@@ -252,7 +255,7 @@ class Act extends CActiveRecord
         switch ($this->period) {
             case 1:
                 if($this->month) {
-                    $criteria->compare('date_format(t.service_date, "%Y-%m")', $this->month);
+                    $criteria->compare('date_format(service_date, "%Y-%m")', $this->month);
                 }
                 break;
             case 2:
