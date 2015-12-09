@@ -128,7 +128,7 @@ class Act extends CActiveRecord
         }
 
         if (($this->isNewRecord && !$this->income)
-            || ($this->company->type == Company::CARWASH_TYPE && $this->old_income == $this->income)
+            || (!$this->is_closed && $this->company->type == Company::CARWASH_TYPE && $this->old_income == $this->income)
         ) {
             $washPrice = Price::model()->find('company_id = :company_id AND type_id = :type_id',
                 array(
@@ -150,7 +150,7 @@ class Act extends CActiveRecord
         }
 
         if (($this->isNewRecord && !$this->expense)
-            || ($this->company->type == Company::CARWASH_TYPE && $this->old_expense == $this->expense)
+            || (!$this->is_closed && $this->company->type == Company::CARWASH_TYPE && $this->old_expense == $this->expense)
         ) {
             $washPrice = Price::model()->find('company_id = :company_id AND type_id = :type_id',
                 array(
@@ -190,6 +190,10 @@ class Act extends CActiveRecord
             $this->showCompany = 1;
         }
 
+        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+            $criteria->compare('cardCompany.is_demo', 0);
+        }
+
         if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
             $this->company_id = Yii::app()->user->model->company_id;
         }
@@ -204,7 +208,7 @@ class Act extends CActiveRecord
             $sort->defaultOrder = 't.company_id, t.service_date';
         }
 
-        $criteria->with = array('company' , 'card', 'type', 'mark');
+        $criteria->with = array('company', 'card', 'type', 'mark', 'card.cardCompany');
         $criteria->compare('company.type', $this->companyType);
         $criteria->compare('t.type_id', $this->type_id);
         $criteria->compare('t.card_id', $this->card_id);
@@ -239,6 +243,11 @@ class Act extends CActiveRecord
             $this->is_closed = 1;
         }
 
+        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+            $criteria->compare('cardCompany.is_demo', 0);
+        }
+
+        $criteria->with = array('card.cardCompany');
         $criteria->compare('number', $this->number);
         switch ($this->period) {
             case 1:
@@ -309,7 +318,7 @@ class Act extends CActiveRecord
     {
         $total = 0;
         foreach ($this->search()->getData() as $row) {
-            $total += $row->expense;
+            $total += isset($row->expense) ? $row->expense : 0;
         }
 
         return $total;
@@ -319,7 +328,7 @@ class Act extends CActiveRecord
     {
         $total = 0;
         foreach ($this->search()->getData() as $row) {
-            $total += $row->income;
+            $total += isset($row->income) ? $row->income : 0;
         }
 
         return $total;

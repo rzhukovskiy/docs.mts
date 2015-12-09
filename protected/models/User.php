@@ -106,6 +106,10 @@ class User extends CActiveRecord
 
     public function beforeSave()
     {
+        if (isset($this->company) && $this->company->type == Company::COMPANY_TYPE) {
+            $this->role = self::WATCHER_ROLE;
+        }
+
         if ($this->isNewRecord || $this->password) {
             $salt = self::randomSalt();
             $this->password = self::hashPassword($this->password, $salt);

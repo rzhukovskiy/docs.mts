@@ -1,4 +1,17 @@
 $(document).ready(function() {
+    var storageName = window.location.href + '_pos';
+    var posReader = localStorage[storageName];
+    if (posReader) {
+        $(window).scrollTop(posReader);
+        localStorage.removeItem(storageName);
+    }
+
+    $('td a').click(function(e) {
+        var storageName = window.location.href + '_pos';
+        localStorage[storageName] = $(window).scrollTop();
+        console.log(localStorage[storageName]);
+    });
+
     $('body').on('mouseover',"input[name='Act[create_date]']",function() {
         datePickerDays ();
     });

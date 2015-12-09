@@ -32,7 +32,7 @@
             $companyId = $data->card->company_id;
 ?>
             <tr class="header">
-                <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 13 : 10?>"><strong><?=$data->card->company->name . ' - ' . $data->card->company->address?></strong></td>
+                <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 13 : 10?>"><strong><?=$data->card->cardCompany->name . ' - ' . $data->card->cardCompany->address?></strong></td>
             </tr>
 <?php
         }
@@ -41,7 +41,7 @@
             <td style="width: 40px; text-align:center;"><?=$row?></td>
             <td style="width: 70px; text-align:center;"><?=date('d', strtotime($data->service_date))?></td>
             <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
-                <td style="width: 100px;"><?=$data->card->company->name?></td>
+                <td style="width: 100px;"><?=$data->card->cardCompany->name?></td>
             <?php } ?>
             <td style="width: 60px;"><?=$data->card->num?></td>
             <td style="width: 80px; text-align:center;" class="<?=Car::model()->find("number = :number" ,array(":number" => $data->number)) ? "" : "error"?>"><?=$data->number?></td>
