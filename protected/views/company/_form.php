@@ -64,13 +64,6 @@ $form = $this->beginWidget('CActiveForm', array(
     </span>
 </div>
 <div class="row">
-    <?= $form->labelEx($model, 'is_demo'); ?>
-    <span class="field">
-        <?= $form->checkBox($model, 'is_demo'); ?>
-        <?= $form->error($model, 'is_demo'); ?>
-    </span>
-</div>
-<div class="row">
     <span class="field">
         <?= CHtml::submitButton($model->isNewRecord ? 'Создать компанию' : 'Сохранить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
     </span>

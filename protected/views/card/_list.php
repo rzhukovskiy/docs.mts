@@ -31,7 +31,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'company_id',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->company->name',
+            'value' => '$data->cardCompany->name',
             'filter' => CHtml::listData(Company::model()->findAll('type = :type', array(':type' => Company::COMPANY_TYPE)), 'id', 'name'),
         ),
     ),

@@ -156,6 +156,11 @@ class ExportableGridBehavior extends CBehavior
         $num = 0;
         $total = 0;
         if ($this->companyType != Company::CARWASH_TYPE) {
+            $companyWorkSheet->getDefaultStyle()->applyFromArray(array(
+                'alignment' => array(
+                    'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                )
+            ));
             $companyWorkSheet->getColumnDimension('B')->setWidth(10);
             $companyWorkSheet->getColumnDimension('C')->setWidth(10);
             $companyWorkSheet->getColumnDimension('D')->setWidth(10);
@@ -172,7 +177,7 @@ class ExportableGridBehavior extends CBehavior
             $companyWorkSheet->mergeCells("F$row:G$row");
             $companyWorkSheet->setCellValue("F$row", "Марка ТС");
             $companyWorkSheet->mergeCells("H$row:I$row");
-            $companyWorkSheet->setCellValue("H$row", "Марка ТС");
+            $companyWorkSheet->setCellValue("H$row", "Госномер");
             $companyWorkSheet->getStyle("B$row:I$row")->applyFromArray(array(
                     'font' => array(
                         'bold' => true,
@@ -312,7 +317,8 @@ class ExportableGridBehavior extends CBehavior
 
         //footer
         $row++;
-        $companyWorkSheet->setCellValue("H$row", "ВСЕГО: $total");
+        $companyWorkSheet->setCellValue("H$row", "ВСЕГО:");
+        $companyWorkSheet->setCellValue("I$row", "$total");
 
         $row++; $row++;
         $companyWorkSheet->mergeCells("B$row:I$row");
@@ -330,40 +336,40 @@ class ExportableGridBehavior extends CBehavior
 
         $row++; $row++;
         $companyWorkSheet->mergeCells("B$row:E$row");
-        $companyWorkSheet->mergeCells("H$row:I$row");
+        $companyWorkSheet->mergeCells("G$row:I$row");
         if ($this->showCompany) {
             $companyWorkSheet->setCellValue("B$row", "Работу сдал");
-            $companyWorkSheet->setCellValue("H$row", "Работу принял");
+            $companyWorkSheet->setCellValue("G$row", "Работу принял");
         } else {
             $companyWorkSheet->setCellValue("B$row", "Работу принял");
-            $companyWorkSheet->setCellValue("H$row", "Работу сдал");
+            $companyWorkSheet->setCellValue("G$row", "Работу сдал");
         }
 
         $row++; $row++;
         $companyWorkSheet->mergeCells("B$row:E$row");
-        $companyWorkSheet->mergeCells("H$row:I$row");
+        $companyWorkSheet->mergeCells("G$row:I$row");
         if ($this->showCompany) {
             $companyWorkSheet->setCellValue("B$row", "Исполнитель");
-            $companyWorkSheet->setCellValue("H$row", "Заказчик");
+            $companyWorkSheet->setCellValue("G$row", "Заказчик");
         } else {
             $companyWorkSheet->setCellValue("B$row", "Заказчик");
-            $companyWorkSheet->setCellValue("H$row", "Исполнитель");
+            $companyWorkSheet->setCellValue("G$row", "Исполнитель");
         }
 
         $row++; $row++;
         $companyWorkSheet->mergeCells("B$row:E$row");
-        $companyWorkSheet->mergeCells("H$row:I$row");
+        $companyWorkSheet->mergeCells("G$row:I$row");
         if ($this->showCompany) {
-            $companyWorkSheet->setCellValue("B$row", "______Мосесян Г.А.");
-            $companyWorkSheet->setCellValue("H$row", "______$company->contact");
+            $companyWorkSheet->setCellValue("B$row", "____________Мосесян Г.А.");
+            $companyWorkSheet->setCellValue("G$row", "____________$company->contact");
         } else {
-            $companyWorkSheet->setCellValue("B$row", "______Мосесян Г.А.");
-            $companyWorkSheet->setCellValue("H$row", "______$company->contact");
+            $companyWorkSheet->setCellValue("B$row", "____________Мосесян Г.А.");
+            $companyWorkSheet->setCellValue("G$row", "____________$company->contact");
         }
 
         $row++; $row++;
         $companyWorkSheet->setCellValue("C$row", "М.П.");
-        $companyWorkSheet->setCellValue("H$row", "М.П.");
+        $companyWorkSheet->setCellValue("G$row", "М.П.");
 
         //saving document
         $path = "acts/" . date('m-Y', $this->time);

@@ -28,7 +28,7 @@
             <?php
             $form = $this->beginWidget('CActiveForm', array(
                 'method' => 'get',
-                'action' => Yii::app()->createUrl("/act/fix"),
+                'action' => Yii::app()->createUrl("/act/fix?" . Yii::app()->getRequest()->queryString),
                 'id' => 'action-form',
                 'errorMessageCssClass' => 'help-inline',
                 'htmlOptions' => array('class'=>'stdform', 'novalidate'=>'novalidate'),

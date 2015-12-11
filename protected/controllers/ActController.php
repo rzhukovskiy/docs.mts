@@ -51,11 +51,26 @@ class ActController extends Controller
 
     public function actionFix()
     {
-        $models = Act::model()->findAll();
-        foreach ($models as $model) {
-            $model->old_expense = $model->expense;
-            $model->old_income = $model->income;
-            $model->save();
+        $model = new Act('search');
+        $model->unsetAttributes();
+        $model->companyType = Company::CARWASH_TYPE;
+        $model->showCompany = Yii::app()->getRequest()->getParam('showCompany', false);
+
+        if (isset($_GET['Act'])) {
+            $model->attributes = $_GET['Act'];
+            $model->day = isset($_GET['Act']['day']) && $_GET['Act']['day'] ? str_pad($_GET['Act']['day'], 2, '0', STR_PAD_LEFT) : false;
+        }
+
+        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+            $model->service_date = date('Y-m-d', time() - 30 * 24 * 3600);
+        }
+
+        $actList = $model->search()->getData();
+
+        foreach ($actList as $act) {
+            $act->old_expense = $act->expense;
+            $act->old_income = $act->income;
+            $act->save();
         }
 
         $this->redirect(isset(Yii::app()->request->urlReferrer) ? Yii::app()->request->urlReferrer : array('act/carwash'));

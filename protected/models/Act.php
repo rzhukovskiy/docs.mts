@@ -108,6 +108,13 @@ class Act extends CActiveRecord
             return false;
         }
 
+        $closedList = self::model()->find('is_closed = 1 AND date_format(service_date, "%Y-%m") = :month', array(
+            ':month' => date('Y-m', strtotime($this->service_date)),
+        ));
+        if ($closedList) {
+            return false;
+        }
+
         $this->number = mb_strtoupper(preg_replace('/\s+/', '', $this->number), 'UTF-8');
 
         $car = Car::model()->find('number = :number', array(':number' => $this->number));
@@ -217,13 +224,14 @@ class Act extends CActiveRecord
         $criteria->compare('t.card_id', $this->card_id);
         $criteria->compare('t.number', $this->number, true);
         $criteria->compare('t.mark_id', $this->mark_id);
-        if($this->day) {
-            $criteria->compare('date_format(t.service_date, "%Y-%m-%d")', "$this->month-$this->day");
-        } elseif($this->month) {
-            $criteria->compare('date_format(t.service_date, "%Y-%m")', $this->month);
-        }
         if($this->create_date) {
             $criteria->compare('date_format(t.create_date, "%Y-%m-%d")', $this->create_date);
+        } else {
+            if($this->day) {
+                $criteria->compare('date_format(t.service_date, "%Y-%m-%d")', "$this->month-$this->day");
+            } else {
+                $criteria->compare('date_format(t.service_date, "%Y-%m")', $this->getMonth());
+            }
         }
         $sort->applyOrder($criteria);
 

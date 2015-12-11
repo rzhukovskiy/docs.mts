@@ -51,7 +51,7 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
+                <?php if ($model->companyType == Company::CARWASH_TYPE)  { ?>
                     <td>&nbsp;</td>
                     <td><input name="Act[check]" type="text"></td>
                     <td>&nbsp;</td>
