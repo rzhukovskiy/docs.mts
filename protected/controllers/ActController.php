@@ -70,6 +70,7 @@ class ActController extends Controller
         foreach ($actList as $act) {
             $act->old_expense = $act->expense;
             $act->old_income = $act->income;
+            $act->fixMode = true;
             $act->save();
         }
 

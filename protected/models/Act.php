@@ -33,6 +33,7 @@ class Act extends CActiveRecord
     public $companyType;
     public $showCompany;
     public $period;
+    public $fixMode = false;
 
     public static $periodList = array('все время', 'месяц', 'квартал', 'полгода', 'год');
     public static $carwashList = array(
@@ -111,7 +112,7 @@ class Act extends CActiveRecord
         $closedList = self::model()->find('is_closed = 1 AND date_format(service_date, "%Y-%m") = :month', array(
             ':month' => date('Y-m', strtotime($this->service_date)),
         ));
-        if ($closedList) {
+        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $closedList) {
             return false;
         }
 
@@ -178,7 +179,7 @@ class Act extends CActiveRecord
             }
         }
 
-        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) && !$this->fixMode) {
             $this->is_closed = 1;
         }
 
