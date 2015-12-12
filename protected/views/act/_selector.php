@@ -43,7 +43,7 @@
     </th>
     <th colspan="<?=$model->companyType == Company::CARWASH_TYPE ? ($model->showCompany ? 5 : 4) : ($model->showCompany ? 2 : 1)?>">
         <?php
-        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) && ($model->companyType == Company::CARWASH_TYPE || $model->showCompany)) {
             $this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
                 'selector' => '#act-grid',
             ));
