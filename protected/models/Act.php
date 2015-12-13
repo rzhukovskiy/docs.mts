@@ -109,11 +109,13 @@ class Act extends CActiveRecord
             return false;
         }
 
-        $closedList = self::model()->find('is_closed = 1 AND date_format(service_date, "%Y-%m") = :month', array(
-            ':month' => date('Y-m', strtotime($this->service_date)),
-        ));
-        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $closedList) {
-            return false;
+        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $this->companyType == Company::CARWASH_TYPE) {
+            $closedList = self::model()->find('is_closed = 1 AND date_format(service_date, "%Y-%m") = :month', array(
+                ':month' => date('Y-m', strtotime($this->service_date)),
+            ));
+            if ($closedList) {
+                return false;
+            }
         }
 
         $this->number = mb_strtoupper(preg_replace('/\s+/', '', $this->number), 'UTF-8');
@@ -177,10 +179,6 @@ class Act extends CActiveRecord
 
                 $this->expense = $servicePrice[$this->service];
             }
-        }
-
-        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) && !$this->fixMode) {
-            $this->is_closed = 1;
         }
 
         $this->profit = $this->income - $this->expense;
