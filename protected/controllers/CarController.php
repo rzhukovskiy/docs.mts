@@ -25,6 +25,7 @@ class CarController extends Controller
             $model->attributes = $_GET['Act'];
         }
         $model->number = $carModel->number;
+        $model->month = date('Y-m');
 
         $this->render('history', array(
             'model' => $model,

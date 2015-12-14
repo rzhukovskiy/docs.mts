@@ -8,6 +8,7 @@
     <table class="stdtable grid table-fixed">
         <thead>
         <?php
+        $totalCount = count($model->search()->getData());
         if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
             $this->renderPartial('_selector', array('model' => $model));
         }
@@ -68,7 +69,7 @@
                 <tr class="total">
                     <td><strong>Общее</strong></td>
                     <td colspan="<?=Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $model->companyType == Company::CARWASH_TYPE ? 7 : (Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 6 : 5); ?>">
-                        <?=count($model->search()->getData())?> машин
+                        <?=$totalCount . ' ' . StringNum::getNumEnding($totalCount, array('машина', 'машины', 'машин'))?>
                     </td>
                     <td style="text-align:center;"><strong><?=$model->totalIncome()?></strong></td>
                     <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 4 : 2?>"></td>

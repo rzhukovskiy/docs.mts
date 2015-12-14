@@ -440,7 +440,7 @@ button,input,select,textarea { font-size: 12px; font-family: Arial, Helvetica, s
 
 /*************** STANDARD TABLES **************/
 /*************** tables.html ******************/
-.type-grid {font-size: 24px; line-height: 24px;}
+.stdtable td.type-grid {font-size: 24px; line-height: 28px;}
 
 .stdtable, .viewtable { width: 100%; border-collapse: collapse;}
 .stdtable .con0 { background: #fcfcfc; }
