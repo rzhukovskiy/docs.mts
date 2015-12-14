@@ -53,13 +53,6 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->company->address',
         ),
         array(
-            'name' => 'company_id',
-            'header' => 'Исполнитель',
-            'htmlOptions' => array('style' => ''),
-            'value' => '$data->card->cardCompany->name',
-            'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
-        ),
-        array(
             'header' => 'Сумма',
             'name' => 'income',
             'htmlOptions' => array('style' => 'text-align:center;'),

@@ -225,8 +225,9 @@ class ExportableGridBehavior extends CBehavior
                     );
 
                 $row++;
-                $companyWorkSheet->mergeCells("B$row:H$row");
+                $companyWorkSheet->mergeCells("B$row:G$row");
                 $companyWorkSheet->setCellValue("B$row", "Вид услуг");
+                $companyWorkSheet->setCellValue("H$row", "Кол-во");
                 $companyWorkSheet->setCellValue("I$row", "Стоимость");
                 $companyWorkSheet->getStyle("B$row:I$row")->applyFromArray(array(
                         'font' => array(
@@ -240,13 +241,18 @@ class ExportableGridBehavior extends CBehavior
                 foreach ($data->scope as $scope) {
                     $row++;
                     $num++;
-                    $companyWorkSheet->mergeCells("B$row:H$row");
+                    $companyWorkSheet->mergeCells("B$row:G$row");
                     $companyWorkSheet->setCellValue("B$row", "$num. $scope->description");
+                    $companyWorkSheet->getStyle("B$row:G$row")->getAlignment()->setWrapText(true);
+                    if (mb_strlen($scope->description) > 55) {
+                        $companyWorkSheet->getRowDimension($row)->setRowHeight(40);
+                    }
+                    $companyWorkSheet->setCellValue("H$row", $scope->amount);
                     if ($this->showCompany) {
-                        $companyWorkSheet->setCellValue("I$row", $scope->amount * $scope->income);
+                        $companyWorkSheet->setCellValue("I$row", $scope->income);
                         $total += $scope->amount * $scope->income;
                     } else {
-                        $companyWorkSheet->setCellValue("I$row", $scope->amount * $scope->expense);
+                        $companyWorkSheet->setCellValue("I$row", $scope->expense);
                         $total += $scope->amount * $scope->expense;
                     }
                 }
