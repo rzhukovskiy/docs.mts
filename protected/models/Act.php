@@ -24,6 +24,8 @@
  * @property string $day
  * @property string $month
  * @property int $period
+ * @property string $start_date
+ * @property string $end_date
  */
 class Act extends CActiveRecord
 {
@@ -33,6 +35,8 @@ class Act extends CActiveRecord
     public $companyType;
     public $showCompany;
     public $period;
+    public $start_date;
+    public $end_date;
     public $fixMode = false;
 
     public static $periodList = array('все время', 'месяц', 'квартал', 'полгода', 'год');
@@ -83,7 +87,7 @@ class Act extends CActiveRecord
         return array(
             array('type_id, card_id, number, mark_id', 'required'),
             array('check', 'unique'),
-            array('period, month, day, check, company_service, old_expense, old_income, month, company_id, service, company_service, service_date, profit, income, expense, check_image', 'safe'),
+            array('start_date, end_date, period, month, day, check, company_service, old_expense, old_income, month, company_id, service, company_service, service_date, profit, income, expense, check_image', 'safe'),
             array('company_id, id, number, mark_id, type_id, card_id, service_date', 'safe', 'on' => 'search'),
         );
     }
@@ -192,15 +196,11 @@ class Act extends CActiveRecord
      */
     public function search()
     {
-        $criteria = new CDbCriteria;
+        $criteria = new CDbCriteria();
 
         if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE) && Yii::app()->user->model->company->type == Company::COMPANY_TYPE) {
             $this->is_closed = 1;
             $this->showCompany = 1;
-        }
-
-        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $criteria->compare('cardCompany.is_demo', 0);
         }
 
         if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
@@ -234,8 +234,49 @@ class Act extends CActiveRecord
         }
         $sort->applyOrder($criteria);
 
+        $this->getDbCriteria()->mergeWith($criteria);
+
         return new CActiveDataProvider(get_class($this), array(
-            'criteria' => $criteria,
+            'criteria' => $this->getDbCriteria(),
+            'pagination' => false,
+        ));
+    }
+    public function stat()
+    {
+        $criteria = new CDbCriteria();
+
+        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE) && Yii::app()->user->model->company->type == Company::COMPANY_TYPE) {
+            $this->is_closed = 1;
+            $this->showCompany = 1;
+        }
+
+        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+            $this->company_id = Yii::app()->user->model->company_id;
+        }
+
+        $sort = new CSort;
+
+        if ($this->showCompany) {
+            $criteria->compare('card.company_id', $this->company_id);
+            $sort->defaultOrder = 'card.company_id, t.service_date';
+        } else {
+            $criteria->compare('t.company_id', $this->company_id);
+            $sort->defaultOrder = 't.company_id, t.service_date';
+        }
+
+        $criteria->with = array('company', 'card', 'type', 'mark', 'card.cardCompany');
+        $criteria->compare('company.type', $this->companyType);
+        $criteria->compare('t.type_id', $this->type_id);
+        $criteria->compare('t.card_id', $this->card_id);
+        $criteria->compare('t.number', $this->number, true);
+        $criteria->compare('t.mark_id', $this->mark_id);
+        $criteria->addBetweenCondition('service_date', $this->start_date, $this->end_date);
+        $sort->applyOrder($criteria);
+
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        return new CActiveDataProvider(get_class($this), array(
+            'criteria' => $this->getDbCriteria(),
             'pagination' => false,
         ));
     }
@@ -246,15 +287,11 @@ class Act extends CActiveRecord
      */
     public function cars()
     {
-        $criteria = new CDbCriteria;
+        $criteria = new CDbCriteria();
 
         if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
             $this->showCompany = 1;
             $this->is_closed = 1;
-        }
-
-        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $criteria->compare('cardCompany.is_demo', 0);
         }
 
         $criteria->with = array('card.cardCompany');
@@ -280,11 +317,28 @@ class Act extends CActiveRecord
         $sort = new CSort;
         $sort->defaultOrder = 'service_date';
         $sort->applyOrder($criteria);
+        $this->getDbCriteria()->mergeWith($criteria);
 
         return new CActiveDataProvider(get_class($this), array(
-            'criteria' => $criteria,
+            'criteria' => $this->getDbCriteria(),
             'pagination' => false,
         ));
+    }
+
+    public function byDays()
+    {
+        $criteria = $this->getDbCriteria();
+
+        $criteria->group = 'day';
+        $criteria->select = [
+            'date_format(service_date, "%Y-%m-%d") as day',
+            'SUM(expense) as expense',
+            'SUM(income) as income',
+            'SUM(profit) as profit'
+        ];
+
+        $this->getDbCriteria()->mergeWith($criteria);
+        return $this;
     }
 
     public function attributeLabels()

@@ -130,10 +130,6 @@ function isScrolledIntoView(elem) {
 }
 
 function datePickerDays () {
-    $( "#StatsForm_to_h" ).datepicker({
-        dateFormat: "yy-mm-dd"
-    });
-
     $( ".datepicker" ).datepicker({
         dateFormat: "yy-mm-dd"
     });

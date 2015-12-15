@@ -12,7 +12,6 @@
  * @property string $type
  * @property string $contract
  * @property string $act_header
- * @property int $is_demo
  */
 class Company extends CActiveRecord
 {
@@ -48,7 +47,7 @@ class Company extends CActiveRecord
     {
         return array(
             array('name','required'),
-            array('is_demo, address, phone, contact, contract, act_header, type, cardList','safe'),
+            array('address, phone, contact, contract, act_header, type, cardList','safe'),
 
         );
     }
@@ -64,7 +63,6 @@ class Company extends CActiveRecord
             'contact' => 'Директор',
             'contract' => 'Договор',
             'act_header' => 'Заголовок акта',
-            'is_demo' => 'Демо компания',
         );
     }
 

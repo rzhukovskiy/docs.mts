@@ -87,6 +87,13 @@ class WMenu extends CWidget
                     'role'   => User::GUEST_ROLE,
                     'visible' => !Yii::app()->user->checkAccess(User::ADMIN_ROLE),
                 ),
+                'stat' => array(
+                    'title'  => 'Статистика',
+                    'class'  => 'empty',
+                    'action' => 'index',
+                    'role'   => User::ADMIN_ROLE,
+                    'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
+                ),
             );
         }
 
