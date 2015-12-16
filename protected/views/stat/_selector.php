@@ -13,19 +13,36 @@ $form = $this->beginWidget('CActiveForm', array(
     'htmlOptions' => array('class'=>'stdform', 'novalidate'=>'novalidate'),
 ));
 ?>
+<style>.ui-datepicker-calendar, .ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current {display: none;} </style>
 <table cellspacing="0" cellpadding="0" border="0" class="stdtable">
     <thead>
         <tr>
             <th>
-                <?=$form->textField($model, 'start_date', ['class' => 'datepicker'])?>
-                <?=$form->textField($model, 'end_date', ['class' => 'datepicker'])?>
+                <?=$form->dropDownList($model, 'period', Act::$periodList, array('class' =>'select-period', 'style' => 'min-width:200px; margin-right: 10px;'))?>
+                <?=$form->textField($model, 'month', array('class' => 'month-selector smallinput', 'style' => $model->period != 1 ? 'display:none' : ''))?>
             </th>
             <th>
                 <?=$form->dropDownList(
                     $model,
-                    'company_id',
-                    CHtml::listData(Company::model()->findAll('type = :type', [':type' => $model->companyType]), 'id', 'name'),
-                    ['empty' => '-все-']
+                    'cardCompany',
+                    CHtml::listData(Company::model()->findAll('type = :type', [':type' => Company::COMPANY_TYPE]), 'id', 'name'),
+                    ['empty' => '-все компании-']
+                )?>
+            </th>
+            <th>
+                <?=$form->dropDownList(
+                    $model,
+                    'type_id',
+                    CHtml::listData(Type::model()->findAll(), 'id', 'name'),
+                    ['empty' => '-все типы-']
+                )?>
+            </th>
+            <th>
+                <?=$form->dropDownList(
+                    $model,
+                    'mark_id',
+                    CHtml::listData(Mark::model()->findAll(), 'id', 'name'),
+                    ['empty' => '-все марки-']
                 )?>
             </th>
             <th>
@@ -33,7 +50,7 @@ $form = $this->beginWidget('CActiveForm', array(
             </th>
         </tr>
         <tr class="header">
-            <td colspan="3">&nbsp;</td>
+            <td colspan="5">&nbsp;</td>
         </tr>
     </thead>
 </table>

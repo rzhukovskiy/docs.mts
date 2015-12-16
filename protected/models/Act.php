@@ -24,8 +24,6 @@
  * @property string $day
  * @property string $month
  * @property int $period
- * @property string $start_date
- * @property string $end_date
  */
 class Act extends CActiveRecord
 {
@@ -34,9 +32,8 @@ class Act extends CActiveRecord
     public $old_income;
     public $companyType;
     public $showCompany;
+    public $cardCompany;
     public $period;
-    public $start_date;
-    public $end_date;
     public $fixMode = false;
 
     public static $periodList = array('все время', 'месяц', 'квартал', 'полгода', 'год');
@@ -87,7 +84,7 @@ class Act extends CActiveRecord
         return array(
             array('type_id, card_id, number, mark_id', 'required'),
             array('check', 'unique'),
-            array('start_date, end_date, period, month, day, check, company_service, old_expense, old_income, month, company_id, service, company_service, service_date, profit, income, expense, check_image', 'safe'),
+            array('cardCompany, period, month, day, check, company_service, old_expense, old_income, month, company_id, service, company_service, service_date, profit, income, expense, check_image', 'safe'),
             array('company_id, id, number, mark_id, type_id, card_id, service_date', 'safe', 'on' => 'search'),
         );
     }
@@ -255,23 +252,44 @@ class Act extends CActiveRecord
         }
 
         $sort = new CSort;
+        $sort->defaultOrder = 'profit DESC';
 
         if ($this->showCompany) {
             $criteria->compare('card.company_id', $this->company_id);
-            $sort->defaultOrder = 'card.company_id, t.service_date';
         } else {
             $criteria->compare('t.company_id', $this->company_id);
-            $sort->defaultOrder = 't.company_id, t.service_date';
         }
 
         $criteria->with = array('company', 'card', 'type', 'mark', 'card.cardCompany');
+        $criteria->compare('card.company_id', $this->cardCompany);
         $criteria->compare('company.type', $this->companyType);
         $criteria->compare('t.type_id', $this->type_id);
         $criteria->compare('t.card_id', $this->card_id);
         $criteria->compare('t.number', $this->number, true);
         $criteria->compare('t.mark_id', $this->mark_id);
-        $criteria->addBetweenCondition('service_date', $this->start_date, $this->end_date);
+        switch ($this->period) {
+            case 1:
+                if($this->month) {
+                    $criteria->compare('date_format(service_date, "%Y-%m")', $this->month);
+                }
+                break;
+            case 2:
+                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-3 month", time())), date('Y-m-d', time()));
+                break;
+            case 3:
+                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-6 month", time())), date('Y-m-d', time()));
+                break;
+            case 4:
+                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-12 month", time())), date('Y-m-d', time()));
+                break;
+            default:
+        }
         $sort->applyOrder($criteria);
+        $sort->attributes = [
+            'income',
+            'expense',
+            'profit',
+        ];
 
         $this->getDbCriteria()->mergeWith($criteria);
 
@@ -335,6 +353,21 @@ class Act extends CActiveRecord
             'SUM(expense) as expense',
             'SUM(income) as income',
             'SUM(profit) as profit'
+        ];
+
+        $this->getDbCriteria()->mergeWith($criteria);
+        return $this;
+    }
+
+    public function byCompanies()
+    {
+        $criteria = $this->getDbCriteria();
+
+        $criteria->group = 't.company_id';
+        $criteria->select = [
+            'SUM(expense) as expense',
+            'SUM(income) as income',
+            'SUM(profit) as profit',
         ];
 
         $this->getDbCriteria()->mergeWith($criteria);

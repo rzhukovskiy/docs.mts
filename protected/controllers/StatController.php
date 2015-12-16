@@ -16,13 +16,8 @@ class StatController extends Controller
         if (isset($_GET['Act'])) {
             $model->attributes = $_GET['Act'];
         }
-
-        if (!isset($model->end_date)) {
-            $model->end_date = date('Y-m-d');
-        }
-
-        if (!isset($model->start_date)) {
-            $model->start_date = date('Y-m-01', strtotime($model->end_date . ' 00:00:00'));
+        if (!isset($_GET['Act']['month'])) {
+            $model->service_date = date('Y-m-d', time());
         }
 
         $this->render('index', array(

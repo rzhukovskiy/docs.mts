@@ -20,7 +20,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'class' => '',
         )
     ),
-    'dataProvider' => $model->byDays()->stat(),
+    'dataProvider' => $model->byCompanies()->stat(),
     'emptyText' => '',
     'cssFile' => false,
     'template' => "{items}\n{pager}",
@@ -30,21 +30,20 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => '№',
             'htmlOptions' => array('style' => 'width: 40px; text-align:center;'),
             'value' => '++$row',
-            'footer' => 'Итого',
         ),
         array(
-            'name' => 'day',
+            'name' => 'company_id',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->day',
-        ),
-        array(
-            'header' => 'Приход',
-            'name' => 'income',
-            'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => '$data->company->name',
         ),
         array(
             'header' => 'Расход',
             'name' => 'expense',
+            'htmlOptions' => array('style' => 'text-align:center;'),
+        ),
+        array(
+            'header' => 'Приход',
+            'name' => 'income',
             'htmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
