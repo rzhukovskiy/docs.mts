@@ -20,7 +20,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'class' => '',
         )
     ),
-    'dataProvider' => $model->byCompanies()->stat(),
+    'dataProvider' => $details ? $model->byDays()->stat() : $model->byCompanies()->stat(),
     'emptyText' => '',
     'cssFile' => false,
     'template' => "{items}\n{pager}",
@@ -32,22 +32,28 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '++$row',
         ),
         array(
+            'name' => 'day',
+            'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => '$data->day',
+            'visible' => $details,
+        ),
+        array(
             'name' => 'company_id',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->company->name',
-            'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
+            'visible' => !$details && Yii::app()->user->checkAccess(User::ADMIN_ROLE),
         ),
         array(
-            'header' => 'Расход',
+            'header' => Yii::app()->user->role == User::MANAGER_ROLE ? 'Приход' : 'Расход',
             'name' => 'expense',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'visible' => Yii::app()->user->checkAccess(User::WATCHER_ROLE),
+            'visible' => Yii::app()->user->checkAccess(User::MANAGER_ROLE),
         ),
         array(
-            'header' => 'Приход',
+            'header' => Yii::app()->user->role == User::WATCHER_ROLE ? 'Расход' : 'Приход',
             'name' => 'income',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'visible' => Yii::app()->user->checkAccess(User::MANAGER_ROLE),
+            'visible' => Yii::app()->user->checkAccess(User::WATCHER_ROLE),
         ),
         array(
             'header' => 'Прибыль',
@@ -55,5 +61,19 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'text-align:center;'),
             'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
         ),
+        array(
+            'class' => 'CButtonColumn',
+            'template' => '{history}',
+            'header' => 'Детализация',
+            'buttons' => array(
+                'history' => array(
+                    'label' => '',
+                    'imageUrl' => false,
+                    'url' => 'Yii::app()->createUrl("stat/details", $_GET)',
+                    'options' => array('class' => 'calendar')
+                ),
+            ),
+            'visible' => !$details,
+        )
     ),
 ));

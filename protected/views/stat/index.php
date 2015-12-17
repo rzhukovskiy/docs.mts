@@ -22,5 +22,5 @@ if (Yii::app()->user->role == User::MANAGER_ROLE) {
         <h2 class="table"><span>Статистика</span></h2>
     </div>
 <?php
-$this->renderPartial('_selector', array('model' => $model));
-$this->renderPartial('_list', array('model' => $model));
+$this->renderPartial('_selector', ['model' => $model]);
+$this->renderPartial('_list', ['model' => $model, 'details' => false]);

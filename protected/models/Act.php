@@ -251,9 +251,6 @@ class Act extends CActiveRecord
             $this->company_id = Yii::app()->user->model->company_id;
         }
 
-        $sort = new CSort;
-        $sort->defaultOrder = 'profit DESC';
-
         if ($this->showCompany) {
             $criteria->compare('card.company_id', $this->company_id);
         } else {
@@ -284,12 +281,6 @@ class Act extends CActiveRecord
                 break;
             default:
         }
-        $sort->applyOrder($criteria);
-        $sort->attributes = [
-            'income',
-            'expense',
-            'profit',
-        ];
 
         $this->getDbCriteria()->mergeWith($criteria);
 
@@ -355,6 +346,15 @@ class Act extends CActiveRecord
             'SUM(profit) as profit'
         ];
 
+        $sort = new CSort;
+        $sort->defaultOrder = 'service_date';
+        $sort->applyOrder($criteria);
+        $sort->attributes = [
+            'income',
+            'expense',
+            'profit',
+        ];
+
         $this->getDbCriteria()->mergeWith($criteria);
         return $this;
     }
@@ -370,6 +370,15 @@ class Act extends CActiveRecord
             'SUM(expense) as expense',
             'SUM(income) as income',
             'SUM(profit) as profit',
+        ];
+
+        $sort = new CSort;
+        $sort->defaultOrder = 'profit DESC';
+        $sort->applyOrder($criteria);
+        $sort->attributes = [
+            'income',
+            'expense',
+            'profit',
         ];
 
         $this->getDbCriteria()->mergeWith($criteria);
@@ -396,6 +405,7 @@ class Act extends CActiveRecord
             'profit' => 'Итого',
             'income' => 'Сумма',
             'expense' => 'Сумма',
+            'day' => 'День',
         );
     }
 
