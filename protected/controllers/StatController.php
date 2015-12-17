@@ -7,7 +7,7 @@ class StatController extends Controller
         $model->unsetAttributes();
 
         if (!$type) {
-            $type = Company::CARWASH_TYPE;
+            $type = Yii::app()->user->role == User::MANAGER_ROLE ? Yii::app()->user->model->company->type : Company::CARWASH_TYPE;
         }
         $model->companyType = $type;
 

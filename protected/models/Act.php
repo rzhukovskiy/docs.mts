@@ -363,7 +363,9 @@ class Act extends CActiveRecord
     {
         $criteria = $this->getDbCriteria();
 
-        $criteria->group = 't.company_id';
+        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+            $criteria->group = 't.company_id';
+        }
         $criteria->select = [
             'SUM(expense) as expense',
             'SUM(income) as income',

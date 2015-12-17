@@ -35,21 +35,25 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'company_id',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->company->name',
+            'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
         ),
         array(
             'header' => 'Расход',
             'name' => 'expense',
             'htmlOptions' => array('style' => 'text-align:center;'),
+            'visible' => Yii::app()->user->checkAccess(User::WATCHER_ROLE),
         ),
         array(
             'header' => 'Приход',
             'name' => 'income',
             'htmlOptions' => array('style' => 'text-align:center;'),
+            'visible' => Yii::app()->user->checkAccess(User::MANAGER_ROLE),
         ),
         array(
             'header' => 'Прибыль',
             'name' => 'profit',
             'htmlOptions' => array('style' => 'text-align:center;'),
+            'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
         ),
     ),
 ));

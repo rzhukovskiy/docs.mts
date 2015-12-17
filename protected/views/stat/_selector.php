@@ -18,23 +18,23 @@ $form = $this->beginWidget('CActiveForm', array(
     <thead>
         <tr>
             <th>
-                <?=$form->dropDownList($model, 'period', Act::$periodList, array('class' =>'select-period', 'style' => 'min-width:200px; margin-right: 10px;'))?>
+                <?=$form->dropDownList($model, 'period', Act::$periodList, ['class' =>'select-period', 'style' => 'min-width:100px; margin-right: 10px;'])?>
                 <?=$form->textField($model, 'month', array('class' => 'month-selector smallinput', 'style' => $model->period != 1 ? 'display:none' : ''))?>
             </th>
             <th>
-                <?=$form->dropDownList(
+                <?=Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? $form->dropDownList(
                     $model,
                     'cardCompany',
                     CHtml::listData(Company::model()->findAll('type = :type', [':type' => Company::COMPANY_TYPE]), 'id', 'name'),
                     ['empty' => '-все компании-']
-                )?>
+                ) : ''?>
             </th>
             <th>
                 <?=$form->dropDownList(
                     $model,
                     'type_id',
                     CHtml::listData(Type::model()->findAll(), 'id', 'name'),
-                    ['empty' => '-все типы-']
+                    ['empty' => '-все типы-', 'style' => 'width: 100px']
                 )?>
             </th>
             <th>
