@@ -23,4 +23,8 @@ if (Yii::app()->user->role == User::MANAGER_ROLE) {
     </div>
 <?php
 $this->renderPartial('_selector', ['model' => $model]);
-$this->renderPartial('_list', ['model' => $model, 'details' => false]);
+if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+    $this->renderPartial('_companies', ['model' => $model, 'details' => false]);
+} else {
+    $this->renderPartial('_months', ['model' => $model, 'details' => false]);
+}

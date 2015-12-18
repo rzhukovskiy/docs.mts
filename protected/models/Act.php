@@ -24,6 +24,7 @@
  * @property string $day
  * @property string $month
  * @property int $period
+ * @property int $amount
  */
 class Act extends CActiveRecord
 {
@@ -34,6 +35,7 @@ class Act extends CActiveRecord
     public $showCompany;
     public $cardCompany;
     public $period;
+    public $amount;
     public $fixMode = false;
 
     public static $periodList = array('все время', 'месяц', 'квартал', 'полгода', 'год');
@@ -353,7 +355,34 @@ class Act extends CActiveRecord
 
         $criteria->group = 'day';
         $criteria->select = [
+            'COUNT(t.id) as amount',
             'date_format(service_date, "%Y-%m-%d") as day',
+            'SUM(expense) as expense',
+            'SUM(income) as income',
+            'SUM(profit) as profit'
+        ];
+
+        $sort = new CSort;
+        $sort->defaultOrder = 'service_date';
+        $sort->applyOrder($criteria);
+        $sort->attributes = [
+            'income',
+            'expense',
+            'profit',
+        ];
+
+        $this->getDbCriteria()->mergeWith($criteria);
+        return $this;
+    }
+
+    public function byMonths()
+    {
+        $criteria = $this->getDbCriteria();
+
+        $criteria->group = 'month';
+        $criteria->select = [
+            'COUNT(t.id) as amount',
+            'date_format(service_date, "%Y-%m") as month',
             'SUM(expense) as expense',
             'SUM(income) as income',
             'SUM(profit) as profit'
@@ -380,6 +409,7 @@ class Act extends CActiveRecord
             $criteria->group = 't.company_id';
         }
         $criteria->select = [
+            'COUNT(t.id) as amount',
             'SUM(expense) as expense',
             'SUM(income) as income',
             'SUM(profit) as profit',

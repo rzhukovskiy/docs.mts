@@ -20,7 +20,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'class' => '',
         )
     ),
-    'dataProvider' => $details ? $model->byDays()->stat() : $model->byCompanies()->stat(),
+    'dataProvider' => $model->byCompanies()->stat(),
     'emptyText' => '',
     'cssFile' => false,
     'template' => "{items}\n{pager}",
@@ -32,34 +32,19 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '++$row',
         ),
         array(
-            'name' => 'day',
-            'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->day',
-            'visible' => $details,
-        ),
-        array(
             'name' => 'company_id',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->company->name',
-            'visible' => !$details && Yii::app()->user->checkAccess(User::ADMIN_ROLE),
         ),
         array(
-            'header' => Yii::app()->user->role == User::MANAGER_ROLE ? 'Приход' : 'Расход',
-            'name' => 'expense',
+            'header' => 'Обслужено',
+            'name' => 'amount',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'visible' => Yii::app()->user->checkAccess(User::MANAGER_ROLE),
-        ),
-        array(
-            'header' => Yii::app()->user->role == User::WATCHER_ROLE ? 'Расход' : 'Приход',
-            'name' => 'income',
-            'htmlOptions' => array('style' => 'text-align:center;'),
-            'visible' => Yii::app()->user->checkAccess(User::WATCHER_ROLE),
         ),
         array(
             'header' => 'Прибыль',
             'name' => 'profit',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
         ),
         array(
             'class' => 'CButtonColumn',
@@ -69,11 +54,10 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 'history' => array(
                     'label' => '',
                     'imageUrl' => false,
-                    'url' => 'Yii::app()->createUrl("stat/details", $_GET)',
+                    'url' => 'Yii::app()->createUrl("stat/details", array_merge($_GET, ["Act[company_id]" => $data->company->id]))',
                     'options' => array('class' => 'calendar')
                 ),
             ),
-            'visible' => !$details,
         )
     ),
 ));

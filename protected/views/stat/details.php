@@ -12,4 +12,4 @@ $this->tabs = array(
         <h2 class="table"><span>Статистика</span></h2>
     </div>
 <?php
-$this->renderPartial('_list', ['model' => $model, 'details' => true]);
+$this->renderPartial('_days', ['model' => $model, 'details' => true]);
