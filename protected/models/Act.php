@@ -233,11 +233,16 @@ class Act extends CActiveRecord
 
         $this->getDbCriteria()->mergeWith($criteria);
 
-        return new CActiveDataProvider(get_class($this), array(
+        $provider = new CActiveDataProvider(get_class($this), array(
             'criteria' => $this->getDbCriteria(),
             'pagination' => false,
         ));
+
+        $this->setDbCriteria(new CDbCriteria());
+
+        return $provider;
     }
+
     public function stat()
     {
         $criteria = new CDbCriteria();
@@ -284,10 +289,14 @@ class Act extends CActiveRecord
 
         $this->getDbCriteria()->mergeWith($criteria);
 
-        return new CActiveDataProvider(get_class($this), array(
+        $provider = new CActiveDataProvider(get_class($this), array(
             'criteria' => $this->getDbCriteria(),
             'pagination' => false,
         ));
+
+        $this->setDbCriteria(new CDbCriteria());
+
+        return $provider;
     }
 
     /**
@@ -328,10 +337,14 @@ class Act extends CActiveRecord
         $sort->applyOrder($criteria);
         $this->getDbCriteria()->mergeWith($criteria);
 
-        return new CActiveDataProvider(get_class($this), array(
+        $provider = new CActiveDataProvider(get_class($this), array(
             'criteria' => $this->getDbCriteria(),
             'pagination' => false,
         ));
+
+        $this->setDbCriteria(new CDbCriteria());
+
+        return $provider;
     }
 
     public function byDays()
