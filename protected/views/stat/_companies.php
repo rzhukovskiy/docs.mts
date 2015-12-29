@@ -30,6 +30,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => '№',
             'htmlOptions' => array('style' => 'width: 40px; text-align:center;'),
             'value' => '++$row',
+            'footer' => 'Итого',
         ),
         array(
             'name' => 'company_id',
@@ -45,6 +46,8 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => 'Прибыль',
             'name' => 'profit',
             'htmlOptions' => array('style' => 'text-align:center;'),
+            'footer' => $model->totalProfit(true),
+            'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
             'class' => 'CButtonColumn',
@@ -54,7 +57,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 'history' => array(
                     'label' => '',
                     'imageUrl' => false,
-                    'url' => 'Yii::app()->createUrl("stat/details", array_merge($_GET, ["Act[company_id]" => $data->company->id]))',
+                    'url' => 'Yii::app()->createUrl("stat/months", array_merge($_GET, ["Act[company_id]" => $data->company->id]))',
                     'options' => array('class' => 'calendar')
                 ),
             ),

@@ -466,31 +466,49 @@ class Act extends CActiveRecord
         return $this->day;
     }
 
-    public function totalExpense()
+    public function totalExpense($isStats = false)
     {
         $total = 0;
-        foreach ($this->search()->getData() as $row) {
-            $total += isset($row->expense) ? $row->expense : 0;
+        if ($isStats) {
+            foreach ($this->stat()->getData() as $row) {
+                $total += $row->expense;
+            }
+        } else {
+            foreach ($this->search()->getData() as $row) {
+                $total += $row->expense;
+            }
         }
 
         return $total;
     }
 
-    public function totalIncome()
+    public function totalIncome($isStats = false)
     {
         $total = 0;
-        foreach ($this->search()->getData() as $row) {
-            $total += isset($row->income) ? $row->income : 0;
+        if ($isStats) {
+            foreach ($this->stat()->getData() as $row) {
+                $total += $row->income;
+            }
+        } else {
+            foreach ($this->search()->getData() as $row) {
+                $total += $row->income;
+            }
         }
 
         return $total;
     }
 
-    public function totalProfit()
+    public function totalProfit($isStats = false)
     {
         $total = 0;
-        foreach ($this->search()->getData() as $row) {
-            $total += $row->profit;
+        if ($isStats) {
+            foreach ($this->stat()->getData() as $row) {
+                $total += $row->profit;
+            }
+        } else {
+            foreach ($this->search()->getData() as $row) {
+                $total += $row->profit;
+            }
         }
 
         return $total;

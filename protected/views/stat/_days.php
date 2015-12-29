@@ -30,6 +30,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => '№',
             'htmlOptions' => array('style' => 'width: 40px; text-align:center;'),
             'value' => '++$row',
+            'footer' => 'Итого',
         ),
         array(
             'name' => 'day',
@@ -46,18 +47,24 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'expense',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'visible' => Yii::app()->user->checkAccess(User::MANAGER_ROLE),
+            'footer' => $model->totalExpense(true),
+            'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
             'header' => Yii::app()->user->role == User::WATCHER_ROLE ? 'Расход' : 'Приход',
             'name' => 'income',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'visible' => Yii::app()->user->checkAccess(User::WATCHER_ROLE),
+            'footer' => $model->totalIncome(true),
+            'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
             'header' => 'Прибыль',
             'name' => 'profit',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
+            'footer' => $model->totalProfit(true),
+            'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
     ),
 ));

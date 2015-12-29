@@ -395,7 +395,7 @@ class ExportableGridBehavior extends CBehavior
         } else {
             $filename = "Акт $company->name от " . date('m-Y', $this->time) . ".xls";
         }
-        $fullFilename = str_replace(' ', '_', "$path/" . preg_replace('%[«»"]%', '', "$filename"));
+        $fullFilename = str_replace(' ', '_', "$path/" . str_replace('"', '', "$filename"));
         $objWriter->save($fullFilename);
         if ($zip) $zip->addFile($fullFilename, iconv('utf-8', 'cp866', $filename));
 
@@ -628,7 +628,7 @@ class ExportableGridBehavior extends CBehavior
         } else {
             $filename = "Счет $company->name от " . date('m-Y', $this->time) . ".xls";
         }
-        $fullFilename = str_replace(' ', '_', "$path/" . preg_replace('%[«»"]%', '', "$filename"));
+        $fullFilename = str_replace(' ', '_', "$path/" . str_replace('"', '', "$filename"));
         $objWriter->save($fullFilename);
         if ($zip) $zip->addFile($fullFilename, iconv('utf-8', 'cp866', $filename));
     }
