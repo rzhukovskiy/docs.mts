@@ -6,10 +6,9 @@ class StatController extends Controller
         $model = new Act('search');
         $model->unsetAttributes();
 
-        if (!$type) {
-            $type = Yii::app()->user->role == User::MANAGER_ROLE ? Yii::app()->user->model->company->type : Company::CARWASH_TYPE;
+        if ($type) {
+            $model->companyType = $type;
         }
-        $model->companyType = $type;
 
         $model->showCompany = Yii::app()->getRequest()->getParam('showCompany', false);
 
@@ -28,10 +27,9 @@ class StatController extends Controller
         $model = new Act('search');
         $model->unsetAttributes();
 
-        if (!$type) {
-            $type = Yii::app()->user->role == User::MANAGER_ROLE ? Yii::app()->user->model->company->type : Company::CARWASH_TYPE;
+        if ($type) {
+            $model->companyType = $type;
         }
-        $model->companyType = $type;
 
         $model->showCompany = Yii::app()->getRequest()->getParam('showCompany', false);
 
@@ -45,15 +43,14 @@ class StatController extends Controller
         $this->render('months', ['model' => $model]);
     }
 
-    public function actionDetails($type = false)
+    public function actionDays($type = false)
     {
         $model = new Act('search');
         $model->unsetAttributes();
 
-        if (!$type) {
-            $type = Yii::app()->user->role == User::MANAGER_ROLE ? Yii::app()->user->model->company->type : Company::CARWASH_TYPE;
+        if ($type) {
+            $model->companyType = $type;
         }
-        $model->companyType = $type;
 
         $model->showCompany = Yii::app()->getRequest()->getParam('showCompany', false);
 
@@ -62,6 +59,24 @@ class StatController extends Controller
         }
         if (!isset($_GET['Act']['month'])) {
             $model->service_date = date('Y-m-d', time());
+        }
+
+        $this->render('days', ['model' => $model]);
+    }
+
+    public function actionDetails($type = false)
+    {
+        $model = new Act('search');
+        $model->unsetAttributes();
+
+        if ($type) {
+            $model->companyType = $type;
+        }
+
+        $model->showCompany = Yii::app()->getRequest()->getParam('showCompany', false);
+
+        if (isset($_GET['Act'])) {
+            $model->attributes = $_GET['Act'];
         }
 
         $this->render('details', ['model' => $model]);

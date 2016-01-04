@@ -28,26 +28,53 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'columns' => array(
         array(
             'header' => '№',
-            'htmlOptions' => array('style' => 'width: 40px; text-align:center;'),
+            'htmlOptions' => array('style' => 'width: 40px; text-align:left;'),
             'value' => '++$row',
             'footer' => 'Итого',
+            'footerHtmlOptions' => array('style' => 'text-align:left;'),
         ),
         array(
+            'header' => $model->companyType == Company::CARWASH_TYPE ? 'Мойки' : ($model->companyType == Company::TIRES_TYPE ? 'Шиномонтаж' : 'Сервис'),
             'name' => 'company_id',
-            'htmlOptions' => array('style' => 'text-align:center;'),
+            'htmlOptions' => array('style' => 'text-align:left;'),
             'value' => '$data->company->name',
+        ),
+        array(
+            'header' => 'Город',
+            'name' => 'address',
+            'htmlOptions' => array('style' => 'text-align:left;'),
+            'value' => '$data->company->address',
         ),
         array(
             'header' => 'Обслужено',
             'name' => 'amount',
-            'htmlOptions' => array('style' => 'text-align:center;'),
+            'htmlOptions' => array('style' => 'text-align:left;'),
+            'footer' => $model->totalAmount(),
+            'footerHtmlOptions' => array('style' => 'text-align:left;'),
+        ),
+        array(
+            'header' => 'Расход',
+            'name' => 'expense',
+            'value' => 'number_format($data->expense)',
+            'htmlOptions' => array('style' => 'text-align:left;'),
+            'footer' => number_format($model->totalExpense(true)),
+            'footerHtmlOptions' => array('style' => 'text-align:left;'),
+        ),
+        array(
+            'header' => 'Доход',
+            'name' => 'income',
+            'value' => 'number_format($data->income)',
+            'htmlOptions' => array('style' => 'text-align:left;'),
+            'footer' => number_format($model->totalIncome(true)),
+            'footerHtmlOptions' => array('style' => 'text-align:left;'),
         ),
         array(
             'header' => 'Прибыль',
             'name' => 'profit',
-            'htmlOptions' => array('style' => 'text-align:center;'),
-            'footer' => $model->totalProfit(true),
-            'footerHtmlOptions' => array('style' => 'text-align:center;'),
+            'value' => 'number_format($data->profit)',
+            'htmlOptions' => array('style' => 'text-align:left;'),
+            'footer' => number_format($model->totalProfit(true)),
+            'footerHtmlOptions' => array('style' => 'text-align:left;'),
         ),
         array(
             'class' => 'CButtonColumn',
@@ -57,7 +84,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 'history' => array(
                     'label' => '',
                     'imageUrl' => false,
-                    'url' => 'Yii::app()->createUrl("stat/months", array_merge($_GET, ["Act[company_id]" => $data->company->id]))',
+                    'url' => 'Yii::app()->createUrl("stat/months", array_merge($_GET, ["Act[company_id]" => $data->company_id]))',
                     'options' => array('class' => 'calendar')
                 ),
             ),

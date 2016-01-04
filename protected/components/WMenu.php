@@ -74,8 +74,15 @@ class WMenu extends CWidget
                     'role'   => User::WATCHER_ROLE,
                     'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) || Yii::app()->user->model->company->type == Company::COMPANY_TYPE,
                 ),
+                'stat' => array(
+                    'title'  => Yii::app()->user->role == User::ADMIN_ROLE ? 'Статистика' : (Yii::app()->user->role == User::MANAGER_ROLE ? 'Доходы' : 'Расходы'),
+                    'class'  => 'empty',
+                    'action' => 'index',
+                    'params' => ['type' => 'carwash'],
+                    'role'   => User::GUEST_ROLE,
+                ),
                 'act' => array(
-                    'title'  => 'Акты',
+                    'title'  => 'Добавить машину',
                     'class'  => 'empty',
                     'action' => Yii::app()->user->checkAccess(User::ADMIN_ROLE)  || Yii::app()->user->model->company->type == Company::COMPANY_TYPE ? Company::CARWASH_TYPE : Yii::app()->user->model->company->type,
                     'role'   => User::MANAGER_ROLE,
@@ -86,12 +93,6 @@ class WMenu extends CWidget
                     'action' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) || Yii::app()->user->model->company->type == Company::COMPANY_TYPE ? Company::CARWASH_TYPE : Yii::app()->user->model->company->type,
                     'role'   => User::GUEST_ROLE,
                     'visible' => !Yii::app()->user->checkAccess(User::ADMIN_ROLE),
-                ),
-                'stat' => array(
-                    'title'  => 'Статистика',
-                    'class'  => 'empty',
-                    'action' => 'index',
-                    'role'   => User::GUEST_ROLE,
                 ),
             );
         }

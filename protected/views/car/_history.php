@@ -30,6 +30,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => '№',
             'htmlOptions' => array('style' => 'width: 40px; text-align:center;'),
             'value' => '++$row',
+            'footer' => 'Итого',
         ),
         array(
             'name' => 'service_date',
@@ -58,6 +59,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'text-align:center;'),
             'cssClassExpression' => '$data->income ? "" : "error"',
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
+            'footer' => $model->totalIncome(true),
         ),
         array(
             'class' => 'CButtonColumn',

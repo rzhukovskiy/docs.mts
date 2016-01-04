@@ -28,30 +28,30 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'columns' => array(
         array(
             'header' => '№',
-            'htmlOptions' => array('style' => 'width: 40px; text-align:center;'),
+            'htmlOptions' => array('style' => 'width: 40px; text-align:left;'),
             'value' => '++$row',
             'footer' => 'Итого',
         ),
         array(
             'name' => 'service_date',
-            'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => 'date("d-m-Y", strtotime($data->service_date))',
+            'htmlOptions' => array('style' => 'text-align:left;'),
+            'value' => 'date("d", strtotime("$data->service_date")) . " " . StringNum::getMonthName(strtotime("$data->service_date"))[1] . " " . date("Y", strtotime("$data->service_date"))',
         ),
         array(
             'name' => 'card_id',
-            'htmlOptions' => array('style' => 'text-align:center;'),
+            'htmlOptions' => array('style' => 'text-align:left;'),
             'value' => '$data->card->num',
+        ),
+        array(
+            'name' => 'number',
+            'htmlOptions' => array('style' => 'text-align:left;'),
+            'cssClassExpression' => 'Car::model()->find("number = :number" ,array(":number" => $data->number)) ? "" : "error"',
         ),
         array(
             'name' => 'mark_id',
             'htmlOptions' => array(),
             'value' => '$data->mark->name',
             'filter' => CHtml::listData(Mark::model()->findAll(array('order' => 'id')), 'id', 'name'),
-        ),
-        array(
-            'name' => 'number',
-            'htmlOptions' => array('style' => 'text-align:center;'),
-            'cssClassExpression' => 'Car::model()->find("number = :number" ,array(":number" => $data->number)) ? "" : "error"',
         ),
         array(
             'name' => 'type_id',
@@ -61,28 +61,40 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'name' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? 'service' : 'company_service',
-            'htmlOptions' => array('style' => 'text-align:center;'),
+            'htmlOptions' => array('style' => 'text-align:left;'),
             'value' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? 'Act::$fullList[$data->service]' : 'Act::$fullList[$data->company_service]',
             'visible' => $model->companyType == Company::CARWASH_TYPE,
         ),
         array(
             'header' => 'Сумма',
-            'name' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? 'expense' : 'income',
-            'htmlOptions' => array('style' => 'text-align:center;'),
-            'cssClassExpression' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? '$data->expense ? "" : "error"' : '$data->income ? "" : "error"',
-            'footer' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? $model->totalExpense() : $model->totalIncome(),
-            'footerHtmlOptions' => array('style' => 'text-align:center;'),
+            'name' => 'income',
+            'value' => 'number_format($data->income)',
+            'htmlOptions' => array('style' => 'text-align:left;'),
+            'cssClassExpression' => '$data->income ? "" : "error"',
+            'footer' => number_format($model->totalIncome()),
+            'footerHtmlOptions' => array('style' => 'text-align:left;'),
+            'visible' => Yii::app()->user->role == User::WATCHER_ROLE
+        ),
+        array(
+            'header' => 'Сумма',
+            'name' => 'expense',
+            'value' => 'number_format($data->expense)',
+            'htmlOptions' => array('style' => 'text-align:left;'),
+            'cssClassExpression' => '$data->expense ? "" : "error"',
+            'footer' => number_format($model->totalExpense()),
+            'footerHtmlOptions' => array('style' => 'text-align:left;'),
+            'visible' => Yii::app()->user->checkAccess(User::MANAGER_ROLE)
         ),
         array(
             'name' => 'city',
             'header' => 'Город',
-            'htmlOptions' => array('style' => 'text-align:center;'),
+            'htmlOptions' => array('style' => 'text-align:left;'),
             'value' => '$data->company->address',
             'visible' => $model->showCompany,
         ),
         array(
             'name' => 'check',
-            'htmlOptions' => array('style' => 'text-align:center;'),
+            'htmlOptions' => array('style' => 'text-align:left;'),
             'visible' => $model->companyType == Company::CARWASH_TYPE,
         ),
         array(

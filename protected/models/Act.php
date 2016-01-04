@@ -226,7 +226,7 @@ class Act extends CActiveRecord
             $criteria->compare('date_format(t.create_date, "%Y-%m-%d")', $this->create_date);
         } else {
             if($this->day) {
-                $criteria->compare('date_format(t.service_date, "%Y-%m-%d")', "$this->month-$this->day");
+                $criteria->compare('date_format(t.service_date, "%Y-%m-%d")', $this->day);
             } else {
                 $criteria->compare('date_format(t.service_date, "%Y-%m")', $this->getMonth());
             }
@@ -263,6 +263,14 @@ class Act extends CActiveRecord
         } else {
             $criteria->compare('t.company_id', $this->company_id);
         }
+
+        $criteria->select = [
+            'company_id',
+            'COUNT(t.id) as amount',
+            'SUM(expense) as expense',
+            'SUM(income) as income',
+            'SUM(profit) as profit'
+        ];
 
         $criteria->with = array('company', 'card', 'type', 'mark', 'card.cardCompany');
         $criteria->compare('card.company_id', $this->cardCompany);
@@ -355,11 +363,7 @@ class Act extends CActiveRecord
 
         $criteria->group = 'day';
         $criteria->select = [
-            'COUNT(t.id) as amount',
             'date_format(service_date, "%Y-%m-%d") as day',
-            'SUM(expense) as expense',
-            'SUM(income) as income',
-            'SUM(profit) as profit'
         ];
 
         $sort = new CSort;
@@ -381,11 +385,7 @@ class Act extends CActiveRecord
 
         $criteria->group = 'month';
         $criteria->select = [
-            'COUNT(t.id) as amount',
             'date_format(service_date, "%Y-%m") as month',
-            'SUM(expense) as expense',
-            'SUM(income) as income',
-            'SUM(profit) as profit'
         ];
 
         $sort = new CSort;
@@ -408,12 +408,6 @@ class Act extends CActiveRecord
         if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
             $criteria->group = 't.company_id';
         }
-        $criteria->select = [
-            'COUNT(t.id) as amount',
-            'SUM(expense) as expense',
-            'SUM(income) as income',
-            'SUM(profit) as profit',
-        ];
 
         $sort = new CSort;
         $sort->defaultOrder = 'profit DESC';
@@ -509,6 +503,17 @@ class Act extends CActiveRecord
             foreach ($this->search()->getData() as $row) {
                 $total += $row->profit;
             }
+        }
+
+        return $total;
+    }
+
+    public function totalAmount()
+    {
+        $total = 0;
+
+        foreach ($this->stat()->getData() as $row) {
+            $total += $row->amount;
         }
 
         return $total;

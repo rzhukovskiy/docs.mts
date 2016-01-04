@@ -5,7 +5,7 @@
  */
 if (Yii::app()->user->role == User::MANAGER_ROLE) {
     $this->tabs = array(
-        'index' => ['url' => Yii::app()->createUrl('stat/index', ['type' => Yii::app()->user->model->company->type]), 'name' => 'Доходы'],
+        'index' => ['url' => Yii::app()->createUrl('stat/index', ['type' => Yii::app()->user->model->company->type]), 'name' => 'Доход'],
     );
 } else {
     $this->tabs = array(
@@ -15,16 +15,22 @@ if (Yii::app()->user->role == User::MANAGER_ROLE) {
             array('url' => Yii::app()->createUrl('stat/index', ['type' => Company::SERVICE_TYPE]), 'name' => 'Сервис'),
         Company::TIRES_TYPE == $model->companyType ? 'index' : Company::TIRES_TYPE =>
             array('url' => Yii::app()->createUrl('stat/index', ['type' => Company::TIRES_TYPE]), 'name' => 'Шиномонтаж'),
+        $model->companyType ? 'total' : 'index' =>
+            array('url' => Yii::app()->createUrl('stat/index'), 'name' => 'Общее'),
     );
 }
 ?>
     <div class="contenttitle radiusbottom0">
-        <h2 class="table"><span>Статистика</span></h2>
+        <h2 class="table">
+            <span>
+                <?=Yii::app()->user->role == User::ADMIN_ROLE ? 'Статистика' : (Yii::app()->user->role == User::MANAGER_ROLE ? 'Доход' : 'Расход')?>
+            </span>
+        </h2>
     </div>
 <?php
 $this->renderPartial('_selector', ['model' => $model]);
 if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-    $this->renderPartial('_companies', ['model' => $model, 'details' => false]);
+    $this->renderPartial('_companies', ['model' => $model]);
 } else {
-    $this->renderPartial('_months', ['model' => $model, 'details' => false]);
+    $this->renderPartial('_months', ['model' => $model]);
 }

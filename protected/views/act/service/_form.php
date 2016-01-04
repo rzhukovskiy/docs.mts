@@ -1,5 +1,5 @@
 <div class="contenttitle radiusbottom0">
-    <h2 class="table"><span>Добавить услугу</span></h2>
+    <h2 class="table"><span>Добавить машину</span></h2>
 </div>
 <?php
 /**

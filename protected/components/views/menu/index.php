@@ -8,7 +8,7 @@
         if(Yii::app()->user->checkAccess($params['role']) && (!isset($params['visible']) || $params['visible'])) {
     ?>
             <li<?php if (Yii::app()->controller->id == $controller) { ?> class="current"<?php } ?>>
-                <a href="<?=Yii::app()->createUrl($controller . '/' . $params['action']); ?>" class="<?=$params['class']?>">
+                <a href="<?=Yii::app()->createUrl($controller . '/' . $params['action'], isset($params['params']) ? $params['params'] : []); ?>" class="<?=$params['class']?>">
                     <span><em><?=$params['title']?></em></span>
                 </a>
                 <?php

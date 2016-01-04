@@ -3,8 +3,7 @@
         <div class="headright">
             <div class="headercolumn" id="userPanel">
                 <a class="userinfo radius2" href="#">
-                    <img class="radius2" alt="" src="/images/avatar.png">
-                    <span><strong><?=Yii::app()->user->name; ?></strong></span>
+                    <span><strong><?=ucfirst(Yii::app()->user->name); ?></strong></span>
                 </a>
                 <div class="userdrop">
                     <ul>
