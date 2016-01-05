@@ -51,7 +51,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => 'number_format($data->expense, 0, ".", " ")',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'visible' => Yii::app()->user->checkAccess(User::MANAGER_ROLE),
-            'footer' => $model->totalExpense(true),
+            'footer' => number_format($model->totalExpense(true), 0, ".", " "),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
@@ -60,7 +60,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => 'number_format($data->income, 0, ".", " ")',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'visible' => Yii::app()->user->checkAccess(User::WATCHER_ROLE),
-            'footer' => $model->totalIncome(true),
+            'footer' => number_format($model->totalIncome(true), 0, ".", " "),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
@@ -72,7 +72,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 'class' => 'total',
             ],
             'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
-            'footer' => $model->totalProfit(true),
+            'footer' => number_format($model->totalProfit(true), 0, ".", " "),
             'footerHtmlOptions' => [
                 'style' => 'text-align:center;',
             ],
