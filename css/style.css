@@ -111,7 +111,7 @@ button,input,select,textarea { font-size: 12px; font-family: Arial, Helvetica, s
 	-moz-box-shadow: 1px 1px 3px #666; -webkit-box-shadow: 1px 1px 3px #666; box-shadow: 1px 1px 3px #666; 
 }
 .headerinner { padding: 10px; }
-.headercolumn { height: 33px; padding: 12px 10px; border-left: 1px solid #444; border-right: 1px solid #272727; float: left; position: relative; }
+.headercolumn { height: 33px; border-left: 1px solid #444; border-right: 1px solid #272727; float: left; position: relative; }
 
 .headleft { position: absolute; top: 0; left: 0; }
 .headleft .headercolumn { border-color: #2c2c2c; border-left: 0; }

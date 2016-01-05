@@ -5,6 +5,7 @@
  * @var $model Act
  * @var $form CActiveForm
  */
+unset($_GET['period']);
 $form = $this->beginWidget('CActiveForm', array(
     'method' => 'get',
     'action' => Yii::app()->createUrl('stat/index', ['type' => $model->companyType]),

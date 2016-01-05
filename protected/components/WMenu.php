@@ -82,7 +82,7 @@ class WMenu extends CWidget
                     'role'   => User::GUEST_ROLE,
                 ),
                 'act' => array(
-                    'title'  => 'Добавить машину',
+                    'title'  => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 'Акты' : 'Добавить машину',
                     'class'  => 'empty',
                     'action' => Yii::app()->user->checkAccess(User::ADMIN_ROLE)  || Yii::app()->user->model->company->type == Company::COMPANY_TYPE ? Company::CARWASH_TYPE : Yii::app()->user->model->company->type,
                     'role'   => User::MANAGER_ROLE,

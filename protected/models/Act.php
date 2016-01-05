@@ -368,12 +368,12 @@ class Act extends CActiveRecord
 
         $sort = new CSort;
         $sort->defaultOrder = 'service_date';
-        $sort->applyOrder($criteria);
         $sort->attributes = [
             'income',
             'expense',
             'profit',
         ];
+        $sort->applyOrder($criteria);
 
         $this->getDbCriteria()->mergeWith($criteria);
         return $this;
@@ -390,12 +390,12 @@ class Act extends CActiveRecord
 
         $sort = new CSort;
         $sort->defaultOrder = 'service_date';
-        $sort->applyOrder($criteria);
         $sort->attributes = [
             'income',
             'expense',
             'profit',
         ];
+        $sort->applyOrder($criteria);
 
         $this->getDbCriteria()->mergeWith($criteria);
         return $this;
@@ -411,12 +411,18 @@ class Act extends CActiveRecord
 
         $sort = new CSort;
         $sort->defaultOrder = 'profit DESC';
-        $sort->applyOrder($criteria);
         $sort->attributes = [
-            'income',
-            'expense',
+            'income' => [
+                'asc' => 'income asc',
+                'desc' => 'income desc',
+            ],
+            'expense' => [
+                'asc' => 'expense asc',
+                'desc' => 'expense desc',
+            ],
             'profit',
         ];
+        $sort->applyOrder($criteria);
 
         $this->getDbCriteria()->mergeWith($criteria);
         return $this;

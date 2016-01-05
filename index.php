@@ -1,5 +1,10 @@
 <?php
 error_reporting(E_ALL);
+if(!function_exists('mb_ucfirst')) {
+    function mb_ucfirst($str, $enc = 'utf-8') {
+        return mb_strtoupper(mb_substr($str, 0, 1, $enc), $enc).mb_substr($str, 1, mb_strlen($str, $enc), $enc);
+    }
+}
 $config = dirname(__FILE__) . '/protected/config/main.php';
 $yii = '../../framework/yii.php';
 

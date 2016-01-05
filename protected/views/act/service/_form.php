@@ -129,7 +129,7 @@ $form = $this->beginWidget('CActiveForm', array(
         </tr>
         <tr>
             <td colspan="4">
-                <?=CHtml::submitButton('Добавить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
+                <?=CHtml::submitButton('Загрузить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
             </td>
         </tr>
     </tbody>

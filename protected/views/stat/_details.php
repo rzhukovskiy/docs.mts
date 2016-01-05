@@ -28,23 +28,23 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'columns' => array(
         array(
             'header' => '№',
-            'htmlOptions' => array('style' => 'width: 40px; text-align:left;'),
+            'htmlOptions' => array('style' => 'width: 40px; text-align:center;'),
             'value' => '++$row',
             'footer' => 'Итого',
         ),
         array(
             'name' => 'service_date',
-            'htmlOptions' => array('style' => 'text-align:left;'),
+            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => 'date("d", strtotime("$data->service_date")) . " " . StringNum::getMonthName(strtotime("$data->service_date"))[1] . " " . date("Y", strtotime("$data->service_date"))',
         ),
         array(
             'name' => 'card_id',
-            'htmlOptions' => array('style' => 'text-align:left;'),
+            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->card->num',
         ),
         array(
             'name' => 'number',
-            'htmlOptions' => array('style' => 'text-align:left;'),
+            'htmlOptions' => array('style' => 'text-align:center;'),
             'cssClassExpression' => 'Car::model()->find("number = :number" ,array(":number" => $data->number)) ? "" : "error"',
         ),
         array(
@@ -61,40 +61,46 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'name' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? 'service' : 'company_service',
-            'htmlOptions' => array('style' => 'text-align:left;'),
+            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? 'Act::$fullList[$data->service]' : 'Act::$fullList[$data->company_service]',
-            'visible' => $model->companyType == Company::CARWASH_TYPE,
         ),
         array(
-            'header' => 'Сумма',
-            'name' => 'income',
-            'value' => 'number_format($data->income)',
-            'htmlOptions' => array('style' => 'text-align:left;'),
-            'cssClassExpression' => '$data->income ? "" : "error"',
-            'footer' => number_format($model->totalIncome()),
-            'footerHtmlOptions' => array('style' => 'text-align:left;'),
-            'visible' => Yii::app()->user->role == User::WATCHER_ROLE
-        ),
-        array(
-            'header' => 'Сумма',
+            'header' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 'Расход' : 'Доход',
             'name' => 'expense',
-            'value' => 'number_format($data->expense)',
-            'htmlOptions' => array('style' => 'text-align:left;'),
-            'cssClassExpression' => '$data->expense ? "" : "error"',
-            'footer' => number_format($model->totalExpense()),
-            'footerHtmlOptions' => array('style' => 'text-align:left;'),
+            'value' => 'number_format($data->expense, 0, ".", " ")',
+            'htmlOptions' => array('style' => 'text-align:center;'),
+            'footer' => number_format($model->totalExpense(), 0, ".", " "),
+            'footerHtmlOptions' => array('style' => 'text-align:center;'),
             'visible' => Yii::app()->user->checkAccess(User::MANAGER_ROLE)
+        ),
+        array(
+            'header' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 'Доход' : 'Расход',
+            'name' => 'income',
+            'value' => 'number_format($data->income, 0, ".", " ")',
+            'htmlOptions' => array('style' => 'text-align:center;'),
+            'footer' => number_format($model->totalIncome(), 0, ".", " "),
+            'footerHtmlOptions' => array('style' => 'text-align:center;'),
+            'visible' => Yii::app()->user->checkAccess(User::WATCHER_ROLE)
+        ),
+        array(
+            'header' => 'Прибыль',
+            'name' => 'expense',
+            'value' => 'number_format($data->profit, 0, ".", " ")',
+            'htmlOptions' => array('style' => 'text-align:center;'),
+            'footer' => number_format($model->totalProfit(), 0, ".", " "),
+            'footerHtmlOptions' => array('style' => 'text-align:center;'),
+            'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE)
         ),
         array(
             'name' => 'city',
             'header' => 'Город',
-            'htmlOptions' => array('style' => 'text-align:left;'),
+            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->company->address',
             'visible' => $model->showCompany,
         ),
         array(
             'name' => 'check',
-            'htmlOptions' => array('style' => 'text-align:left;'),
+            'htmlOptions' => array('style' => 'text-align:center;'),
             'visible' => $model->companyType == Company::CARWASH_TYPE,
         ),
         array(

@@ -23,7 +23,7 @@ if (Yii::app()->user->role == User::MANAGER_ROLE) {
     <div class="contenttitle radiusbottom0">
         <h2 class="table">
             <span>
-                <?=Yii::app()->user->role == User::ADMIN_ROLE ? 'Статистика' : (Yii::app()->user->role == User::MANAGER_ROLE ? 'Доход' : 'Расход')?>
+                <?=Yii::app()->user->role == User::ADMIN_ROLE ? 'Статистика' : (Yii::app()->user->role == User::MANAGER_ROLE ? 'Доходы' : 'Расходы')?>
             </span>
         </h2>
     </div>
