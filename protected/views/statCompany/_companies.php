@@ -80,8 +80,8 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                     'label' => '',
                     'imageUrl' => false,
                     'url' => $model->showCompany
-                        ? 'Yii::app()->createUrl("stat/months", array_merge($_GET, ["Act[company_id]" => $data->card->company_id]))'
-                        : 'Yii::app()->createUrl("stat/months", array_merge($_GET, ["Act[company_id]" => $data->company_id]))',
+                        ? 'Yii::app()->createUrl("statCompany/months", array_merge($_GET, ["Act[company_id]" => $data->card->company_id]))'
+                        : 'Yii::app()->createUrl("statCompany/months", array_merge($_GET, ["Act[company_id]" => $data->company_id]))',
                     'options' => array('class' => 'calendar')
                 ),
             ),

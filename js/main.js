@@ -85,11 +85,13 @@ $(document).ready(function() {
     })
 
     $('body').on('change','.select-period', function(e) {
-        if ($(this).val() == 1) {
-            $('.month-selector').fadeIn();
-        } else {
-            $('.month-selector').fadeOut();
-            $('.date-send').click();
+        switch ($(this).val()) {
+            case '1':
+                $('.month-selector').fadeIn();
+                break;
+            default:
+                $('.month-selector').fadeOut();
+                $('.date-send').click();
         }
     })
 });

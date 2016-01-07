@@ -11,6 +11,7 @@ return array(
         'application.components.*',
         'application.wrappers.*',
         'application.extensions.*',
+        'application.controllers.*',
     ),
     'defaultController' => 'home',
     'components' => array(

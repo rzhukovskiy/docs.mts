@@ -20,7 +20,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'class' => '',
         )
     ),
-    'dataProvider' => $model->byCompanies()->stat(),
+    'dataProvider' => $model->byDays()->stat(),
     'emptyText' => '',
     'cssFile' => false,
     'template' => "{items}\n{pager}",
@@ -34,16 +34,9 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
-            'header' => $model->companyType == Company::CARWASH_TYPE ? 'Мойки' : ($model->companyType == Company::TIRES_TYPE ? 'Шиномонтаж' : 'Сервис'),
-            'name' => 'company_id',
+            'name' => 'day',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => $model->showCompany ? '$data->card->cardCompany->name' : '$data->company->name',
-        ),
-        array(
-            'header' => 'Город',
-            'name' => 'address',
-            'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => $model->showCompany ? '$data->card->cardCompany->address' : '$data->company->address',
+            'value' => 'date("d", strtotime("$data->day 00:00:00")) . " " . StringNum::getMonthName(strtotime("$data->day 00:00:00"))[1] . " " . date("Y", strtotime("$data->day 00:00:00"))',
         ),
         array(
             'header' => 'Обслужено',
@@ -53,11 +46,21 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
-            'header' => 'Расход',
+            'header' => Yii::app()->user->role == User::MANAGER_ROLE ? 'Доход' : 'Расход',
             'name' => 'expense',
             'value' => 'number_format($data->expense, 0, ".", " ")',
             'htmlOptions' => array('style' => 'text-align:center;'),
+            'visible' => Yii::app()->user->checkAccess(User::MANAGER_ROLE),
             'footer' => number_format($model->totalExpense(true), 0, ".", " "),
+            'footerHtmlOptions' => array('style' => 'text-align:center;'),
+        ),
+        array(
+            'header' => Yii::app()->user->role == User::WATCHER_ROLE ? 'Расход' : 'Доход',
+            'name' => 'income',
+            'value' => 'number_format($data->income, 0, ".", " ")',
+            'htmlOptions' => array('style' => 'text-align:center;'),
+            'visible' => Yii::app()->user->checkAccess(User::WATCHER_ROLE),
+            'footer' => number_format($model->totalIncome(true), 0, ".", " "),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
@@ -68,6 +71,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 'style' => 'text-align:center;',
                 'class' => 'total',
             ],
+            'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
             'footer' => number_format($model->totalProfit(true), 0, ".", " "),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
@@ -79,9 +83,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 'history' => array(
                     'label' => '',
                     'imageUrl' => false,
-                    'url' => $model->showCompany
-                        ? 'Yii::app()->createUrl("stat/months", array_merge($_GET, ["Act[company_id]" => $data->card->company_id]))'
-                        : 'Yii::app()->createUrl("stat/months", array_merge($_GET, ["Act[company_id]" => $data->company_id]))',
+                    'url' => 'Yii::app()->createUrl("statCompany/details", array_merge($_GET, ["Act[day]" => $data->day]))',
                     'options' => array('class' => 'calendar')
                 ),
             ),

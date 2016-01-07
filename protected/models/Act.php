@@ -273,7 +273,6 @@ class Act extends CActiveRecord
         ];
 
         $criteria->with = array('company', 'card', 'type', 'mark', 'card.cardCompany');
-        $criteria->compare('card.company_id', $this->cardCompany);
         $criteria->compare('company.type', $this->companyType);
         $criteria->compare('t.type_id', $this->type_id);
         $criteria->compare('t.card_id', $this->card_id);
@@ -406,7 +405,11 @@ class Act extends CActiveRecord
         $criteria = $this->getDbCriteria();
 
         if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $criteria->group = 't.company_id';
+            if ($this->showCompany) {
+                $criteria->group = 'card.company_id';
+            } else {
+                $criteria->group = 't.company_id';
+            }
         }
 
         $sort = new CSort;

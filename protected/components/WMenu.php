@@ -75,11 +75,18 @@ class WMenu extends CWidget
                     'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) || Yii::app()->user->model->company->type == Company::COMPANY_TYPE,
                 ),
                 'stat' => array(
-                    'title'  => Yii::app()->user->role == User::ADMIN_ROLE ? 'Статистика' : (Yii::app()->user->role == User::MANAGER_ROLE ? 'Доходы' : 'Расходы'),
+                    'title'  => Yii::app()->user->role == User::ADMIN_ROLE ? 'Статистика партнеров' : (Yii::app()->user->role == User::MANAGER_ROLE ? 'Доходы' : 'Расходы'),
                     'class'  => 'empty',
                     'action' => 'index',
                     'params' => ['type' => 'carwash'],
                     'role'   => User::GUEST_ROLE,
+                ),
+                'statCompany' => array(
+                    'title'  => 'Статистика компаний',
+                    'class'  => 'empty',
+                    'action' => 'index',
+                    'params' => ['type' => 'carwash', 'showCompany' => 1],
+                    'role'   => User::ADMIN_ROLE,
                 ),
                 'act' => array(
                     'title'  => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 'Акты' : 'Добавить машину',
