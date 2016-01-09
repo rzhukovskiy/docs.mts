@@ -53,11 +53,11 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
-            'header' => 'Расход',
+            'header' => 'Доход',
             'name' => 'expense',
-            'value' => 'number_format($data->expense, 0, ".", " ")',
+            'value' => 'number_format($data->income, 0, ".", " ")',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'footer' => number_format($model->totalExpense(true), 0, ".", " "),
+            'footer' => number_format($model->totalIncome(true), 0, ".", " "),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(

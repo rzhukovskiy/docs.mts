@@ -65,7 +65,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? 'Act::$fullList[$data->service]' : 'Act::$fullList[$data->company_service]',
         ),
         array(
-            'header' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 'Расход' : 'Доход',
+            'header' =>'Расход',
             'name' => 'expense',
             'value' => 'number_format($data->expense, 0, ".", " ")',
             'htmlOptions' => array('style' => 'text-align:center;'),
@@ -74,7 +74,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'visible' => Yii::app()->user->checkAccess(User::MANAGER_ROLE)
         ),
         array(
-            'header' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 'Доход' : 'Расход',
+            'header' => 'Доход',
             'name' => 'income',
             'value' => 'number_format($data->income, 0, ".", " ")',
             'htmlOptions' => array('style' => 'text-align:center;'),
