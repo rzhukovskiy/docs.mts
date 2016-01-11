@@ -18,7 +18,7 @@ class ArchiveController extends Controller
 
         $model->service_date = date('Y-m-d', time() - 30 * 24 * 3600);
 
-        if (Yii::app()->user->role == User::WATCHER_ROLE) {
+        if (Yii::app()->user->role == User::CLIENT_ROLE) {
             //$model->is_closed = 1;
         }
 

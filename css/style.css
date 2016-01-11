@@ -580,7 +580,8 @@ button,input,select,textarea { font-size: 12px; font-family: Arial, Helvetica, s
     -moz-box-shadow: inset 1px 1px 2px #ddd; -webkit-box-shadow: inset 1px 1px 2px #ddd; box-shadow: inset 1px 1px 2px #ddd; color: #666;
 }
 .stdform input:focus { background: #fff; -moz-box-shadow: inset 1px 1px 2px #eee; -webkit-box-shadow: inset 1px 1px 2px #eee; box-shadow: inset 1px 1px 2px #eee; }
-.stdform .smallinput { width: 20%; }
+.stdform .smallinput { min-width: 0; width: 20%; }
+.stdform .autoinput { min-width: 0; width: auto; }
 .stdform .mediuminput { width: 60%; }
 .stdform .longinput { width: 80%; }
 .stdform .error input{ border: 1px solid #ff6600; }

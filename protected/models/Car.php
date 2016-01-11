@@ -9,11 +9,13 @@
  * @property int $mark_id
  * @property int $type_id
  * @property int $service_count
- * @property string $month
- * @property int $period
+ * @property string $from_date
+ * @property int $to_date
  */
 class Car extends CActiveRecord
 {
+    public $from_date;
+    public $to_date;
     public $service_count;
     public $period;
     public $month;
@@ -39,7 +41,7 @@ class Car extends CActiveRecord
         return array(
             array('company_id, number, mark_id, type_id', 'required'),
             array('number', 'unique'),
-            array('period, month', 'safe'),
+            array('from_date, to_date', 'safe'),
             array('service_count, id, number, mark_id', 'safe', 'on' => 'search'),
         );
     }
@@ -104,23 +106,7 @@ class Car extends CActiveRecord
         $criteria->compare('t.company_id', $this->company_id);
         $criteria->compare('t.mark_id', $this->mark_id);
         $criteria->compare('t.type_id', $this->type_id);
-        switch ($this->period) {
-            case 1:
-                if($this->month) {
-                    $criteria->compare('date_format(act.service_date, "%Y-%m")', $this->month);
-                }
-                break;
-            case 2:
-                $criteria->addBetweenCondition('act.service_date', date('Y-m-d', strtotime("-3 month", time())), date('Y-m-d', time()));
-                break;
-            case 3:
-                $criteria->addBetweenCondition('act.service_date', date('Y-m-d', strtotime("-6 month", time())), date('Y-m-d', time()));
-                break;
-            case 4:
-                $criteria->addBetweenCondition('act.service_date', date('Y-m-d', strtotime("-12 month", time())), date('Y-m-d', time()));
-                break;
-            default:
-        }
+        $criteria->addBetweenCondition('act.service_date', $this->from_date, $this->to_date);
 
         $sort = new CSort();
         $sort->defaultOrder = 't.company_id, service_count DESC';

@@ -39,7 +39,7 @@ class ExportableGridBehavior extends CBehavior
                 'params' => array(':type' => $this->showCompany ? Company::COMPANY_TYPE : $actModel->companyType),
                 'order' => 'type DESC'
             )) as $company) {
-                $actModel->company_id = $company->id;
+                $actModel->partner_id = $company->id;
                 $this->fillAct($actModel, $company, $zip);
             }
             if ($zip) $zip->close();
@@ -292,11 +292,11 @@ class ExportableGridBehavior extends CBehavior
                 $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->mark->name);
                 $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->number);
                 if ($this->showCompany) {
-                    $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, Act::$fullList[$data->company_service]);
+                    $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, Act::$fullList[$data->client_service]);
                     $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->income);
                     $total += $data->income;
                 } else {
-                    $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, Act::$fullList[$data->service]);
+                    $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, Act::$fullList[$data->partner_service]);
                     $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->expense);
                     $total += $data->expense;
                 }

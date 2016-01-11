@@ -16,7 +16,7 @@ foreach(Company::model()->findAll(array(
     'order' => 'type DESC'
 )) as $company) {
     if($model->companyType == Company::SERVICE_TYPE) {
-        $model->company_id = $company->id;
+        $model->partner_id = $company->id;
         foreach ($model->search()->getData() as $data) {
             $filename = "Акт $company->name от " . date('d-m-Y', strtotime($data->service_date)) . ".xls";
             $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
@@ -34,7 +34,7 @@ foreach(Company::model()->findAll(array(
             }
         }
     } else {
-        $model->company_id = $company->id;
+        $model->partner_id = $company->id;
         if (!$model->search()->getData()) {
             continue;
         }

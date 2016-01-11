@@ -5,7 +5,7 @@
  * The followings are the available columns in table '{{card}}':
  * @property int $id
  * @property int $company_id
- * @property int $num
+ * @property int $number
  * @property int $active
  * @property string $create_date
  */
@@ -39,8 +39,8 @@ class Card extends CActiveRecord
     {
         return array(
             array('company_id', 'required'),
-            array('num', 'unique'),
-            array('id, num, type, active, create_date', 'safe', 'on' => 'search'),
+            array('number', 'unique'),
+            array('id, number, type, active, create_date', 'safe', 'on' => 'search'),
         );
     }
 
@@ -63,9 +63,13 @@ class Card extends CActiveRecord
         $criteria = new CDbCriteria;
 
         $criteria->compare('id', $this->id);
-        $criteria->compare('num', $this->num, true);
+        $criteria->compare('number', $this->number, true);
         $criteria->compare('company_id', $this->company_id);
         $criteria->compare('active', $this->active);
+
+        $sort = new CSort;
+        $sort->defaultOrder = 'company_id, number';
+        $sort->applyOrder($criteria);
 
         return new CActiveDataProvider(get_class($this), array(
             'criteria' => $criteria,
@@ -77,7 +81,7 @@ class Card extends CActiveRecord
     {
         return array(
             'id' => 'ID',
-            'num' => 'Номер',
+            'number' => 'Номер',
             'company_id' => 'Компания',
             'active' => 'Active',
             'create_date' => 'Create Date',
@@ -86,18 +90,18 @@ class Card extends CActiveRecord
 
     public function beforeSave()
     {
-        if ($this->isNewRecord && !$this->num) {
+        if ($this->isNewRecord && !$this->number) {
             $salt = self::randomSalt();
-            $this->num = $salt . str_pad($this->company_id, 4, "0", STR_PAD_LEFT);
+            $this->number = $salt . str_pad($this->company_id, 4, "0", STR_PAD_LEFT);
         } else {
-            $numPointList = explode('-', $this->num);
+            $numPointList = explode('-', $this->number);
             if(count($numPointList) > 1) {
                 for ($num = intval($numPointList[0]); $num < intval($numPointList[1]); $num++) {
                     $card = clone $this;
-                    $card->num = $num;
+                    $card->number = $num;
                     $card->save();
                 }
-                $this->num = intval($numPointList[1]);
+                $this->number = intval($numPointList[1]);
             }
         }
         return true;

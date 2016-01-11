@@ -12,10 +12,10 @@ class HomeController extends Controller
 
             // validate user input and redirect to the previous page if valid
             if ($model->validate() && $model->login()) {
-                if (Yii::app()->user->role == User::MANAGER_ROLE) {
+                if (Yii::app()->user->role == User::PARTNER_ROLE) {
                     $this->redirect(Yii::app()->createUrl('act/' . Yii::app()->user->model->company->type));
                 }
-                if (Yii::app()->user->role == User::WATCHER_ROLE) {
+                if (Yii::app()->user->role == User::CLIENT_ROLE) {
                     $this->redirect(Yii::app()->createUrl('archive/' . Company::CARWASH_TYPE));
                 }
                 $this->redirect(Yii::app()->createUrl('company/list'));
@@ -32,10 +32,10 @@ class HomeController extends Controller
 
     public function actionIndex()
     {
-        if (Yii::app()->user->role == User::MANAGER_ROLE) {
+        if (Yii::app()->user->role == User::PARTNER_ROLE) {
             $this->redirect(Yii::app()->createUrl('act/' . Yii::app()->user->model->company->type));
         }
-        if (Yii::app()->user->role == User::WATCHER_ROLE) {
+        if (Yii::app()->user->role == User::CLIENT_ROLE) {
             $this->redirect(Yii::app()->createUrl('archive/list'));
         }
         $this->redirect(Yii::app()->createUrl('company/list'));

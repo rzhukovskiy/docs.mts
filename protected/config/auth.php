@@ -7,7 +7,7 @@ return array(
         'bizRule' => null,
         'data' => null
     ),
-    User::MANAGER_ROLE => array(
+    User::PARTNER_ROLE => array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'Manager',
         'children' => array(
@@ -16,7 +16,7 @@ return array(
         'bizRule' => null,
         'data' => null
     ),
-    User::WATCHER_ROLE => array(
+    User::CLIENT_ROLE => array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'Watcher',
         'children' => array(
@@ -29,8 +29,8 @@ return array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'Administrator',
         'children' => array(
-            User::MANAGER_ROLE,
-            User::WATCHER_ROLE,
+            User::PARTNER_ROLE,
+            User::CLIENT_ROLE,
         ),
         'bizRule' => null,
         'data' => null

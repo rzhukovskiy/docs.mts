@@ -43,7 +43,7 @@
                         array('empty' => 'Все'))?>
                 </td>
                 <td><?=CHtml::dropDownList('Act[company_id]',
-                        $model->company_id,
+                        $model->partner_id,
                         CHtml::listData(Company::model()->findAll('type = :type' , array(':type' => $model->companyType)),'id', 'name'),
                         array('empty' => 'Все', 'style' => 'width: 80px;'))?>
                 </td>

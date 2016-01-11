@@ -115,7 +115,7 @@ class Company extends CActiveRecord
                 for ($num = intval($numPointList[0]); $num <= intval($numPointList[1]); $num++) {
                     $card = new Card();
                     $card->company_id = $this->id;
-                    $card->num = $num;
+                    $card->number = $num;
                     $card->save();
                 }
             }

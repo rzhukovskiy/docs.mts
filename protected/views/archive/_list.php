@@ -60,17 +60,17 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->type->name',
         ),
         array(
-            'name' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? 'service' : 'company_service',
+            'name' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? 'service' : 'company_service',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? 'Act::$fullList[$data->service]' : 'Act::$fullList[$data->company_service]',
+            'value' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? 'Act::$fullList[$data->service]' : 'Act::$fullList[$data->company_service]',
             'visible' => $model->companyType == Company::CARWASH_TYPE,
         ),
         array(
             'header' => 'Сумма',
-            'name' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? 'expense' : 'income',
+            'name' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? 'expense' : 'income',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'cssClassExpression' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? '$data->expense ? "" : "error"' : '$data->income ? "" : "error"',
-            'footer' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? $model->totalExpense() : $model->totalIncome(),
+            'cssClassExpression' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? '$data->expense ? "" : "error"' : '$data->income ? "" : "error"',
+            'footer' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? $model->totalExpense() : $model->totalIncome(),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(

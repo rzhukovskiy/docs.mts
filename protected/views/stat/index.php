@@ -3,7 +3,7 @@
  * @var $this StatController
  * @var $model Act
  */
-if (Yii::app()->user->role == User::MANAGER_ROLE) {
+if (Yii::app()->user->role == User::PARTNER_ROLE) {
     $this->tabs = array(
         'index' => ['url' => Yii::app()->createUrl('stat/index', ['type' => Yii::app()->user->model->company->type]), 'name' => 'Доход'],
     );
@@ -23,7 +23,7 @@ if (Yii::app()->user->role == User::MANAGER_ROLE) {
     <div class="contenttitle radiusbottom0">
         <h2 class="table">
             <span>
-                <?=Yii::app()->user->role == User::ADMIN_ROLE ? 'Статистика' : (Yii::app()->user->role == User::MANAGER_ROLE ? 'Доходы' : 'Расходы')?>
+                <?=Yii::app()->user->role == User::ADMIN_ROLE ? 'Статистика' : (Yii::app()->user->role == User::PARTNER_ROLE ? 'Доходы' : 'Расходы')?>
             </span>
         </h2>
     </div>

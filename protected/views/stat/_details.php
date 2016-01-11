@@ -60,9 +60,9 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->type->name',
         ),
         array(
-            'name' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? 'service' : 'company_service',
+            'name' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? 'service' : 'company_service',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => Yii::app()->user->checkAccess(User::MANAGER_ROLE) ? 'Act::$fullList[$data->service]' : 'Act::$fullList[$data->company_service]',
+            'value' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? 'Act::$fullList[$data->service]' : 'Act::$fullList[$data->company_service]',
         ),
         array(
             'header' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 'Расход' : 'Доход',
@@ -71,7 +71,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'text-align:center;'),
             'footer' => number_format($model->totalExpense(), 0, ".", " "),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
-            'visible' => Yii::app()->user->checkAccess(User::MANAGER_ROLE)
+            'visible' => Yii::app()->user->checkAccess(User::PARTNER_ROLE)
         ),
         array(
             'header' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 'Доход' : 'Расход',
@@ -80,7 +80,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'text-align:center;'),
             'footer' => number_format($model->totalIncome(), 0, ".", " "),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
-            'visible' => Yii::app()->user->checkAccess(User::WATCHER_ROLE)
+            'visible' => Yii::app()->user->checkAccess(User::CLIENT_ROLE)
         ),
         array(
             'header' => 'Прибыль',

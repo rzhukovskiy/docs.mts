@@ -83,7 +83,7 @@ class ActController extends Controller
         if (isset($_POST['Act'])) {
             $model->attributes = $_POST['Act'];
             if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-                $model->company_id = Yii::app()->user->model->company_id;
+                $model->partner_id = Yii::app()->user->model->company_id;
             }
             if (!empty($_FILES)) {
                 if (property_exists($model, 'screen')) {

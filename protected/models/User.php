@@ -17,8 +17,8 @@ class User extends CActiveRecord
     const STATUS_NOT_ACTIVE = 0;
     const STATUS_ACTIVE = 1;
 
-    const MANAGER_ROLE = 'manager';
-    const WATCHER_ROLE = 'watcher';
+    const PARTNER_ROLE = 'partner';
+    const CLIENT_ROLE  = 'client';
     const ADMIN_ROLE   = 'admin';
     const GUEST_ROLE   = 'guest';
 
@@ -107,7 +107,7 @@ class User extends CActiveRecord
     public function beforeSave()
     {
         if (isset($this->company) && $this->company->type == Company::COMPANY_TYPE) {
-            $this->role = self::WATCHER_ROLE;
+            $this->role = self::CLIENT_ROLE;
         }
 
         if ($this->isNewRecord || $this->password) {

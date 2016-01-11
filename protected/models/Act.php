@@ -4,7 +4,8 @@
  *
  * The followings are the available columns in table '{{act}}':
  * @property int $id
- * @property int $company_id
+ * @property int $partner_id
+ * @property int $client_id
  * @property int $type_id
  * @property int $card_id
  * @property string $number
@@ -12,8 +13,8 @@
  * @property string $create_date
  * @property string $service_date
  * @property int $is_closed
- * @property int $service
- * @property int $company_service
+ * @property int $partner_service
+ * @property int $client_service
  * @property string $check
  * @property string $check_image
  * @property int $expense
@@ -86,7 +87,7 @@ class Act extends CActiveRecord
         return array(
             array('type_id, card_id, number, mark_id', 'required'),
             array('check', 'unique'),
-            array('cardCompany, period, month, day, check, company_service, old_expense, old_income, month, company_id, service, company_service, service_date, profit, income, expense, check_image', 'safe'),
+            array('period, month, day, check, company_service, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
             array('company_id, id, number, mark_id, type_id, card_id, service_date', 'safe', 'on' => 'search'),
         );
     }
@@ -94,7 +95,8 @@ class Act extends CActiveRecord
     public function relations()
     {
         return array(
-            'company' => array(self::BELONGS_TO, 'Company', 'company_id'),
+            'partner' => array(self::BELONGS_TO, 'Company', 'partner_id'),
+            'client' => array(self::BELONGS_TO, 'Company', 'client_id'),
             'card' => array(self::BELONGS_TO, 'Card', 'card_id'),
             'type' => array(self::BELONGS_TO, 'Type', 'type_id'),
             'mark' => array(self::BELONGS_TO, 'Mark', 'mark_id'),
@@ -104,25 +106,26 @@ class Act extends CActiveRecord
 
     public function beforeSave()
     {
-        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $this->company_id != Yii::app()->user->model->company_id) {
+        //запрет на редактирование
+        //для неадминов и не партнеров
+        if(!Yii::app()->user->checkAccess(User::ADMIN_ROLE) && !Yii::app()->user->checkAccess(User::PARTNER_ROLE)) {
             return false;
         }
 
+        //для чужих актов для партнеров
+        if (Yii::app()->user->model->role == User::PARTNER_ROLE && $this->partner_id != Yii::app()->user->model->company_id) {
+            return false;
+        }
+
+        //для партнеров закрытых актов
         if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $this->is_closed) {
             return false;
         }
 
-        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $this->companyType == Company::CARWASH_TYPE) {
-            $closedList = self::model()->find('is_closed = 1 AND date_format(service_date, "%Y-%m") = :month', array(
-                ':month' => date('Y-m', strtotime($this->service_date)),
-            ));
-            if ($closedList) {
-                return false;
-            }
-        }
-
+        //номер в верхний регистр
         $this->number = mb_strtoupper(preg_replace('/\s+/', '', $this->number), 'UTF-8');
 
+        //подставляем тип и марку из машины, если нашли по номеру
         $car = Car::model()->find('number = :number', array(':number' => $this->number));
         if ($car) {
             $this->mark_id = $car->mark_id;
@@ -130,14 +133,14 @@ class Act extends CActiveRecord
         }
 
         if ($this->company->type == Company::SERVICE_TYPE) {
-            $this->company_service = $this->service = 3;
+            $this->client_service = $this->partner_service = 3;
         }
         if ($this->company->type == Company::TIRES_TYPE) {
-            $this->company_service = $this->service = 4;
+            $this->client_service = $this->partner_service = 4;
         }
 
         if ($this->isNewRecord) {
-            $this->company_service = $this->service;
+            $this->client_service = $this->partner_service;
         }
 
         if (($this->isNewRecord && !$this->income)
@@ -158,7 +161,7 @@ class Act extends CActiveRecord
                     $washPrice->outside + $washPrice->inside,
                 );
 
-                $this->income = $servicePrice[$this->company_service];
+                $this->income = $servicePrice[$this->client_service];
             }
         }
 
@@ -167,7 +170,7 @@ class Act extends CActiveRecord
         ) {
             $washPrice = Price::model()->find('company_id = :company_id AND type_id = :type_id',
                 array(
-                    ':company_id' => $this->company_id,
+                    ':company_id' => $this->partner_id,
                     ':type_id' => $this->type_id
                 )
             );
@@ -180,7 +183,7 @@ class Act extends CActiveRecord
                     $washPrice->outside + $washPrice->inside,
                 );
 
-                $this->expense = $servicePrice[$this->service];
+                $this->expense = $servicePrice[$this->partner_service];
             }
         }
 
@@ -197,27 +200,32 @@ class Act extends CActiveRecord
     {
         $criteria = new CDbCriteria();
 
-        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE) && Yii::app()->user->model->company->type == Company::COMPANY_TYPE) {
+        //клиентам всегда показываем только закрытые акты
+        if (Yii::app()->user->model->role == User::CLIENT_ROLE) {
             $this->is_closed = 1;
             $this->showCompany = 1;
         }
 
-        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $this->company_id = Yii::app()->user->model->company_id;
+        //на всякий случай для партнеров и клиентов показываем только их акты
+        if (Yii::app()->user->model->role == User::PARTNER_ROLE) {
+            $this->partner_id = Yii::app()->user->model->company_id;
+        }
+        if (Yii::app()->user->model->role == User::CLIENT_ROLE) {
+            $this->client_id = Yii::app()->user->model->company_id;
         }
 
         $sort = new CSort;
 
         if ($this->showCompany) {
-            $criteria->compare('card.company_id', $this->company_id);
-            $sort->defaultOrder = 'card.company_id, t.service_date';
+            $sort->defaultOrder = 'client_id, t.service_date';
         } else {
-            $criteria->compare('t.company_id', $this->company_id);
-            $sort->defaultOrder = 't.company_id, t.service_date';
+            $sort->defaultOrder = 'partner_id, t.service_date';
         }
 
-        $criteria->with = array('company', 'card', 'type', 'mark', 'card.cardCompany');
-        $criteria->compare('company.type', $this->companyType);
+        $criteria->with = array('partner', 'client', 'card', 'type', 'mark');
+        $criteria->compare('partner.type', $this->companyType);
+        $criteria->compare('partner_id', $this->partner_id);
+        $criteria->compare('client_id', $this->client_id);
         $criteria->compare('t.type_id', $this->type_id);
         $criteria->compare('t.card_id', $this->card_id);
         $criteria->compare('t.number', $this->number, true);
@@ -255,13 +263,13 @@ class Act extends CActiveRecord
         }
 
         if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $this->company_id = Yii::app()->user->model->company_id;
+            $this->partner_id = Yii::app()->user->model->company_id;
         }
 
         if ($this->showCompany) {
-            $criteria->compare('card.company_id', $this->company_id);
+            $criteria->compare('card.company_id', $this->partner_id);
         } else {
-            $criteria->compare('t.company_id', $this->company_id);
+            $criteria->compare('t.company_id', $this->partner_id);
         }
 
         $criteria->select = [
@@ -439,7 +447,8 @@ class Act extends CActiveRecord
             'check_image' => 'Чек',
             'screen' => 'Загрузка чека',
             'type_id' => 'Тип ТС',
-            'company_id' => 'Сервис',
+            'partner_id' => 'Партнер',
+            'client_id' => 'Клиент',
             'card_id' => 'Карта',
             'number' => 'Госномер',
             'mark_id' => 'Марка',
@@ -482,7 +491,7 @@ class Act extends CActiveRecord
             }
         }
 
-        return $total;
+        return number_format($total, 0, ".", " ");
     }
 
     public function totalIncome($isStats = false)
@@ -498,7 +507,7 @@ class Act extends CActiveRecord
             }
         }
 
-        return $total;
+        return number_format($total, 0, ".", " ");
     }
 
     public function totalProfit($isStats = false)
@@ -514,7 +523,7 @@ class Act extends CActiveRecord
             }
         }
 
-        return $total;
+        return number_format($total, 0, ".", " ");
     }
 
     public function totalAmount()

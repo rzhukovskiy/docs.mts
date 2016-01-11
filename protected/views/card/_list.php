@@ -25,7 +25,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '++$row',
         ),
         array(
-            'name' => 'num',
+            'name' => 'number',
             'htmlOptions' => array(),
         ),
         array(
