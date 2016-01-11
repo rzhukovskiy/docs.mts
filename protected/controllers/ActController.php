@@ -24,7 +24,6 @@ class ActController extends Controller
 
         if (isset($_GET['Act'])) {
             $model->attributes = $_GET['Act'];
-            $model->day = isset($_GET['Act']['day']) && $_GET['Act']['day'] ? str_pad($_GET['Act']['day'], 2, '0', STR_PAD_LEFT) : false;
         }
 
         if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
@@ -127,7 +126,7 @@ class ActController extends Controller
     {
         $model = Act::model()->findByPk((int)$id);
         $model->showCompany = Yii::app()->getRequest()->getParam('showCompany', false);
-        $model->companyType = $model->company->type;
+        $model->companyType = $model->partner->type;
 
         if (isset($_POST['Act'])) {
             $model->attributes = $_POST['Act'];

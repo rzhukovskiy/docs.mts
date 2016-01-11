@@ -2,7 +2,7 @@
 <?php
 /**
  * @var $this CarController
- * @var $model Car
+ * @var $model Car|Act
  * @var $form CActiveForm
  */
 
@@ -72,7 +72,7 @@ $form = $this->beginWidget('CActiveForm', array(
             <th style="text-align: left;">
                 <?=CHtml::label('Выбор периода', '')?>
                 <?=CHtml::dropDownList('period', $period, Act::$periodList, array('class' =>'select-period autoinput', 'style' => 'margin-right: 10px;'))?>
-                <?=CHtml::dropDownList('year', 10, range(date('Y') - 10, date('Y')), ['class' => 'autoinput', 'style' => $diff <= 12 ? '' : 'display:none'])?>
+                <?=CHtml::dropDownList('year', 10, range(date('Y') - 10, date('Y')), ['class' => 'autoinput', 'style' => $diff && $diff <= 12 ? '' : 'display:none'])?>
                 <?=CHtml::dropDownList('half', '', $halfs, ['class' => 'autoinput', 'style' => $diff == 6 ? '' : 'display:none'])?>
                 <?=CHtml::dropDownList('quarter', '', $quarters, ['class' => 'autoinput', 'style' => $diff == 3 ? '' : 'display:none'])?>
                 <?=CHtml::dropDownList('month', '', $months, ['class' => 'autoinput', 'style' => $diff == 1 ? '' : 'display:none'])?>

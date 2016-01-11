@@ -28,7 +28,7 @@ $form = $this->beginWidget('CActiveForm', array(
             </th>
             <?php if(Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
                 <th>
-                    <?=$attributes['company_id']; ?>
+                    <?=$attributes['partner_id']; ?>
                 </th>
             <?php } ?>
             <th style="width: 80px;">
@@ -45,7 +45,7 @@ $form = $this->beginWidget('CActiveForm', array(
             </th>
             <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
                 <th>
-                    <?=$attributes['service']; ?>
+                    <?=$attributes['partner_service']; ?>
                 </th>
                 <th>
                     <?=$attributes['check']; ?>
@@ -65,11 +65,11 @@ $form = $this->beginWidget('CActiveForm', array(
             </td>
             <?php if(Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
                 <td>
-                    <?=$form->dropDownList($model, 'company_id', CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name')); ?>
+                    <?=$form->dropDownList($model, 'partner_id', CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name')); ?>
                 </td>
             <?php } ?>
             <td>
-                <?=$form->dropDownList($model, 'card_id', CHtml::listData(Card::model()->findAll(), 'id', 'num')); ?>
+                <?=$form->dropDownList($model, 'card_id', CHtml::listData(Card::model()->findAll(), 'id', 'number')); ?>
             </td>
             <td>
                 <?=$form->textField($model, 'number', array('class' => 'number_fill', 'style' => 'width:80px')); ?>
@@ -82,7 +82,7 @@ $form = $this->beginWidget('CActiveForm', array(
             </td>
             <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
                 <td>
-                    <?=$form->dropDownList($model, 'service', Act::$carwashList, array('style' => 'width:80px')); ?>
+                    <?=$form->dropDownList($model, 'partner_service', Act::$carwashList, array('style' => 'width:80px')); ?>
                 </td>
                 <td>
                     <?=$form->textField($model, 'check', array('style' => 'width:60px')); ?>

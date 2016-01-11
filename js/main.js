@@ -124,7 +124,7 @@ $(document).ready(function() {
                 if ($('#month').val() == 11) {
                     endDate = new Date(parseInt($('#year option:selected').text()) + 1, 0, 1);
                 } else {
-                    endDate = new Date($('#year option:selected').text(), $('#month').val() + 1, 1);
+                    endDate = new Date($('#year option:selected').text(), parseInt($('#month').val()) + 1, 1);
                 }
                 break;
             case '2':
@@ -132,7 +132,7 @@ $(document).ready(function() {
                 if ($('#quarter').val() == 3) {
                     endDate = new Date(parseInt($('#year option:selected').text()) + 1, 0, 1);
                 } else {
-                    endDate = new Date($('#year option:selected').text(), $('#quarter').val() * 3 + 3, 1);
+                    endDate = new Date($('#year option:selected').text(), parseInt($('#quarter').val()) * 3 + 3, 1);
                 }
                 break;
             case '3':
@@ -140,13 +140,17 @@ $(document).ready(function() {
                 if ($('#half').val() == 1) {
                     endDate = new Date(parseInt($('#year option:selected').text()) + 1, 0, 1);
                 } else {
-                    endDate = new Date($('#year option:selected').text(), $('#half').val() * 6 + 6, 1);
+                    endDate = new Date($('#year option:selected').text(), parseInt($('#half').val()) * 6 + 6, 1);
                 }
                 break;
             case '4':
                 startDate = new Date($('#year option:selected').text(), 0, 1);
                 endDate = new Date(parseInt($('#year option:selected').text()) + 1, 0, 1);
                 break;
+            default:
+                $('.from_date').remove();
+                $('.to_date').remove();
+                return true;
         }
         $('.from_date').datepicker({
             dateFormat: "yy-mm-dd"

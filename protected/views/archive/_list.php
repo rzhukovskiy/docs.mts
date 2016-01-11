@@ -4,6 +4,7 @@
  * @var $model Act
  * @var $form CActiveForm
  */
+$provider = $model->search();
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'act-grid',
     'htmlOptions' => array('class' => 'my-grid'),
@@ -20,7 +21,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'class' => '',
         )
     ),
-    'dataProvider' => $model->search(),
+    'dataProvider' => $provider,
     'emptyText' => '',
     'cssFile' => false,
     'template' => "{items}\n{pager}",
@@ -40,7 +41,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'card_id',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->card->num',
+            'value' => '$data->card->number',
         ),
         array(
             'name' => 'mark_id',
@@ -60,24 +61,25 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->type->name',
         ),
         array(
-            'name' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? 'service' : 'company_service',
+            'name' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? 'partner_service' : 'client_service',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? 'Act::$fullList[$data->service]' : 'Act::$fullList[$data->company_service]',
+            'value' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? 'Act::$fullList[$data->partner_service]' : 'Act::$fullList[$data->client_service]',
             'visible' => $model->companyType == Company::CARWASH_TYPE,
         ),
         array(
             'header' => 'Сумма',
             'name' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? 'expense' : 'income',
+            'value' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? '$data->getFormattedField("expense")' : '$data->getFormattedField("income")',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'cssClassExpression' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? '$data->expense ? "" : "error"' : '$data->income ? "" : "error"',
-            'footer' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? $model->totalExpense() : $model->totalIncome(),
+            'footer' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? $model->totalField($provider, 'expense') : $model->totalField($provider, 'income'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
             'name' => 'city',
             'header' => 'Город',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->company->address',
+            'value' => '$data->partner->address',
             'visible' => $model->showCompany,
         ),
         array(

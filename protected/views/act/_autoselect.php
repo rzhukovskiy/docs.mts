@@ -6,7 +6,7 @@
             $result = array();
             foreach (Card::model()->findAll() as $row)
             {
-                $result[] = array($row->id, htmlentities($row->num));
+                $result[] = array($row->id, htmlentities($row->number));
             }
 
             echo json_encode($result);

@@ -10,7 +10,7 @@
  * @property int $type_id
  * @property int $service_count
  * @property string $from_date
- * @property int $to_date
+ * @property string $to_date
  */
 class Car extends CActiveRecord
 {
@@ -106,7 +106,9 @@ class Car extends CActiveRecord
         $criteria->compare('t.company_id', $this->company_id);
         $criteria->compare('t.mark_id', $this->mark_id);
         $criteria->compare('t.type_id', $this->type_id);
-        $criteria->addBetweenCondition('act.service_date', $this->from_date, $this->to_date);
+        if (isset($this->from_date)) {
+            $criteria->addBetweenCondition('act.service_date', $this->from_date, $this->to_date);
+        }
 
         $sort = new CSort();
         $sort->defaultOrder = 't.company_id, service_count DESC';

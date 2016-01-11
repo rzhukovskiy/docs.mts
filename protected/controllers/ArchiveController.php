@@ -16,15 +16,19 @@ class ArchiveController extends Controller
         $model->unsetAttributes();
         $model->companyType = $type;
 
-        $model->service_date = date('Y-m-d', time() - 30 * 24 * 3600);
-
-        if (Yii::app()->user->role == User::CLIENT_ROLE) {
-            //$model->is_closed = 1;
-        }
+        $month = isset($_GET['Act']['month']) ? $_GET['Act']['month'] : date('Y-m', time() - 30 * 24 * 3600);
+        $model->month = $month;
 
         if (isset($_GET['Act'])) {
             $model->attributes = $_GET['Act'];
-            $model->month = $_GET['Act']['month'];
+        }
+
+        $model->from_date = $model->month . '-01';
+        $month = explode('-', $model->month);
+        if ($month[1] == 12) {
+            $model->to_date = ($month[0] + 1) . '-01-01';
+        } else {
+            $model->to_date = $month[0] . '-' . ($month[1] + 1) . '-01';
         }
 
         $this->render('list', array(

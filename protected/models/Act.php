@@ -26,9 +26,13 @@
  * @property string $month
  * @property int $period
  * @property int $amount
+ * @property string $from_date
+ * @property string $to_date
  */
 class Act extends CActiveRecord
 {
+    public $from_date;
+    public $to_date;
     public $screen;
     public $old_expense;
     public $old_income;
@@ -87,7 +91,7 @@ class Act extends CActiveRecord
         return array(
             array('type_id, card_id, number, mark_id', 'required'),
             array('check', 'unique'),
-            array('period, month, day, check, company_service, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
+            array('from_date, to_date, period, month, day, check, company_service, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
             array('company_id, id, number, mark_id, type_id, card_id, service_date', 'safe', 'on' => 'search'),
         );
     }
@@ -132,10 +136,10 @@ class Act extends CActiveRecord
             $this->type_id = $car->type_id;
         }
 
-        if ($this->company->type == Company::SERVICE_TYPE) {
+        if ($this->partner->type == Company::SERVICE_TYPE) {
             $this->client_service = $this->partner_service = 3;
         }
-        if ($this->company->type == Company::TIRES_TYPE) {
+        if ($this->partner->type == Company::TIRES_TYPE) {
             $this->client_service = $this->partner_service = 4;
         }
 
@@ -144,11 +148,11 @@ class Act extends CActiveRecord
         }
 
         if (($this->isNewRecord && !$this->income)
-            || (!$this->is_closed && $this->company->type == Company::CARWASH_TYPE && $this->old_income == $this->income)
+            || (!$this->is_closed && $this->partner->type == Company::CARWASH_TYPE && $this->old_income == $this->income)
         ) {
             $washPrice = Price::model()->find('company_id = :company_id AND type_id = :type_id',
                 array(
-                    ':company_id' => $this->card->company_id,
+                    ':company_id' => $this->client_id,
                     ':type_id' => $this->type_id
                 )
             );
@@ -166,7 +170,7 @@ class Act extends CActiveRecord
         }
 
         if (($this->isNewRecord && !$this->expense)
-            || (!$this->is_closed && $this->company->type == Company::CARWASH_TYPE && $this->old_expense == $this->expense)
+            || (!$this->is_closed && $this->partner->type == Company::CARWASH_TYPE && $this->old_expense == $this->expense)
         ) {
             $washPrice = Price::model()->find('company_id = :company_id AND type_id = :type_id',
                 array(
@@ -216,10 +220,14 @@ class Act extends CActiveRecord
 
         $sort = new CSort;
 
-        if ($this->showCompany) {
-            $sort->defaultOrder = 'client_id, t.service_date';
+        if ($this->number) {
+            $sort->defaultOrder = 't.service_date';
         } else {
-            $sort->defaultOrder = 'partner_id, t.service_date';
+            if ($this->showCompany) {
+                $sort->defaultOrder = 'client_id, t.service_date';
+            } else {
+                $sort->defaultOrder = 'partner_id, t.service_date';
+            }
         }
 
         $criteria->with = array('partner', 'client', 'card', 'type', 'mark');
@@ -230,14 +238,13 @@ class Act extends CActiveRecord
         $criteria->compare('t.card_id', $this->card_id);
         $criteria->compare('t.number', $this->number, true);
         $criteria->compare('t.mark_id', $this->mark_id);
-        if($this->create_date) {
-            $criteria->compare('date_format(t.create_date, "%Y-%m-%d")', $this->create_date);
+        if ($this->is_closed) {
+            $criteria->compare('t.is_closed', $this->is_closed);
+        }
+        if (isset($this->from_date)) {
+            $criteria->addBetweenCondition('service_date', $this->from_date, $this->to_date);
         } else {
-            if($this->day) {
-                $criteria->compare('date_format(t.service_date, "%Y-%m-%d")', $this->day);
-            } else {
-                $criteria->compare('date_format(t.service_date, "%Y-%m")', $this->getMonth());
-            }
+            $criteria->compare('date_format(t.create_date, "%Y-%m-%d")', date('Y-m-d'));
         }
         $sort->applyOrder($criteria);
 
@@ -316,54 +323,6 @@ class Act extends CActiveRecord
         return $provider;
     }
 
-    /**
-     * Retrieves a list of models based on the current search/filter conditions.
-     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-     */
-    public function cars()
-    {
-        $criteria = new CDbCriteria();
-
-        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $this->showCompany = 1;
-            $this->is_closed = 1;
-        }
-
-        $criteria->with = array('card.cardCompany');
-        $criteria->compare('number', $this->number);
-        switch ($this->period) {
-            case 1:
-                if($this->month) {
-                    $criteria->compare('date_format(service_date, "%Y-%m")', $this->month);
-                }
-                break;
-            case 2:
-                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-3 month", time())), date('Y-m-d', time()));
-                break;
-            case 3:
-                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-6 month", time())), date('Y-m-d', time()));
-                break;
-            case 4:
-                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-12 month", time())), date('Y-m-d', time()));
-                break;
-            default:
-        }
-
-        $sort = new CSort;
-        $sort->defaultOrder = 'service_date';
-        $sort->applyOrder($criteria);
-        $this->getDbCriteria()->mergeWith($criteria);
-
-        $provider = new CActiveDataProvider(get_class($this), array(
-            'criteria' => $this->getDbCriteria(),
-            'pagination' => false,
-        ));
-
-        $this->setDbCriteria(new CDbCriteria());
-
-        return $provider;
-    }
-
     public function byDays()
     {
         $criteria = $this->getDbCriteria();
@@ -414,11 +373,19 @@ class Act extends CActiveRecord
 
         if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
             if ($this->showCompany) {
-                $criteria->group = 'card.company_id';
+                $criteria->group = 'client_id';
             } else {
-                $criteria->group = 't.company_id';
+                $criteria->group = 'partner_id';
             }
         }
+
+        $criteria->select = [
+            'partner_id',
+            'COUNT(t.id) as amount',
+            'SUM(expense) as expense',
+            'SUM(income) as income',
+            'SUM(profit) as profit'
+        ];
 
         $sort = new CSort;
         $sort->defaultOrder = 'profit DESC';
@@ -453,8 +420,8 @@ class Act extends CActiveRecord
             'number' => 'Госномер',
             'mark_id' => 'Марка',
             'service_date' => 'Дата',
-            'service' => 'Услуга',
-            'company_service' => 'Услуга',
+            'partner_service' => 'Услуга',
+            'client_service' => 'Услуга',
             'month' => 'Месяц',
             'is_closed' => 'Закрыта',
             'profit' => 'Итого',
@@ -478,62 +445,24 @@ class Act extends CActiveRecord
         return $this->day;
     }
 
-    public function totalExpense($isStats = false)
+    public function getFormattedField($field)
+    {
+        return number_format($this->$field, 0, ".", " ");
+    }
+
+    /**
+     * @param $provider CActiveDataProvider
+     * @param $field string
+     * @return string
+     */
+    public function totalField($provider, $field)
     {
         $total = 0;
-        if ($isStats) {
-            foreach ($this->stat()->getData() as $row) {
-                $total += $row->expense;
-            }
-        } else {
-            foreach ($this->search()->getData() as $row) {
-                $total += $row->expense;
-            }
+
+        foreach ($provider->getData() as $row) {
+            $total += $row->$field;
         }
 
         return number_format($total, 0, ".", " ");
-    }
-
-    public function totalIncome($isStats = false)
-    {
-        $total = 0;
-        if ($isStats) {
-            foreach ($this->stat()->getData() as $row) {
-                $total += $row->income;
-            }
-        } else {
-            foreach ($this->search()->getData() as $row) {
-                $total += $row->income;
-            }
-        }
-
-        return number_format($total, 0, ".", " ");
-    }
-
-    public function totalProfit($isStats = false)
-    {
-        $total = 0;
-        if ($isStats) {
-            foreach ($this->stat()->getData() as $row) {
-                $total += $row->profit;
-            }
-        } else {
-            foreach ($this->search()->getData() as $row) {
-                $total += $row->profit;
-            }
-        }
-
-        return number_format($total, 0, ".", " ");
-    }
-
-    public function totalAmount()
-    {
-        $total = 0;
-
-        foreach ($this->stat()->getData() as $row) {
-            $total += $row->amount;
-        }
-
-        return $total;
     }
 }

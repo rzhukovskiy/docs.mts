@@ -24,10 +24,10 @@ $form = $this->beginWidget('CActiveForm', array(
 
     <?php if(Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
         <div class="row">
-            <?=$form->labelEx($model, 'company_id'); ?>
+            <?=$form->labelEx($model, 'partner_id'); ?>
             <span class="field">
-                <?=$form->dropDownList($model, 'company_id', CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name')); ?>
-                <?=$form->error($model, 'company_id'); ?>
+                <?=$form->dropDownList($model, 'partner_id', CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name')); ?>
+                <?=$form->error($model, 'partner_id'); ?>
             </span>
         </div>
     <?php } ?>
@@ -35,7 +35,7 @@ $form = $this->beginWidget('CActiveForm', array(
     <div class="row">
         <?=$form->labelEx($model, 'card_id'); ?>
         <span class="field">
-            <?=$form->dropDownList($model, 'card_id', CHtml::listData(Card::model()->findAll(), 'id', 'num')); ?>
+            <?=$form->dropDownList($model, 'card_id', CHtml::listData(Card::model()->findAll(), 'id', 'number')); ?>
             <?=$form->error($model, 'card_id'); ?>
         </span>
     </div>
@@ -64,12 +64,12 @@ $form = $this->beginWidget('CActiveForm', array(
         </span>
     </div>
 
-    <?php if($model->company->type == Company::CARWASH_TYPE) { ?>
+    <?php if($model->partner->type == Company::CARWASH_TYPE) { ?>
         <div class="row">
-            <?=$form->labelEx($model, 'service'); ?>
+            <?=$form->labelEx($model, 'partner_service'); ?>
             <span class="field">
-                    <?=$form->dropDownList($model, 'service', Act::$carwashList); ?>
-                    <?=$form->error($model, 'service'); ?>
+                    <?=$form->dropDownList($model, 'partner_service', Act::$carwashList); ?>
+                    <?=$form->error($model, 'partner_service'); ?>
                 </span>
         </div>
 
@@ -90,7 +90,7 @@ $form = $this->beginWidget('CActiveForm', array(
         </div>
     <?php } ?>
 
-    <?php if(Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $model->company->type == Company::CARWASH_TYPE) { ?>
+    <?php if(Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $model->partner->type == Company::CARWASH_TYPE) { ?>
         <div class="row">
             <?=$form->labelEx($model, 'expense'); ?>
             <span class="field">

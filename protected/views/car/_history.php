@@ -4,6 +4,7 @@
  * @var $model Act
  * @var $form CActiveForm
  */
+$provider = $model->search();
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'history-grid',
     'htmlOptions' => array('class' => 'my-grid'),
@@ -20,7 +21,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'class' => '',
         )
     ),
-    'dataProvider' => $model->cars(),
+    'dataProvider' => $model->search(),
     'emptyText' => '',
     'cssFile' => false,
     'template' => "{items}\n{pager}",
@@ -40,32 +41,33 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'card_id',
             'htmlOptions' => array('style' => ''),
-            'value' => '$data->card->num',
+            'value' => '$data->card->number',
         ),
         array(
-            'name' => 'service',
+            'name' => 'client_service',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => ' Act::$shortList[$data->company_service]',
+            'value' => ' Act::$shortList[$data->client_service]',
         ),
         array(
             'name' => 'city',
             'header' => 'Город',
             'htmlOptions' => array('style' => ''),
-            'value' => '$data->company->address',
+            'value' => '$data->partner->address',
         ),
         array(
             'header' => 'Сумма',
             'name' => 'income',
             'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => '$data->getFormattedField("income")',
             'cssClassExpression' => '$data->income ? "" : "error"',
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
-            'footer' => $model->totalIncome(true),
+            'footer' => $model->totalField($provider, 'income'),
         ),
         array(
             'class' => 'CButtonColumn',
             'template' => '{details}',
             'header' => '',
-            'cssClassExpression' => '$data->company->type == Company::CARWASH_TYPE? "hidden" : ""',
+            'cssClassExpression' => '$data->partner->type == Company::CARWASH_TYPE? "hidden" : ""',
             'buttons' => array(
                 'details' => array(
                     'label' => '',

@@ -18,10 +18,10 @@ $form = $this->beginWidget('CActiveForm', array(
 ?>
 <div class="row">
     <span class="field">
-        <?=$form->labelEx($model, 'num'); ?>
+        <?=$form->labelEx($model, 'number'); ?>
         <?=$form->hiddenField($model, 'company_id'); ?>
-        <?=$form->textField($model, 'num'); ?>
-        <?=$form->error($model, 'num');?>
+        <?=$form->textField($model, 'number'); ?>
+        <?=$form->error($model, 'number');?>
         <?=CHtml::hiddenField('returnUrl', Yii::app()->createUrl("/company/cards", array('id' => $model->company_id))) ?>
 
         <?=CHtml::submitButton($model->isNewRecord ? 'Добавить карту' : 'Сохранить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>

@@ -3,12 +3,13 @@
  * @var $this ActController
  * @var $model Act
  */
+$provider = $model->search();
 ?>
 <div class="my-grid" id="act-grid">
     <table class="stdtable grid table-fixed">
         <thead>
         <?php
-        $totalCount = count($model->search()->getData());
+        $totalCount = count($provider->getData());
         if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
             $this->renderPartial('_selector', array('model' => $model));
         }
@@ -17,14 +18,14 @@
             <th id="act-grid_c0">№</th>
             <th id="act-grid_c1"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=service_date">Дата</a></th>
             <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
-                <th id="act-grid_c2"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=company_id">Компания</a></th>
+                <th id="act-grid_c2"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=client_id">Клиент</a></th>
             <?php } ?>
             <th id="act-grid_c3"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=card_id">Карта</a></th>
             <th id="act-grid_c4"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=number">Госномер</a></th>
             <th id="act-grid_c5"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=mark_id">Марка</a></th>
             <th id="act-grid_c6"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=type_id">Тип ТС</a></th>
             <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
-                <th id="act-grid_c7"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=service">Услуга</a></th>
+                <th id="act-grid_c7"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=client_service">Услуга</a></th>
             <?php } ?>
             <th id="act-grid_c8"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=income">Сумма</a></th>
             <th id="act-grid_c9"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=address">Город</a></th>
@@ -43,7 +44,7 @@
                         range(0, date('t', strtotime("$model->month-$model->day"))),
                         array('empty' => 'Все'))?>
                 </td>
-                <td><?=CHtml::dropDownList('Act[company_id]',
+                <td><?=CHtml::dropDownList('Act[partner_id]',
                         $model->partner_id,
                         CHtml::listData(Company::model()->findAll('type = :type' , array(':type' => Company::COMPANY_TYPE)),'id', 'name'),
                         array('empty' => 'Все', 'style' => 'width: 80px;'))?>
@@ -71,7 +72,7 @@
                     <td colspan="<?=Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $model->companyType == Company::CARWASH_TYPE ? 7 : (Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 6 : 5); ?>">
                         <?=$totalCount . ' ' . StringNum::getNumEnding($totalCount, array('машина', 'машины', 'машин'))?>
                     </td>
-                    <td style="text-align:center;"><strong><?=$model->totalIncome()?></strong></td>
+                    <td style="text-align:center;"><strong><?=$model->totalField($provider, 'income')?></strong></td>
                     <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 4 : 2?>"></td>
                 </tr>
             <?php } ?>

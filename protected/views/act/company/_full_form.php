@@ -25,10 +25,10 @@ $form = $this->beginWidget('CActiveForm', array(
 
 <?php if(Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
     <div class="row">
-        <?=$form->labelEx($model, 'company_id'); ?>
+        <?=$form->labelEx($model, 'partner_id'); ?>
         <span class="field">
-            <?=$form->dropDownList($model, 'company_id', CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name')); ?>
-            <?=$form->error($model, 'company_id'); ?>
+            <?=$form->dropDownList($model, 'partner_id', CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name')); ?>
+            <?=$form->error($model, 'partner_id'); ?>
         </span>
     </div>
 <?php } ?>
@@ -65,7 +65,7 @@ $form = $this->beginWidget('CActiveForm', array(
     </span>
 </div>
 
-<?php if($model->company->type == Company::CARWASH_TYPE) { ?>
+<?php if($model->partner->type == Company::CARWASH_TYPE) { ?>
     <div class="row">
         <?=$form->labelEx($model, 'company_service'); ?>
         <span class="field">
@@ -91,7 +91,7 @@ $form = $this->beginWidget('CActiveForm', array(
     </div>
 <?php } ?>
 
-<?php if(Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $model->company->type == Company::CARWASH_TYPE) { ?>
+<?php if(Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $model->partner->type == Company::CARWASH_TYPE) { ?>
     <div class="row">
         <?=$form->labelEx($model, 'income'); ?>
         <span class="field">
