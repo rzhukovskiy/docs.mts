@@ -9,7 +9,7 @@ $this->tabs = [
 ];
 ?>
     <div class="contenttitle radiusbottom0">
-        <h2 class="table"><span>Статистика <?=$model->company->name?> по месяцам</span></h2>
+        <h2 class="table"><span>Статистика <?=$model->client->name?> по месяцам</span></h2>
     </div>
 <?php
 $this->renderPartial('_selector', ['model' => $model]);

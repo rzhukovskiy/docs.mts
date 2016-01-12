@@ -4,6 +4,7 @@
  * @var $model Act
  * @var $form CActiveForm
  */
+$provider = $model->byDays()->search();
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'act-grid',
     'htmlOptions' => array('class' => 'my-grid'),
@@ -20,7 +21,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'class' => '',
         )
     ),
-    'dataProvider' => $model->byDays()->stat(),
+    'dataProvider' => $provider,
     'emptyText' => '',
     'cssFile' => false,
     'template' => "{items}\n{pager}",
@@ -42,37 +43,37 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => 'Обслужено',
             'name' => 'amount',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'footer' => $model->totalAmount(),
+            'footer' => $model->totalField($provider, 'amount'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
             'header' => Yii::app()->user->role == User::PARTNER_ROLE ? 'Доход' : 'Расход',
             'name' => 'expense',
-            'value' => 'number_format($data->expense, 0, ".", " ")',
+            'value' => '$data->getFormattedField("expense")',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'visible' => Yii::app()->user->checkAccess(User::PARTNER_ROLE),
-            'footer' => number_format($model->totalExpense(true), 0, ".", " "),
+            'footer' => $model->totalField($provider, 'expense'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
             'header' => Yii::app()->user->role == User::CLIENT_ROLE ? 'Расход' : 'Доход',
             'name' => 'income',
-            'value' => 'number_format($data->income, 0, ".", " ")',
+            'value' => '$data->getFormattedField("income")',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'visible' => Yii::app()->user->checkAccess(User::CLIENT_ROLE),
-            'footer' => number_format($model->totalIncome(true), 0, ".", " "),
+            'footer' => $model->totalField($provider, 'income'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
             'header' => 'Прибыль',
             'name' => 'profit',
-            'value' => 'number_format($data->profit, 0, ".", " ")',
+            'value' => '$data->getFormattedField("profit")',
             'htmlOptions' => [
                 'style' => 'text-align:center;',
                 'class' => 'total',
             ],
             'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
-            'footer' => number_format($model->totalProfit(true), 0, ".", " "),
+            'footer' => $model->totalField($provider, 'profit'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
@@ -83,7 +84,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 'history' => array(
                     'label' => '',
                     'imageUrl' => false,
-                    'url' => 'Yii::app()->createUrl("stat/details", array_merge($_GET, ["Act[day]" => $data->day]))',
+                    'url' => 'Yii::app()->createUrl("stat/details", ["Act[partner_id]" => ' . $model->partner_id . ', "Act[day]" => $data->day])',
                     'options' => array('class' => 'calendar')
                 ),
             ),

@@ -68,8 +68,8 @@ class Act extends CActiveRecord
         'шиномонтаж',
     );
 
-    protected $month;
-    protected $day;
+    public $month;
+    public $day;
 
     /**
      * Returns the static model of the specified AR class.
@@ -146,6 +146,8 @@ class Act extends CActiveRecord
         if ($this->isNewRecord) {
             $this->client_service = $this->partner_service;
         }
+
+        $this->client_id = $this->card->company_id;
 
         if (($this->isNewRecord && !$this->income)
             || (!$this->is_closed && $this->partner->type == Company::CARWASH_TYPE && $this->old_income == $this->income)
@@ -242,74 +244,17 @@ class Act extends CActiveRecord
             $criteria->compare('t.is_closed', $this->is_closed);
         }
         if (isset($this->from_date)) {
-            $criteria->addBetweenCondition('service_date', $this->from_date, $this->to_date);
-        } else {
-            $criteria->compare('date_format(t.create_date, "%Y-%m-%d")', date('Y-m-d'));
+            $criteria->addCondition('service_date >= "' . $this->from_date . '"');
+            $criteria->addCondition('service_date < "' . $this->to_date . '"');
         }
+        if (isset($this->month)) {
+            $criteria->compare('date_format(t.service_date, "%Y-%m")', $this->month);
+        }
+        if (isset($this->day)) {
+            $criteria->compare('date_format(t.service_date, "%Y-%m-%d")', $this->day);
+        }
+        $criteria->compare('date_format(t.create_date, "%Y-%m-%d")', $this->create_date);
         $sort->applyOrder($criteria);
-
-        $this->getDbCriteria()->mergeWith($criteria);
-
-        $provider = new CActiveDataProvider(get_class($this), array(
-            'criteria' => $this->getDbCriteria(),
-            'pagination' => false,
-        ));
-
-        $this->setDbCriteria(new CDbCriteria());
-
-        return $provider;
-    }
-
-    public function stat()
-    {
-        $criteria = new CDbCriteria();
-
-        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE) && Yii::app()->user->model->company->type == Company::COMPANY_TYPE) {
-            $this->is_closed = 1;
-            $this->showCompany = 1;
-        }
-
-        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $this->partner_id = Yii::app()->user->model->company_id;
-        }
-
-        if ($this->showCompany) {
-            $criteria->compare('card.company_id', $this->partner_id);
-        } else {
-            $criteria->compare('t.company_id', $this->partner_id);
-        }
-
-        $criteria->select = [
-            'company_id',
-            'COUNT(t.id) as amount',
-            'SUM(expense) as expense',
-            'SUM(income) as income',
-            'SUM(profit) as profit'
-        ];
-
-        $criteria->with = array('company', 'card', 'type', 'mark', 'card.cardCompany');
-        $criteria->compare('company.type', $this->companyType);
-        $criteria->compare('t.type_id', $this->type_id);
-        $criteria->compare('t.card_id', $this->card_id);
-        $criteria->compare('t.number', $this->number, true);
-        $criteria->compare('t.mark_id', $this->mark_id);
-        switch ($this->period) {
-            case 1:
-                if($this->month) {
-                    $criteria->compare('date_format(service_date, "%Y-%m")', $this->month);
-                }
-                break;
-            case 2:
-                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-3 month", time())), date('Y-m-d', time()));
-                break;
-            case 3:
-                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-6 month", time())), date('Y-m-d', time()));
-                break;
-            case 4:
-                $criteria->addBetweenCondition('service_date', date('Y-m-d', strtotime("-12 month", time())), date('Y-m-d', time()));
-                break;
-            default:
-        }
 
         $this->getDbCriteria()->mergeWith($criteria);
 
@@ -330,6 +275,10 @@ class Act extends CActiveRecord
         $criteria->group = 'day';
         $criteria->select = [
             'date_format(service_date, "%Y-%m-%d") as day',
+            'COUNT(t.id) as amount',
+            'SUM(expense) as expense',
+            'SUM(income) as income',
+            'SUM(profit) as profit'
         ];
 
         $sort = new CSort;
@@ -352,6 +301,10 @@ class Act extends CActiveRecord
         $criteria->group = 'month';
         $criteria->select = [
             'date_format(service_date, "%Y-%m") as month',
+            'COUNT(t.id) as amount',
+            'SUM(expense) as expense',
+            'SUM(income) as income',
+            'SUM(profit) as profit'
         ];
 
         $sort = new CSort;
@@ -381,6 +334,40 @@ class Act extends CActiveRecord
 
         $criteria->select = [
             'partner_id',
+            'client_id',
+            'COUNT(t.id) as amount',
+            'SUM(expense) as expense',
+            'SUM(income) as income',
+            'SUM(profit) as profit'
+        ];
+
+        $sort = new CSort;
+        $sort->defaultOrder = 'profit DESC';
+        $sort->attributes = [
+            'income' => [
+                'asc' => 'income asc',
+                'desc' => 'income desc',
+            ],
+            'expense' => [
+                'asc' => 'expense asc',
+                'desc' => 'expense desc',
+            ],
+            'profit',
+        ];
+        $sort->applyOrder($criteria);
+
+        $this->getDbCriteria()->mergeWith($criteria);
+        return $this;
+    }
+
+    public function byTypes()
+    {
+        $criteria = $this->getDbCriteria();
+
+        $criteria->group = 'partnerType';
+
+        $criteria->select = [
+            'partner.type as partnerType',
             'COUNT(t.id) as amount',
             'SUM(expense) as expense',
             'SUM(income) as income',
@@ -429,20 +416,6 @@ class Act extends CActiveRecord
             'expense' => 'Сумма',
             'day' => 'День',
         );
-    }
-
-    public function getMonth()
-    {
-        if (!$this->month) {
-           $this->month = date('Y-m', strtotime($this->service_date));
-        }
-
-        return $this->month;
-    }
-
-    public function getDay()
-    {
-        return $this->day;
     }
 
     public function getFormattedField($field)

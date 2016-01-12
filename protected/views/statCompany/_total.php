@@ -4,7 +4,7 @@
  * @var $model Act
  * @var $form CActiveForm
  */
-$provider = $model->byCompanies()->search();
+$provider = $model->byTypes()->search();
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'act-grid',
     'htmlOptions' => array('class' => 'my-grid'),
@@ -35,16 +35,10 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
-            'header' => Company::$listService[$model->companyType],
-            'name' => 'company',
+            'header' => 'Услуга',
+            'name' => 'service',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->partner->name',
-        ),
-        array(
-            'header' => 'Город',
-            'name' => 'address',
-            'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->partner->address',
+            'value' => 'Company::$listService[$data->partner->type]',
         ),
         array(
             'header' => 'Обслужено',
@@ -80,7 +74,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 'history' => array(
                     'label' => '',
                     'imageUrl' => false,
-                    'url' => 'Yii::app()->createUrl("stat/months", array_merge($_GET, ["Act[partner_id]" => $data->partner_id]))',
+                    'url' => 'Yii::app()->createUrl("statCompany/index", array_merge($_GET, ["type" => $data->partner->type]))',
                     'options' => array('class' => 'calendar')
                 ),
             ),

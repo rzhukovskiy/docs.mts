@@ -4,6 +4,7 @@
  * @var $model Act
  * @var $form CActiveForm
  */
+$provider = $model->search();
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'act-grid',
     'htmlOptions' => array('class' => 'my-grid'),
@@ -20,7 +21,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'class' => '',
         )
     ),
-    'dataProvider' => $model->search(),
+    'dataProvider' => $provider,
     'emptyText' => '',
     'cssFile' => false,
     'template' => "{items}\n{pager}",
@@ -40,7 +41,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'card_id',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->card->num',
+            'value' => '$data->card->number',
         ),
         array(
             'name' => 'number',
@@ -60,46 +61,39 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->type->name',
         ),
         array(
-            'name' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? 'service' : 'company_service',
+            'name' => 'partner_service',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? 'Act::$fullList[$data->service]' : 'Act::$fullList[$data->company_service]',
+            'value' => 'Act::$fullList[$data->partner_service]',
         ),
         array(
             'header' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 'Расход' : 'Доход',
             'name' => 'expense',
-            'value' => 'number_format($data->expense, 0, ".", " ")',
+            'value' => '$data->getFormattedField("expense")',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'footer' => number_format($model->totalExpense(), 0, ".", " "),
+            'visible' => Yii::app()->user->checkAccess(User::PARTNER_ROLE),
+            'footer' => $model->totalField($provider, 'expense'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
-            'visible' => Yii::app()->user->checkAccess(User::PARTNER_ROLE)
         ),
         array(
             'header' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 'Доход' : 'Расход',
             'name' => 'income',
-            'value' => 'number_format($data->income, 0, ".", " ")',
+            'value' => '$data->getFormattedField("income")',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'footer' => number_format($model->totalIncome(), 0, ".", " "),
+            'visible' => Yii::app()->user->checkAccess(User::CLIENT_ROLE),
+            'footer' => $model->totalField($provider, 'income'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
-            'visible' => Yii::app()->user->checkAccess(User::CLIENT_ROLE)
         ),
         array(
             'header' => 'Прибыль',
-            'name' => 'expense',
-            'value' => 'number_format($data->profit, 0, ".", " ")',
+            'name' => 'profit',
+            'value' => '$data->getFormattedField("profit")',
             'htmlOptions' => [
                 'style' => 'text-align:center;',
                 'class' => 'total',
             ],
-            'footer' => number_format($model->totalProfit(), 0, ".", " "),
+            'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
+            'footer' => $model->totalField($provider, 'profit'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
-            'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE)
-        ),
-        array(
-            'name' => 'city',
-            'header' => 'Город',
-            'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->company->address',
-            'visible' => $model->showCompany,
         ),
         array(
             'name' => 'check',
@@ -119,7 +113,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'class' => 'CButtonColumn',
             'template' => '{details}',
             'header' => '',
-            'cssClassExpression' => '$data->company->type == Company::CARWASH_TYPE? "hidden" : ""',
+            'cssClassExpression' => '$data->partner->type == Company::CARWASH_TYPE? "hidden" : ""',
             'buttons' => array(
                 'details' => array(
                     'label' => '',

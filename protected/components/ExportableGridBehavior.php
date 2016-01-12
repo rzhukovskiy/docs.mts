@@ -39,7 +39,11 @@ class ExportableGridBehavior extends CBehavior
                 'params' => array(':type' => $this->showCompany ? Company::COMPANY_TYPE : $actModel->companyType),
                 'order' => 'type DESC'
             )) as $company) {
-                $actModel->partner_id = $company->id;
+                if ($this->showCompany) {
+                    $actModel->client_id = $company->id;
+                } else {
+                    $actModel->partner_id = $company->id;
+                }
                 $this->fillAct($actModel, $company, $zip);
             }
             if ($zip) $zip->close();
@@ -208,7 +212,7 @@ class ExportableGridBehavior extends CBehavior
                 $companyWorkSheet->mergeCells("B$row:C$row");
                 $companyWorkSheet->setCellValueByColumnAndRow(1, $row, $date->format('j'));
                 $companyWorkSheet->mergeCells("D$row:E$row");
-                $companyWorkSheet->setCellValueByColumnAndRow(3, $row, $data->card->num);
+                $companyWorkSheet->setCellValueByColumnAndRow(3, $row, $data->card->number);
                 $companyWorkSheet->mergeCells("F$row:G$row");
                 $companyWorkSheet->setCellValueByColumnAndRow(5, $row, $data->mark->name);
                 $companyWorkSheet->mergeCells("H$row:I$row");
@@ -288,7 +292,7 @@ class ExportableGridBehavior extends CBehavior
                 $date = new DateTime($data->service_date);
                 $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $num);
                 $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $date->format('j'));
-                $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->card->num);
+                $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->card->number);
                 $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->mark->name);
                 $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->number);
                 if ($this->showCompany) {

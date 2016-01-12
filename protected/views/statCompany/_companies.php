@@ -4,6 +4,7 @@
  * @var $model Act
  * @var $form CActiveForm
  */
+$provider = $model->byCompanies()->search();
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'act-grid',
     'htmlOptions' => array('class' => 'my-grid'),
@@ -20,7 +21,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'class' => '',
         )
     ),
-    'dataProvider' => $model->byCompanies()->stat(),
+    'dataProvider' => $provider,
     'emptyText' => '',
     'cssFile' => false,
     'template' => "{items}\n{pager}",
@@ -34,41 +35,41 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
-            'header' => $model->companyType == Company::CARWASH_TYPE ? 'Мойки' : ($model->companyType == Company::TIRES_TYPE ? 'Шиномонтаж' : 'Сервис'),
-            'name' => 'company_id',
+            'header' => Company::$listService[$model->companyType],
+            'name' => 'client',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => $model->showCompany ? '$data->card->cardCompany->name' : '$data->company->name',
+            'value' => '$data->client->name',
         ),
         array(
             'header' => 'Город',
             'name' => 'address',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => $model->showCompany ? '$data->card->cardCompany->address' : '$data->company->address',
+            'value' => '$data->client->address',
         ),
         array(
             'header' => 'Обслужено',
             'name' => 'amount',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'footer' => $model->totalAmount(),
+            'footer' => $model->totalField($provider, 'amount'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
             'header' => 'Доход',
-            'name' => 'expense',
-            'value' => 'number_format($data->income, 0, ".", " ")',
+            'name' => 'income',
+            'value' => '$data->getFormattedField("income")',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'footer' => number_format($model->totalIncome(true), 0, ".", " "),
+            'footer' => $model->totalField($provider, 'income'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
             'header' => 'Прибыль',
             'name' => 'profit',
-            'value' => 'number_format($data->profit, 0, ".", " ")',
+            'value' => '$data->getFormattedField("profit")',
             'htmlOptions' => [
                 'style' => 'text-align:center;',
                 'class' => 'total',
             ],
-            'footer' => number_format($model->totalProfit(true), 0, ".", " "),
+            'footer' => $model->totalField($provider, 'profit'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
@@ -79,9 +80,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 'history' => array(
                     'label' => '',
                     'imageUrl' => false,
-                    'url' => $model->showCompany
-                        ? 'Yii::app()->createUrl("statCompany/months", array_merge($_GET, ["Act[company_id]" => $data->card->company_id]))'
-                        : 'Yii::app()->createUrl("statCompany/months", array_merge($_GET, ["Act[company_id]" => $data->company_id]))',
+                    'url' => 'Yii::app()->createUrl("statCompany/months", array_merge($_GET, ["Act[client_id]" => $data->client_id]))',
                     'options' => array('class' => 'calendar')
                 ),
             ),

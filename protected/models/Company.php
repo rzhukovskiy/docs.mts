@@ -21,6 +21,12 @@ class Company extends CActiveRecord
           TIRES_TYPE   = 'tires';
 
     public $cardList;
+    static $listService = [
+        self::COMPANY_TYPE => 'Компания',
+        self::CARWASH_TYPE => 'Мойка',
+        self::SERVICE_TYPE => 'Сервис',
+        self::TIRES_TYPE => 'Шиномонтаж',
+    ];
 
     /**
      * Returns the static model of the specified AR class.

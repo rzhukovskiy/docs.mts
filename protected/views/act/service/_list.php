@@ -62,5 +62,18 @@ $provider = $model->search();
             </tr>
         <?php } ?>
         </thead>
+        <tbody>
+        <?=$this->renderPartial('service/_item', array('model' => $model))?>
+        <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
+            <tr class="total">
+                <td><strong>Общее</strong></td>
+                <td colspan="<?=Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $model->companyType == Company::CARWASH_TYPE ? 7 : (Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 6 : 5); ?>">
+                    <?=$totalCount . ' ' . StringNum::getNumEnding($totalCount, array('машина', 'машины', 'машин'))?>
+                </td>
+                <td style="text-align:center;"><strong><?=$model->totalField($provider, 'expense')?></strong></td>
+                <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 3 : 1?>"></td>
+            </tr>
+        <?php } ?>
+        </tbody>
     </table>
 </div>

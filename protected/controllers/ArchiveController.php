@@ -16,19 +16,10 @@ class ArchiveController extends Controller
         $model->unsetAttributes();
         $model->companyType = $type;
 
-        $month = isset($_GET['Act']['month']) ? $_GET['Act']['month'] : date('Y-m', time() - 30 * 24 * 3600);
-        $model->month = $month;
+        $model->month = date('Y-m', time() - 30 * 24 * 3600);
 
         if (isset($_GET['Act'])) {
             $model->attributes = $_GET['Act'];
-        }
-
-        $model->from_date = $model->month . '-01';
-        $month = explode('-', $model->month);
-        if ($month[1] == 12) {
-            $model->to_date = ($month[0] + 1) . '-01-01';
-        } else {
-            $model->to_date = $month[0] . '-' . ($month[1] + 1) . '-01';
         }
 
         $this->render('list', array(

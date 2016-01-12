@@ -60,7 +60,7 @@ switch ($diff) {
 
 $form = $this->beginWidget('CActiveForm', array(
     'method' => 'get',
-    'action' => Yii::app()->createUrl('stat/index', ['type' => $model->companyType]),
+    'action' => Yii::app()->createUrl("stat/{$this->action->id}", ['type' => $model->companyType, 'Act[partner_id]' => $model->partner_id]),
     'id' => 'action-form',
     'errorMessageCssClass' => 'help-inline',
     'htmlOptions' => array('class'=>'stdform', 'novalidate'=>'novalidate'),

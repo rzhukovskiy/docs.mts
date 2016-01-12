@@ -10,13 +10,12 @@ if (Yii::app()->user->role == User::PARTNER_ROLE) {
 } else {
     $this->tabs = [
         Company::CARWASH_TYPE == $model->companyType ? 'index' : Company::CARWASH_TYPE =>
-            array('url' => Yii::app()->createUrl('stat/index', ['type' => Company::CARWASH_TYPE]), 'name' => 'Мойка'),
+            ['url' => Yii::app()->createUrl('stat/index', ['type' => Company::CARWASH_TYPE]), 'name' => 'Мойка'],
         Company::SERVICE_TYPE == $model->companyType ? 'index' : Company::SERVICE_TYPE =>
-            array('url' => Yii::app()->createUrl('stat/index', ['type' => Company::SERVICE_TYPE]), 'name' => 'Сервис'),
+            ['url' => Yii::app()->createUrl('stat/index', ['type' => Company::SERVICE_TYPE]), 'name' => 'Сервис'],
         Company::TIRES_TYPE == $model->companyType ? 'index' : Company::TIRES_TYPE =>
-            array('url' => Yii::app()->createUrl('stat/index', ['type' => Company::TIRES_TYPE]), 'name' => 'Шиномонтаж'),
-        $model->companyType ? 'total' : 'index' =>
-            array('url' => Yii::app()->createUrl('stat/index'), 'name' => 'Общее'),
+            ['url' => Yii::app()->createUrl('stat/index', ['type' => Company::TIRES_TYPE]), 'name' => 'Шиномонтаж'],
+        'total' => ['url' => Yii::app()->createUrl('stat/total'), 'name' => 'Общее'],
     ];
 }
 ?>
