@@ -100,7 +100,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'class' => 'CButtonColumn',
             'template' => '{details}',
             'header' => '',
-            'cssClassExpression' => '$data->company->type == Company::CARWASH_TYPE? "hidden" : ""',
+            'cssClassExpression' => '$data->partner->type == Company::CARWASH_TYPE? "hidden" : ""',
             'buttons' => array(
                 'details' => array(
                     'label' => '',
