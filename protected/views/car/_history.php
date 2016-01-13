@@ -40,7 +40,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'name' => 'card_id',
-            'htmlOptions' => array('style' => ''),
+            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->card->number',
         ),
         array(
@@ -51,7 +51,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'city',
             'header' => 'Город',
-            'htmlOptions' => array('style' => ''),
+            'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->partner->address',
         ),
         array(

@@ -35,14 +35,8 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'name' => 'service_date',
-            'header' => 'Город',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => 'date("d", strtotime("$data->service_date")) . " " . StringNum::getMonthName(strtotime("$data->service_date"))[1] . " " . date("Y", strtotime("$data->service_date"))',
-        ),
-        array(
-            'name' => 'city',
-            'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->partner->address',
         ),
         array(
             'name' => 'card_id',
@@ -100,6 +94,12 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
             'footer' => $model->totalField($provider, 'profit'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
+        ),
+        array(
+            'name' => 'city',
+            'header' => 'Город',
+            'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => '$data->partner->address',
         ),
         array(
             'name' => 'check',
