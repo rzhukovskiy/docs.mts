@@ -226,9 +226,9 @@ class Act extends CActiveRecord
             $sort->defaultOrder = 't.service_date';
         } else {
             if ($this->showCompany) {
-                $sort->defaultOrder = 'profit DESC, client_id, t.service_date';
+                $sort->defaultOrder = 'client_id, t.service_date, profit DESC';
             } else {
-                $sort->defaultOrder = 'profit DESC, partner_id, t.service_date';
+                $sort->defaultOrder = 'partner_id, t.service_date, profit DESC';
             }
         }
 
