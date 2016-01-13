@@ -25,13 +25,13 @@ $sumName = 'income';
         <?=CHtml::label("$num", "", array('class' => 'scope_num total'))?>
         <?=CHtml::textField('Scope[description][]', $scope->description, array('readonly' => 'readonly', 'class' => 'smallinput', 'style' => 'float: left; margin-right: 20px; width: 500px;')); ?>
         <?=CHtml::numberField('Scope[amount][]', $scope->amount, array('readonly' => 'readonly', 'class' => 'smallinput', 'style' => 'float: left; margin-right: 20px; width: 50px;')); ?>
-        <?=CHtml::textField("Scope[$sumName][]", $scope->$sumName, array('readonly' => 'readonly', 'class' => 'smallinput', 'style' => 'width: 60px;')); ?>
+        <?=CHtml::textField("Scope[$sumName][]", number_format($scope->$sumName, 0, ".", " "), array('readonly' => 'readonly', 'class' => 'smallinput', 'style' => 'width: 60px;')); ?>
     </div>
 <?php $num++; } ?>
 
 <div class="row">
     <?=CHtml::label('Итого:', '', array('class' => 'total', 'style' => 'margin-left: 734px; width: 60px;'))?>
-    <?=$form->textField($model, 'income', array('readonly' => 'readonly', 'class' => 'smallinput total', 'style' => 'margin-left: 20px; width: 60px; float: left;')); ?>
+    <?=CHtml::textField($sumName, $model->getFormattedField($sumName), array('readonly' => 'readonly', 'class' => 'smallinput total', 'style' => 'margin-left: 20px; width: 60px; float: left;')); ?>
     <?=CHtml::link('Назад', Yii::app()->request->urlReferrer, array('class' => 'btn-info pull-right', 'style' => 'margin: 0 0 0 20px'))?>
 </div>
 <?php $this->endWidget(); ?>
