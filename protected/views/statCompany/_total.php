@@ -65,6 +65,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             ],
             'footer' => $model->totalField($provider, 'profit'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
+            'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
         ),
         array(
             'class' => 'CButtonColumn',
