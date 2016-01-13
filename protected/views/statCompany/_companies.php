@@ -35,7 +35,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
-            'header' => Company::$listService[$model->companyType],
+            'header' => 'Компания',
             'name' => 'client',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->client->name',

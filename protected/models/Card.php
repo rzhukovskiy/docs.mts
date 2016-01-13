@@ -81,7 +81,7 @@ class Card extends CActiveRecord
     {
         return array(
             'id' => 'ID',
-            'number' => 'Номер',
+            'number' => 'Номер карты',
             'company_id' => 'Компания',
             'active' => 'Active',
             'create_date' => 'Create Date',

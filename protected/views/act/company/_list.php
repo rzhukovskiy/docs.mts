@@ -44,8 +44,8 @@ $provider = $model->search();
                         range(0, date('t', strtotime("$model->month-$model->day"))),
                         array('empty' => 'Все'))?>
                 </td>
-                <td><?=CHtml::dropDownList('Act[partner_id]',
-                        $model->partner_id,
+                <td><?=CHtml::dropDownList('Act[client_id]',
+                        $model->client_id,
                         CHtml::listData(Company::model()->findAll('type = :type' , array(':type' => Company::COMPANY_TYPE)),'id', 'name'),
                         array('empty' => 'Все', 'style' => 'width: 80px;'))?>
                 </td>

@@ -36,7 +36,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'service_date',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value'=>'date("d-m-Y", strtotime($data->service_date))',
+            'value' => 'date("d", strtotime("$data->service_date")) . " " . StringNum::getMonthName(strtotime("$data->service_date"))[1] . " " . date("Y", strtotime("$data->service_date"))',
         ),
         array(
             'name' => 'card_id',

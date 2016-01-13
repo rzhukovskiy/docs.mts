@@ -26,7 +26,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'name' => 'number',
-            'htmlOptions' => array(),
+            'htmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
             'name' => 'company_id',

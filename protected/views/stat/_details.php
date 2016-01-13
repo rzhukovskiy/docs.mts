@@ -98,7 +98,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'check',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'visible' => $model->companyType == Company::CARWASH_TYPE,
+            'visible' => $model->partner->type == Company::CARWASH_TYPE,
         ),
         array(
             'name' => 'check_image',
@@ -107,7 +107,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                       .'CHtml::link("image", "/files/checks/" . $data->check_image,'
                       .'array("class"=>"preview")) : "no image"',
             'htmlOptions' => array('style' => 'width: 40px;'),
-            'visible' => $model->companyType == Company::CARWASH_TYPE,
+            'visible' => $model->partner->type == Company::CARWASH_TYPE,
         ),
         array(
             'class' => 'CButtonColumn',
@@ -122,7 +122,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                     'options' => array('class' => 'update show-act-details')
                 ),
             ),
-            'visible' => $model->companyType != Company::CARWASH_TYPE,
+            'visible' => $model->partner->type != Company::CARWASH_TYPE,
         ),
     ),
 ));

@@ -50,21 +50,21 @@ class Act extends CActiveRecord
         'снаружи+внутри',
     );
     public static $serviceList = array(
-        3 => 'ремонт',
+        3 => 'сервис',
         4 => 'шиномонатж',
     );
     public static $fullList = array(
         'снаружи',
         'внутри',
         'снаружи+внутри',
-        'ремонт',
+        'сервис',
         'шиномонтаж',
     );
     public static $shortList = array(
         'мойка снаружи',
         'мойка внутри',
         'мойка снаружи+внутри',
-        'ремонт',
+        'сервис',
         'шиномонтаж',
     );
 
@@ -226,9 +226,9 @@ class Act extends CActiveRecord
             $sort->defaultOrder = 't.service_date';
         } else {
             if ($this->showCompany) {
-                $sort->defaultOrder = 'client_id, t.service_date';
+                $sort->defaultOrder = 'profit DESC, client_id, t.service_date';
             } else {
-                $sort->defaultOrder = 'partner_id, t.service_date';
+                $sort->defaultOrder = 'profit DESC, partner_id, t.service_date';
             }
         }
 
@@ -281,15 +281,6 @@ class Act extends CActiveRecord
             'SUM(profit) as profit'
         ];
 
-        $sort = new CSort;
-        $sort->defaultOrder = 'service_date';
-        $sort->attributes = [
-            'income',
-            'expense',
-            'profit',
-        ];
-        $sort->applyOrder($criteria);
-
         $this->getDbCriteria()->mergeWith($criteria);
         return $this;
     }
@@ -306,15 +297,6 @@ class Act extends CActiveRecord
             'SUM(income) as income',
             'SUM(profit) as profit'
         ];
-
-        $sort = new CSort;
-        $sort->defaultOrder = 'service_date';
-        $sort->attributes = [
-            'income',
-            'expense',
-            'profit',
-        ];
-        $sort->applyOrder($criteria);
 
         $this->getDbCriteria()->mergeWith($criteria);
         return $this;
@@ -341,21 +323,6 @@ class Act extends CActiveRecord
             'SUM(profit) as profit'
         ];
 
-        $sort = new CSort;
-        $sort->defaultOrder = 'profit DESC';
-        $sort->attributes = [
-            'income' => [
-                'asc' => 'income asc',
-                'desc' => 'income desc',
-            ],
-            'expense' => [
-                'asc' => 'expense asc',
-                'desc' => 'expense desc',
-            ],
-            'profit',
-        ];
-        $sort->applyOrder($criteria);
-
         $this->getDbCriteria()->mergeWith($criteria);
         return $this;
     }
@@ -373,21 +340,6 @@ class Act extends CActiveRecord
             'SUM(income) as income',
             'SUM(profit) as profit'
         ];
-
-        $sort = new CSort;
-        $sort->defaultOrder = 'profit DESC';
-        $sort->attributes = [
-            'income' => [
-                'asc' => 'income asc',
-                'desc' => 'income desc',
-            ],
-            'expense' => [
-                'asc' => 'expense asc',
-                'desc' => 'expense desc',
-            ],
-            'profit',
-        ];
-        $sort->applyOrder($criteria);
 
         $this->getDbCriteria()->mergeWith($criteria);
         return $this;
