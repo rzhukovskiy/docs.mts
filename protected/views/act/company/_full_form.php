@@ -67,10 +67,10 @@ $form = $this->beginWidget('CActiveForm', array(
 
 <?php if($model->partner->type == Company::CARWASH_TYPE) { ?>
     <div class="row">
-        <?=$form->labelEx($model, 'company_service'); ?>
+        <?=$form->labelEx($model, 'client_service'); ?>
         <span class="field">
-            <?=$form->dropDownList($model, 'company_service', Act::$carwashList); ?>
-            <?=$form->error($model, 'company_service'); ?>
+            <?=$form->dropDownList($model, 'client_service', Act::$carwashList); ?>
+            <?=$form->error($model, 'client_service'); ?>
         </span>
     </div>
 
