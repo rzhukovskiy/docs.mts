@@ -283,8 +283,6 @@ class Act extends CActiveRecord
             'SUM(profit) as profit'
         ];
 
-        $criteria->order = 'profit DESC';
-
         $this->getDbCriteria()->mergeWith($criteria);
         return $this;
     }
@@ -301,8 +299,6 @@ class Act extends CActiveRecord
             'SUM(income) as income',
             'SUM(profit) as profit'
         ];
-
-        $criteria->order = 'profit DESC';
 
         $this->getDbCriteria()->mergeWith($criteria);
         return $this;

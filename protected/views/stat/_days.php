@@ -7,7 +7,7 @@
 $provider = $model->byDays()->search();
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'act-grid',
-    'htmlOptions' => array('class' => 'my-grid'),
+    'htmlOptions' => array('class' => 'my-grid data-table'),
     'itemsCssClass' => 'stdtable grid',
     'pagerCssClass' => 'dataTables_paginate paging_full_numbers',
     'pager' => array(
@@ -36,7 +36,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'name' => 'day',
-            'htmlOptions' => array('style' => 'text-align:center;'),
+            'htmlOptions' => array('style' => 'text-align:center;', 'class' => 'value_0'),
             'value' => 'date("d", strtotime("$data->day 00:00:00")) . " " . StringNum::getMonthName(strtotime("$data->day 00:00:00"))[1] . " " . date("Y", strtotime("$data->day 00:00:00"))',
         ),
         array(
@@ -70,7 +70,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->getFormattedField("profit")',
             'htmlOptions' => [
                 'style' => 'text-align:center;',
-                'class' => 'total',
+                'class' => 'total value_2',
             ],
             'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
             'footer' => $model->totalField($provider, 'profit'),
