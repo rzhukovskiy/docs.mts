@@ -334,8 +334,13 @@ class ExportableGridBehavior extends CBehavior
 
         //footer
         $row++;
-        $companyWorkSheet->setCellValue("H$row", "ВСЕГО:");
-        $companyWorkSheet->setCellValue("I$row", "$total");
+        if ($this->companyType == Company::CARWASH_TYPE) {
+            $companyWorkSheet->setCellValue("G$row", "ВСЕГО:");
+            $companyWorkSheet->setCellValue("H$row", "$total");
+        } else {
+            $companyWorkSheet->setCellValue("H$row", "ВСЕГО:");
+            $companyWorkSheet->setCellValue("I$row", "$total");
+        }
 
         $row++; $row++;
         $companyWorkSheet->mergeCells("B$row:I$row");

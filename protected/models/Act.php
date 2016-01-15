@@ -222,13 +222,15 @@ class Act extends CActiveRecord
 
         $sort = new CSort;
 
-        if ($this->number) {
-            $sort->defaultOrder = 't.service_date';
-        } else {
-            if ($this->showCompany) {
-                $sort->defaultOrder = 'client_id, t.service_date, profit DESC';
+        if (!$this->getDbCriteria()->order) {
+            if ($this->number) {
+                $sort->defaultOrder = 't.service_date';
             } else {
-                $sort->defaultOrder = 'partner_id, t.service_date, profit DESC';
+                if ($this->showCompany) {
+                    $sort->defaultOrder = 'client_id, t.service_date, profit DESC';
+                } else {
+                    $sort->defaultOrder = 'partner_id, t.service_date, profit DESC';
+                }
             }
         }
 
@@ -281,6 +283,8 @@ class Act extends CActiveRecord
             'SUM(profit) as profit'
         ];
 
+        $criteria->order = 'profit DESC';
+
         $this->getDbCriteria()->mergeWith($criteria);
         return $this;
     }
@@ -298,6 +302,8 @@ class Act extends CActiveRecord
             'SUM(profit) as profit'
         ];
 
+        $criteria->order = 'profit DESC';
+
         $this->getDbCriteria()->mergeWith($criteria);
         return $this;
     }
@@ -313,6 +319,8 @@ class Act extends CActiveRecord
                 $criteria->group = 'partner_id';
             }
         }
+
+        $criteria->order = 'profit DESC';
 
         $criteria->select = [
             'partner_id',
@@ -340,6 +348,8 @@ class Act extends CActiveRecord
             'SUM(income) as income',
             'SUM(profit) as profit'
         ];
+
+        $criteria->order = 'profit DESC';
 
         $this->getDbCriteria()->mergeWith($criteria);
         return $this;
