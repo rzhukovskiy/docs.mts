@@ -38,7 +38,8 @@
 <?php
         }
         $carByNumber = Car::model()->find("number = :number" ,array(":number" => $data->number));
-        $numError = !$carByNumber || $carByNumber->company_id != $data->card->company_id;
+        $numError = !$carByNumber;
+        $cardError = !$numError && $carByNumber->company_id != $data->card->company_id;
 ?>
         <tr class="<?=$row%2 ? 'even' : 'odd'?>">
             <td style="width: 40px; text-align:center;"><?=$row?></td>
@@ -46,7 +47,7 @@
             <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
                 <td style="width: 100px;"><?=$data->partner->name?></td>
             <?php } ?>
-            <td style="width: 60px;" class="<?=$numError ? "error" : ""?>"><?=$data->card->number?></td>
+            <td style="width: 60px;" class="<?=$cardError ? "error" : ""?>"><?=$data->card->number?></td>
             <td style="width: 80px; text-align:center;" class="<?=$numError ? "error" : ""?>"><?=$data->number?></td>
             <td style="width: 80px;" class="<?=isset($data->mark) ? "" : "error"?>"><?=isset($data->mark) ? $data->mark->name : 'неизвестно'?></td>
             <td class="<?=isset($data->type) ? "" : "error"?>"><?=isset($data->type) ? $data->type->name : 'неизвестно'?></td>

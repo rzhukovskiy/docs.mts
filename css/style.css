@@ -58,7 +58,7 @@ h3 { font-size: 20px; }
 h4 { font-size: 16px; }
 h1,h2,h3 { font-family: 'BebasNeueRegular', Arial, Helvetica, sans-serif; letter-spacing: 0.5px; font-weight: normal; color: #333; }
 
-td.error {color: red}
+td.error {color: red; font-weight: bold}
 span.error {color: red}
 
 .radius2 { -moz-border-radius: 2px; -webkit-border-radius: 2px; border-radius: 2px; }
