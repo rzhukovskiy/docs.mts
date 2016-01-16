@@ -13,6 +13,7 @@ class WHTMLHead extends CWidget{
         $clientScript->registerScriptFile('/js/select2/select2_locale_ru.js');
         $clientScript->registerScriptFile('/js/jquery/datepicker-ru.js');
         $clientScript->registerScriptFile('/js/main.js');
+        $clientScript->registerScriptFile('/js/jquery/jquery.canvasjs.min.js');
 
         
         $clientScript->registerCssFile('/css/style.css');

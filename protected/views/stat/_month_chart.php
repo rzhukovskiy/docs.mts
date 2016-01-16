@@ -1,40 +1,65 @@
 <div id="chart_div" style="width:100%;height:500px;"></div>
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
-    // Load the Visualization API and the piechart package.
-    google.load('visualization', '1.0', {
-        'packages':['corechart'],
-        'language' : 'ru'
-    });
+    CanvasJS.addColorSet("blue",
+        [//colorSet Array
 
-    // Set a callback to run when the Google Visualization API is loaded.
-    google.setOnLoadCallback(drawChart);
+            "#428bca"
+        ]);
 
-    // Callback that creates and populates a data table,
-    // instantiates the pie chart, passes in the data and
-    // draws it.
-    function drawChart() {
-
-        // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Партнер');
-        data.addColumn('number', 'Прибыль');
-        data.addColumn({type: 'string', role: 'annotation'});
-
-        $('.data-table tr').each(function(id, value) {
-            data.addRow([
-                $(this).find('.value_0').text(),
-                parseInt($(this).find('.value_2').text().replace(" ", "")),
-                $(this).find('.value_2').text().replace(" ", ""),
-            ]);
+    var dataTable = [];
+    $('.data-table tbody tr').each(function(id, value) {
+        dataTable.push({
+            label: $(this).find('.value_0').text(),
+            y: parseInt($(this).find('.value_2').text().replace(" ", "")),
+            indexLabel: '{y}'
         });
+    });
+    var options = {
+        colorSet: "blue",
+        title: {
+            text: 'По месяцам',
+            fontColor: '#069',
+            fontSize: 22
+        },
+        subtitles:[
+            {
+                text: "Прибыль",
+                horizontalAlign: "left",
+                fontSize: 14,
+                fontColor: '#069',
+                margin: 20
+            }
+        ],
+        data: [
+            {
+                type: "column", //change it to line, area, bar, pie, etc
+                dataPoints: dataTable
+            }
+        ],
+        axisX:{
+            title: "Месяц",
+            titleFontSize: 14,
+            titleFontColor: '#069',
+            titleFontWeight: 'bold',
+            labelFontColor: '#069',
+            labelFontWeight: 'bold',
+            interval: 1,
+            lineThickness: 1,
+            labelFontSize: 14,
+            lineColor: 'black'
+        },
 
-        // Set chart options
-        var options = {
-        };
+        axisY:{
+            labelFontColor: '#069',
+            labelFontWeight: 'bold',
+            tickThickness: 1,
+            gridThickness: 1,
+            lineThickness: 1,
+            labelFontSize: 14,
+            lineColor: 'black',
+            valueFormatString: "### ### ###"
+        }
+    };
 
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-    }
+    $("#chart_div").CanvasJSChart(options);
 </script>

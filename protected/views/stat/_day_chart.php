@@ -1,52 +1,91 @@
-<div id="chart_div" style="width:100%;height:500px;"></div>
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<div id="chart_div" style="width:100%;height:550px;"></div>
 <script type="text/javascript">
-    // Load the Visualization API and the piechart package.
-    google.load('visualization', '1.0', {
-        'packages':['corechart'],
-        'language' : 'ru'
+    var it = 1;
+    var days = <?=date("t", strtotime("$model->month-01 00:00:00"))?>;
+    var dataTable = [];
+    CanvasJS.addColorSet("blue",
+        [//colorSet Array
+
+            "#428bca"
+        ]);
+
+    $('.data-table tbody tr').each(function(id, value) {
+        var day = parseInt($(this).find('.value_0').text());
+        for (var i = it; i < day; i++) {
+            dataTable.push({
+                x: i,
+                y: 0
+            });
+        }
+        dataTable.push({
+            x: parseInt($(this).find('.value_0').text()),
+            y: parseInt($(this).find('.value_2').text().replace(" ", ""))
+        });
+        it = day;
     });
 
-    // Set a callback to run when the Google Visualization API is loaded.
-    google.setOnLoadCallback(drawChart);
-
-    // Callback that creates and populates a data table,
-    // instantiates the pie chart, passes in the data and
-    // draws it.
-    function drawChart() {
-
-        // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Партнер');
-        data.addColumn('number', 'Прибыль');
-
-        var it = 1;
-        $('.data-table tbody tr').each(function(id, value) {
-            var day = parseInt($(this).find('.value_0').text());
-            for (var i = it + 1; i < day; i++) {
-                data.addRow([
-                    i.toString(),
-                    0,
-                ]);
-            }
-            data.addRow([
-                parseInt($(this).find('.value_0').text()).toString(),
-                parseInt($(this).find('.value_2').text().replace(" ", "")),
-            ]);
-            it = day;
+    for (var i = it + 1; i <= days; i++) {
+        dataTable.push({
+            x: i,
+            y: 0
         });
-
-        // Set chart options
-        var options = {
-            title: '<?=StringNum::getMonthName(strtotime("$model->month-01 00:00:00"))[0]?> <?=explode('-',$model->month)[0]?>',
-            legend: { position: 'none' },
-            chartArea: {'width': '90%', 'height': '80%'},
-            hAxis: {showTextEvery:1},
-            fontSize: 14
-        };
-
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
     }
+
+    var options = {
+        colorSet: "blue",
+        title: {
+            text: "<?=StringNum::getMonthName(strtotime("$model->month-01 00:00:00"))[0]?> <?=explode('-',$model->month)[0]?>",
+            fontColor: '#069',
+            fontSize: 22
+        },
+        dataPointMaxWidth: 30,
+        subtitles:[
+            {
+                text: "Прибыль",
+                horizontalAlign: "left",
+                fontSize: 14,
+                fontColor: '#069',
+                margin: 20
+            }
+        ],
+        data: [
+            {
+                type: "column",
+                dataPoints: dataTable
+            }
+        ],
+        axisX:{
+            title: "Дни месяца",
+            titleFontSize: 14,
+            titleFontColor: '#069',
+            titleFontWeight: 'bold',
+            labelFontColor: '#069',
+            labelFontWeight: 'bold',
+            interval: 1,
+            lineThickness: 1,
+            labelFontSize: 14,
+            lineColor: 'black',
+            margin: 20
+        },
+
+        axisY:{
+            labelFontColor: '#069',
+            labelFontWeight: 'bold',
+            tickThickness: 1,
+            gridThickness: 1,
+            lineThickness: 1,
+            labelFontSize: 14,
+            lineColor: 'black',
+            valueFormatString: "### ### ###",
+            stripLines:[
+                {
+                    thickness: 1,
+                    value:0,
+                    color:"#000"
+                }
+            ]
+        }
+    };
+
+    $("#chart_div").CanvasJSChart(options);
 </script>

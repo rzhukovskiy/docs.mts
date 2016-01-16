@@ -37,7 +37,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'day',
             'htmlOptions' => array('style' => 'text-align:center;', 'class' => 'value_0'),
-            'value' => 'date("d", strtotime("$data->day 00:00:00")) . " " . StringNum::getMonthName(strtotime("$data->day 00:00:00"))[1] . " " . date("Y", strtotime("$data->day 00:00:00"))',
+            'value' => 'date("j", strtotime("$data->day 00:00:00")) . " " . StringNum::getMonthName(strtotime("$data->day 00:00:00"))[1] . " " . date("Y", strtotime("$data->day 00:00:00"))',
         ),
         array(
             'header' => 'Обслужено',
