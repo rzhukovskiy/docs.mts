@@ -26,4 +26,5 @@ if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
     $this->renderPartial('_companies', ['model' => $model]);
 } else {
     $this->renderPartial('_months', ['model' => $model]);
+    $this->renderPartial('_month_chart', ['model' => $model]);
 }

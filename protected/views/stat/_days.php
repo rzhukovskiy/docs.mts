@@ -50,7 +50,10 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => Yii::app()->user->role == User::PARTNER_ROLE ? 'Доход' : 'Расход',
             'name' => 'expense',
             'value' => '$data->getFormattedField("expense")',
-            'htmlOptions' => array('style' => 'text-align:center;'),
+            'htmlOptions' => [
+                'style' => 'text-align:center;',
+                'class' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? '': 'value_2',
+            ],
             'visible' => Yii::app()->user->checkAccess(User::PARTNER_ROLE),
             'footer' => $model->totalField($provider, 'expense'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
@@ -59,7 +62,9 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => Yii::app()->user->role == User::CLIENT_ROLE ? 'Расход' : 'Доход',
             'name' => 'income',
             'value' => '$data->getFormattedField("income")',
-            'htmlOptions' => array('style' => 'text-align:center;'),
+            'htmlOptions' => [
+                'style' => 'text-align:center;',
+            ],
             'visible' => Yii::app()->user->checkAccess(User::CLIENT_ROLE),
             'footer' => $model->totalField($provider, 'income'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),

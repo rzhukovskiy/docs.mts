@@ -38,6 +38,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'month',
             'htmlOptions' => array('style' => 'text-align:center;', 'class' => 'value_0'),
             'value' => 'StringNum::getMonthName(strtotime("{$data->month}-01 00:00:00"))[0] . date(" Y", strtotime("$data->month-01 00:00:00"))',
+            'cssClassExpression' => 'date("Y", strtotime("$data->month-01 00:00:00")) == date("Y", time() - 31 * 24 * 3600) ? "month_" . date("n", strtotime("$data->month-01 00:00:00")) : ""',
         ),
         array(
             'header' => 'Обслужено',
@@ -50,7 +51,11 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => Yii::app()->user->role == User::PARTNER_ROLE ? 'Доход' : 'Расход',
             'name' => 'expense',
             'value' => '$data->getFormattedField("expense")',
-            'htmlOptions' => array('style' => 'text-align:center;'),
+            'cssClassExpression' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? '' : '"month_" . date("n", strtotime("$data->month-01 00:00:00"))',
+            'htmlOptions' => [
+                'style' => 'text-align:center;',
+                'class' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? '' : 'value_2',
+            ],
             'visible' => Yii::app()->user->checkAccess(User::PARTNER_ROLE),
             'footer' => $model->totalField($provider, 'expense'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),

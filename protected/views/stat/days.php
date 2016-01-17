@@ -17,7 +17,5 @@ $this->tabs['days'] = ['url' => '#', 'name' => 'По дням'];
         </h2>
     </div>
 <?php
-$this->renderPartial('_days', ['model' => $model, 'details' => true]);;
-if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-    $this->renderPartial('_day_chart', ['model' => $model]);
-}
+$this->renderPartial('_days', ['model' => $model, 'details' => true]);
+$this->renderPartial('_day_chart', ['model' => $model]);

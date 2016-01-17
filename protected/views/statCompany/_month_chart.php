@@ -14,6 +14,7 @@ $month1 = date('m', $ts1);
 $month2 = date('m', $ts2);
 
 $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
+
 ?>
 <div id="chart_div" style="width:100%;height:500px;"></div>
 <script type="text/javascript">
@@ -26,7 +27,7 @@ $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
         for ($i = 1; $i <= 12; $i++) {?>
             if ($('.data-table .month_<?=$i?>').length) {
                 dataTable.push({
-                    label: '<?=StringNum::getMonthNameByNum($i)[0]?>',
+                    label: $('.data-table .month_<?=$i?>').parent().find('.value_0').text(),
                     y: parseInt($('.data-table .month_<?=$i?>').parent().find('.value_2').text().replace(" ", "")),
                     indexLabel: '{y}'
                 });
@@ -50,10 +51,10 @@ $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
     dataTable.forEach(function (value) {
         if (value.y > max) max = value.y;
     });
-    console.log(max);
     var options = {
         colorSet: "blue",
         dataPointMaxWidth: 40,
+        indexLabelFontSize: 20,
         title: {
             text: 'По месяцам',
             fontColor: '#069',
@@ -61,7 +62,7 @@ $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
         },
         subtitles: [
             {
-                text: "Прибыль",
+                text: "<?=Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 'Прибыль' : 'Расход'?>",
                 horizontalAlign: "left",
                 fontSize: 14,
                 fontColor: '#069',
@@ -71,8 +72,7 @@ $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
         data: [
             {
                 type: "column", //change it to line, area, bar, pie, etc
-                dataPoints: dataTable,
-                indexLabelFontSize: 18
+                dataPoints: dataTable
             }
         ],
         axisX: {

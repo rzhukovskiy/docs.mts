@@ -18,3 +18,4 @@ $this->tabs['days'] = ['url' => '#', 'name' => 'По дням'];
     </div>
 <?php
 $this->renderPartial('_days', ['model' => $model, 'details' => true]);
+$this->renderPartial('_day_chart', ['model' => $model]);
