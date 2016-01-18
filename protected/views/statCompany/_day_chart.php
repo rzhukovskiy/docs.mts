@@ -5,6 +5,7 @@
     var dataTable = [];
     CanvasJS.addColorSet("blue",
         [//colorSet Array
+
             "#428bca"
         ]);
 

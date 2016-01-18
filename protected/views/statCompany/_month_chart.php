@@ -27,9 +27,8 @@ $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
         for ($i = 1; $i <= 12; $i++) {?>
             if ($('.data-table .month_<?=$i?>').length) {
                 dataTable.push({
-                    label: $('.data-table .month_<?=$i?>').parent().find('.value_0').text(),
+                    label: '<?=StringNum::getMonthNameByNum($i)[0]?>',
                     y: parseInt($('.data-table .month_<?=$i?>').parent().find('.value_2').text().replace(" ", "")),
-                    indexLabel: '{y}'
                 });
             } else {
                 dataTable.push({
@@ -43,7 +42,6 @@ $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
         dataTable.push({
             label: $(this).find('.value_0').text(),
             y: parseInt($(this).find('.value_2').text().replace(" ", "")),
-            indexLabel: '{y}'
         });
     });
     <?php } ?>
@@ -54,7 +52,6 @@ $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
     var options = {
         colorSet: "blue",
         dataPointMaxWidth: 40,
-        indexLabelFontSize: 20,
         title: {
             text: 'По месяцам',
             fontColor: '#069',

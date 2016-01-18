@@ -51,7 +51,6 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => Yii::app()->user->role == User::PARTNER_ROLE ? 'Доход' : 'Расход',
             'name' => 'expense',
             'value' => '$data->getFormattedField("expense")',
-            'cssClassExpression' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? '' : '"month_" . date("n", strtotime("$data->month-01 00:00:00"))',
             'htmlOptions' => [
                 'style' => 'text-align:center;',
                 'class' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? '' : 'value_2',

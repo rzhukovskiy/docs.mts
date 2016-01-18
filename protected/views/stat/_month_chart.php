@@ -28,7 +28,6 @@ $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
                 dataTable.push({
                     label: '<?=StringNum::getMonthNameByNum($i)[0]?>',
                     y: parseInt($('.data-table .month_<?=$i?>').parent().find('.value_2').text().replace(" ", "")),
-                    indexLabel: '{y}'
                 });
             } else {
                 dataTable.push({
@@ -42,7 +41,6 @@ $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
         dataTable.push({
             label: $(this).find('.value_0').text(),
             y: parseInt($(this).find('.value_2').text().replace(" ", "")),
-            indexLabel: '{y}'
         });
     });
     <?php } ?>
@@ -50,7 +48,6 @@ $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
     dataTable.forEach(function (value) {
         if (value.y > max) max = value.y;
     });
-    console.log(max);
     var options = {
         colorSet: "blue",
         dataPointMaxWidth: 40,
@@ -72,7 +69,6 @@ $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
             {
                 type: "column", //change it to line, area, bar, pie, etc
                 dataPoints: dataTable,
-                indexLabelFontSize: 18
             }
         ],
         axisX: {
