@@ -9,6 +9,12 @@ class UserIdentity extends CUserIdentity
     public function authenticate()
     {
         $user = User::model()->find('LOWER(email)=?', array(strtolower($this->username)));
+
+        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+            $this->_id = $user->id;
+            return $this->errorCode == self::ERROR_NONE;
+        }
+
         if ($user === null) {
             $this->errorCode = self::ERROR_USERNAME_INVALID;
         } elseif (User::model()->hashPassword($this->password, $user->salt) !== $user->password) {

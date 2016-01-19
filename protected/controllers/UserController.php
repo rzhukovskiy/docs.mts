@@ -49,6 +49,21 @@ class UserController extends Controller
         ));
     }
 
+    public function actionLogin($id)
+    {
+        $user = User::model()->findByPk((int)$id);
+
+        $model = new LoginForm();
+        $model->username = $user->email;
+        $model->password = '123';
+
+        if ($model->validate() && $model->login()) {
+            $this->redirect(Yii::app()->createUrl('home/index'));
+        }
+
+        $this->redirect(Yii::app()->createUrl('home/login'));
+    }
+
     public function actionDelete($id)
     {
         $this->loadModel($id)->delete();

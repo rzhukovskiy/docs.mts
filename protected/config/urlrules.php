@@ -4,6 +4,7 @@ return array(
     'error' => 'home/error',
     'login' => 'home/login',
     'logout' => 'home/logout',
+    'user/login' => 'user/login',
     'user/create' => 'user/create',
     'user/update' => 'user/update',
     'user/delete' => 'user/delete',

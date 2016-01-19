@@ -55,7 +55,7 @@
                 <td style="width: 80px; text-align:center;"><?=Act::$fullList[$data->client_service]?></td>
             <?php } ?>
             <td style="width: 60px; text-align:center;" class="<?=$data->income ? "" : "error"?>"><?=$data->getFormattedField('income')?></td>
-            <td style="text-align:center;"><?=$data->client->address?></td>
+            <td style="text-align:center;"><?=$data->partner->address?></td>
             <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
                 <td style="width: 60px; text-align:center;" class="<?=!empty($data->check_image) ? "" : "error"?>"><?=$data->check?></td>
                 <td style="width: 40px;"><a class="preview" href="/files/checks/<?=$data->check_image?>"><?=!empty($data->check_image) ? 'image' : ''?></a></td>

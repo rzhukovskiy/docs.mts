@@ -53,11 +53,17 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'class' => 'CButtonColumn',
-            'template' => '{update}{delete}',
+            'template' => '{login}{update}{delete}',
             'header' => '',
             'updateButtonUrl' => 'Yii::app()->createUrl("/user/update", array("id" => $data->id))',
             'deleteButtonUrl' => 'Yii::app()->createUrl("/user/delete", array("id" => $data->id))',
             'buttons' => array(
+                'login' => array(
+                    'label' => '',
+                    'imageUrl' => false,
+                    'url' => 'Yii::app()->createUrl("user/login", array("id" => $data->id))',
+                    'options' => array('class' => 'calendar')
+                ),
                 'update' => array(
                     'label' => '',
                     'imageUrl' => false,
