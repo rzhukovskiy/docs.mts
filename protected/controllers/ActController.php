@@ -55,13 +55,14 @@ class ActController extends Controller
         $model->companyType = Company::CARWASH_TYPE;
         $model->showCompany = Yii::app()->getRequest()->getParam('showCompany', false);
 
-        if (isset($_GET['Act'])) {
-            $model->attributes = $_GET['Act'];
-            $model->day = isset($_GET['Act']['day']) && $_GET['Act']['day'] ? str_pad($_GET['Act']['day'], 2, '0', STR_PAD_LEFT) : false;
+        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+            $model->month = date('Y-m', time() - 30 * 24 * 3600);
+        } else {
+            $model->create_date = date('Y-m-d', time());
         }
 
-        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $model->service_date = date('Y-m-d', time() - 30 * 24 * 3600);
+        if (isset($_GET['Act'])) {
+            $model->attributes = $_GET['Act'];
         }
 
         $actList = $model->search()->getData();
