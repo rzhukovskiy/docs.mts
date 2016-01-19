@@ -160,6 +160,9 @@ class ExportableGridBehavior extends CBehavior
         $num = 0;
         $total = 0;
         if ($this->companyType != Company::CARWASH_TYPE) {
+            $first = $dataList[0];
+            $companyWorkSheet->setCellValue('H5', date("d ", strtotime($first->service_date)) . $monthName[1] . date(' Y', $this->time));
+
             $row = 11;
 
             $companyWorkSheet->getDefaultStyle()->applyFromArray(array(
@@ -593,7 +596,12 @@ class ExportableGridBehavior extends CBehavior
                 )
             )
         );
-        $text = "СЧЕТ б/н от " . date("t", $this->time) . ' ' . $monthName[1] . date(' Y', $this->time);
+        if ($this->companyType != Company::CARWASH_TYPE) {
+            $first = $dataList[0];
+            $text = "СЧЕТ б/н от " . date("d ", strtotime($first->service_date)) . ' ' . $monthName[1] . date(' Y', $this->time);
+        } else {
+            $text = "СЧЕТ б/н от " . date("t", $this->time) . ' ' . $monthName[1] . date(' Y', $this->time);
+        }
         $companyWorkSheet->setCellValue("B$row", $text);
 
         $row++;
