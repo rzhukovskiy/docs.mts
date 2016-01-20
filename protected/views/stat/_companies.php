@@ -5,6 +5,7 @@
  * @var $form CActiveForm
  */
 $provider = $model->byCompanies()->search();
+
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'act-grid',
     'htmlOptions' => array('class' => 'my-grid data-table'),
@@ -35,7 +36,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'footerHtmlOptions' => ['style' => 'text-align:center;'],
         ),
         array(
-            'header' => Company::$listService[$model->companyType],
+            'header' => $model->companyType ? Company::$listService[$model->companyType] : 'Партнер',
             'name' => 'company',
             'htmlOptions' => array('style' => 'text-align:center;', 'class' => 'value_0'),
             'value' => '$data->partner->name',

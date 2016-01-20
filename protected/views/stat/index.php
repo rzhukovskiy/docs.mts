@@ -15,7 +15,7 @@ if (Yii::app()->user->role == User::PARTNER_ROLE) {
             ['url' => Yii::app()->createUrl('stat/index', ['type' => Company::SERVICE_TYPE]), 'name' => 'Сервис'],
         Company::TIRES_TYPE == $model->companyType ? 'index' : Company::TIRES_TYPE =>
             ['url' => Yii::app()->createUrl('stat/index', ['type' => Company::TIRES_TYPE]), 'name' => 'Шиномонтаж'],
-        'total' => ['url' => Yii::app()->createUrl('stat/total'), 'name' => 'Общее'],
+        $model->companyType? 'total' : 'index' => ['url' => Yii::app()->createUrl('stat/total'), 'name' => 'Общее'],
     ];
 }
 ?>

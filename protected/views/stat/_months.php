@@ -90,7 +90,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 'history' => array(
                     'label' => '',
                     'imageUrl' => false,
-                    'url' => 'Yii::app()->createUrl("stat/days", ["Act[partner_id]" => ' . $model->partner_id . ', "Act[month]" => $data->month])',
+                    'url' => 'Yii::app()->createUrl("stat/days", ["type" => "' . $model->companyType . '", "Act[partner_id]" => ' . $model->partner_id . ', "Act[month]" => $data->month])',
                     'options' => array('class' => 'calendar')
                 ),
             ),

@@ -3,9 +3,9 @@
  * @var $this StatController
  * @var $model Act
  */
-$this->tabs['index'] = ['url' => Yii::app()->createUrl('stat/index', ['type' => $model->partner->type]), 'name' => 'Статистика'];
+$this->tabs['index'] = ['url' => Yii::app()->createUrl('stat/index', ['type' => $model->companyType]), 'name' => 'Статистика'];
 if (Yii::app()->user->checkAccess(User::ADMIN_ROLE))
-    $this->tabs['months'] = ['url' => Yii::app()->createUrl('stat/months', ['type' => $model->partner->type, 'Act[partner_id]' => $model->partner_id]), 'name' => 'По месяцам'];
+    $this->tabs['months'] = ['url' => Yii::app()->createUrl('stat/months', ['type' => $model->companyType, 'Act[partner_id]' => $model->partner_id]), 'name' => 'По месяцам'];
 $this->tabs['days'] = ['url' => '#', 'name' => 'По дням'];
 ?>
     <div class="contenttitle radiusbottom0">

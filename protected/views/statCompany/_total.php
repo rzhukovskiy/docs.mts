@@ -79,6 +79,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                     'options' => array('class' => 'calendar')
                 ),
             ),
+            'footer' => '<a class="calendar" title="" href="/statCompany/index"></a>'
         )
     ),
 ));
