@@ -23,3 +23,11 @@ $this->tabs = [
 <?php
 $this->renderPartial('_selector', ['model' => $model]);
 $this->renderPartial('_total', ['model' => $model]);
+?>
+<div style="display:none">
+<?php
+$this->renderPartial('_months', ['model' => $model]);
+?>
+</div>
+<?php
+$this->renderPartial('_month_chart', ['model' => $model]);

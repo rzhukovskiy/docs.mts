@@ -7,7 +7,7 @@
 $provider = $model->byCompanies()->search();
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'act-grid',
-    'htmlOptions' => array('class' => 'my-grid'),
+    'htmlOptions' => array('class' => 'my-grid data-table'),
     'itemsCssClass' => 'stdtable grid',
     'pagerCssClass' => 'dataTables_paginate paging_full_numbers',
     'pager' => array(
@@ -37,7 +37,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'header' => 'Компания',
             'name' => 'client',
-            'htmlOptions' => array('style' => 'text-align:center;'),
+            'htmlOptions' => array('style' => 'text-align:center;', 'class' => 'value_0'),
             'value' => '$data->client->name',
         ),
         array(
@@ -57,7 +57,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => 'Доход',
             'name' => 'income',
             'value' => '$data->getFormattedField("income")',
-            'htmlOptions' => array('style' => 'text-align:center;'),
+            'htmlOptions' => array('style' => 'text-align:center;', 'class' => 'value_1'),
             'footer' => $model->totalField($provider, 'income'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
@@ -67,7 +67,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->getFormattedField("profit")',
             'htmlOptions' => [
                 'style' => 'text-align:center;',
-                'class' => 'total',
+                'class' => 'total value_2',
             ],
             'footer' => $model->totalField($provider, 'profit'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),

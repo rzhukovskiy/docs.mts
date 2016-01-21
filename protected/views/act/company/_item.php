@@ -57,7 +57,7 @@
             <td style="width: 60px; text-align:center;" class="<?=$data->income ? "" : "error"?>"><?=$data->getFormattedField('income')?></td>
             <td style="text-align:center;"><?=$data->partner->address?></td>
             <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
-                <td style="width: 60px; text-align:center;" class="<?=!empty($data->check_image) ? "" : "error"?>"><?=$data->check?></td>
+                <td style="width: 60px; text-align:center;" class="<?=!empty($data->check) ? "" : "error"?>"><?=$data->check ? $data->check : "error"?></td>
                 <td style="width: 40px;"><a class="preview" href="/files/checks/<?=$data->check_image?>"><?=!empty($data->check_image) ? 'image' : ''?></a></td>
             <?php } ?>
             <td style="width: 75px;" class="button-column">

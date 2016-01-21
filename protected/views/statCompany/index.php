@@ -24,6 +24,7 @@ $this->tabs = [
 $this->renderPartial('_selector', ['model' => $model]);
 if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
     $this->renderPartial('_companies', ['model' => $model]);
+    $this->renderPartial('_company_chart', ['model' => $model]);
 } else {
     $this->renderPartial('_months', ['model' => $model]);
     $this->renderPartial('_month_chart', ['model' => $model]);
