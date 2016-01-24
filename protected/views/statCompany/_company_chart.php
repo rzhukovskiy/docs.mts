@@ -38,8 +38,10 @@ $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
                 toolTipContent: "{label}: <strong>{y}</strong>",
                 indexLabel: "{label} - {y}",
                 indexLabelFontSize: 14,
+                indexLabelFontColor: '#069',
+                indexLabelFontWeight: 'bold'
             }
-        ],
+        ]
     };
 
     $("#chart_div").CanvasJSChart(options);
