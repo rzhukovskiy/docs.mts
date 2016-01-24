@@ -1,9 +1,13 @@
 $(document).ready(function() {
     var sticked = false;
     $(window).scroll(function(e) {
-        if (!sticked && $(window).scrollTop() > $('thead').offset().top) {
+        if (!sticked && $(window).scrollTop() > $('.maintabmenu').offset().top) {
             sticked = true;
             $('thead').css({
+                'position':'fixed',
+                'top': 35
+            });
+            $('.maintabmenu').css({
                 'position':'fixed',
                 'top': 0
             });
@@ -19,6 +23,9 @@ $(document).ready(function() {
         if (sticked && $(window).scrollTop() == 0) {
             sticked = false;
             $('thead').css({
+                'position':'relative'
+            });
+            $('.maintabmenu').css({
                 'position':'relative'
             });
         }

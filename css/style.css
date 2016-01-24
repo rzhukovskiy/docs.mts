@@ -385,7 +385,15 @@ button,input,select,textarea { font-size: 12px; font-family: Arial, Helvetica, s
 /***************** MAIN TAB MENU *********************/
 /*****************************************************/
 
-.maintabmenu { list-style: none; margin: 0; line-height: 21px; position: relative; z-index: 5; }
+.maintabmenu {
+    list-style: none;
+    margin: 0;
+    line-height: 21px;
+    position: relative;
+    z-index: 5;
+    background: #dededc;
+    width: 100%;
+}
 .maintabmenu li { display: inline-block; }
 .maintabmenu li a { 
 	padding: 8px 10px 4px 10px; color: #999; font-family: 'BebasNeueRegular', Arial, Helvetica, sans-serif; font-size: 14px;
