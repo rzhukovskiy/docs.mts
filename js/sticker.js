@@ -26,7 +26,7 @@ $(document).ready(function() {
                 'position':'relative'
             });
             $('.maintabmenu').css({
-                'position':'relative'
+                'position':'relative',
             });
         }
     })

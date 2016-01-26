@@ -270,6 +270,17 @@ class Act extends CActiveRecord
         return $provider;
     }
 
+    public function withErrors()
+    {
+        $criteria = $this->getDbCriteria();
+
+        $criteria->compare('income', 0);
+        $criteria->compare('expense', 0, false, 'OR');
+
+        $this->getDbCriteria()->mergeWith($criteria);
+        return $this;
+    }
+
     public function byDays()
     {
         $criteria = $this->getDbCriteria();

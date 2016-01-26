@@ -26,4 +26,18 @@ class ArchiveController extends Controller
             'model' => $model,
         ));
     }
+
+    public function actionError()
+    {
+        $model = new Act('search');
+        $model->unsetAttributes();
+
+        if (isset($_GET['Act'])) {
+            $model->attributes = $_GET['Act'];
+        }
+
+        $this->render('error', array(
+            'model' => $model,
+        ));
+    }
 }
