@@ -38,9 +38,25 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => 'date("d-m-Y", strtotime($data->service_date))',
         ),
         array(
+            'header' => 'Партнер',
+            'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => '$data->partner->name',
+        ),
+        array(
+            'header' => 'Клиент',
+            'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => '$data->client->name',
+        ),
+        array(
+            'header' => 'Город',
+            'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => '$data->partner->address',
+        ),
+        array(
             'name' => 'card_id',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->card->number',
+            'cssClassExpression' => 'isset($data->car->company_id) && $data->card->company_id != $data->car->company_id ? "error" : ""',
         ),
         array(
             'name' => 'mark_id',
@@ -60,11 +76,6 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->type->name',
         ),
         array(
-            'name' => 'partner_service',
-            'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => 'Act::$fullList[$data->partner_service]',
-        ),
-        array(
             'header' => 'Расход',
             'name' => 'expense',
             'value' => '$data->getFormattedField("expense")',
@@ -81,6 +92,8 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'check',
             'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => '$data->check ? $data->check : ($data->partner->type == Company::CARWASH_TYPE ? "error" : "")',
+            'cssClassExpression' => '!$data->check && $data->partner->type != Company::CARWASH_TYPE ? "error" : ""',
         ),
         array(
             'name' => 'check_image',
@@ -92,15 +105,13 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'class' => 'CButtonColumn',
-            'template' => '{details}',
+            'template' => '{update}',
             'header' => '',
-            'cssClassExpression' => '$data->partner->type == Company::CARWASH_TYPE? "hidden" : ""',
             'buttons' => array(
-                'details' => array(
+                'update' => array(
                     'label' => '',
                     'imageUrl' => false,
-                    'url' => 'Yii::app()->createUrl("car/details", array("id" => $data->id))',
-                    'options' => array('class' => 'update show-act-details')
+                    'url' => 'Yii::app()->createUrl("archive/update", array("id" => $data->id))',
                 ),
             ),
         ),

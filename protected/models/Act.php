@@ -105,6 +105,7 @@ class Act extends CActiveRecord
             'type' => array(self::BELONGS_TO, 'Type', 'type_id'),
             'mark' => array(self::BELONGS_TO, 'Mark', 'mark_id'),
             'scope' => array(self::HAS_MANY, 'ActScope', 'act_id'),
+            'car' => array(self::BELONGS_TO, 'Car', array('number' => 'number')),
         );
     }
 
@@ -274,8 +275,14 @@ class Act extends CActiveRecord
     {
         $criteria = $this->getDbCriteria();
 
+        $criteria->with = ['car'];
+        $criteria->order = 'service_date DESC';
+
         $criteria->compare('income', 0);
         $criteria->compare('expense', 0, false, 'OR');
+        $criteria->addCondition('`check` is NULL AND partner_service IN(0,1,2)', 'OR');
+        $criteria->addCondition('card.company_id != car.company_id', 'OR');
+        $criteria->addCondition('car.company_id is NULL', 'OR');
 
         $this->getDbCriteria()->mergeWith($criteria);
         return $this;

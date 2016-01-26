@@ -96,7 +96,7 @@ class WMenu extends CWidget
                 ),
                 'archive' => array(
                     'title'  => Yii::app()->user->model->role == User::ADMIN_ROLE
-                        ? 'Ошибочные'
+                        ? 'Ошибочные акты'
                         : (Yii::app()->user->model->role == User::CLIENT_ROLE ? 'Услуги' : 'Архив'),
                     'class'  => 'empty',
                     'action' => Yii::app()->user->model->role == User::ADMIN_ROLE

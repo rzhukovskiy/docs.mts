@@ -15,6 +15,7 @@ return array(
     'act/fix' => 'act/fix',
     'act/<type:\w+>' => 'act/list',
     'archive/error' => 'archive/error',
+    'archive/update' => 'archive/update',
     'archive/<type:\w+>' => 'archive/list',
     '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
     '<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',

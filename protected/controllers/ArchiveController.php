@@ -40,4 +40,77 @@ class ArchiveController extends Controller
             'model' => $model,
         ));
     }
+
+    public function actionUpdate($id)
+    {
+        $model = Act::model()->findByPk((int)$id);
+        $model->showCompany = Yii::app()->getRequest()->getParam('showCompany', false);
+
+        if (isset($_POST['Act'])) {
+            $model->attributes = $_POST['Act'];
+            if (!empty($_FILES)) {
+                if (property_exists($model, 'screen')) {
+                    $dir = $_SERVER['DOCUMENT_ROOT'] . '/files/checks/';
+                    $model->screen = CUploadedFile::getInstance($model, 'screen');
+                    if ($model->screen) {
+                        $model->check_image = md5(uniqid(rand(), 1)) . '.jpg';
+                        $model->screen->saveAs($dir . $model->check_image);
+                        Yii::app()->ih
+                            ->load($dir . $model->check_image)
+                            ->resize(400, 400, true)
+                            ->save($dir . $model->check_image);
+                    }
+                }
+            }
+            $this->performAjaxValidation($model);
+
+            $sumName = $model->showCompany ? 'income' : 'expense';
+            if (isset($_POST['Scope'])) {
+                $scopeList = $_POST['Scope'];
+                $total = 0;
+                for ($i = 0; $i < count($scopeList[$sumName]) || $i < count($scopeList['amount']); $i++) {
+                    $total += abs($scopeList[$sumName][$i]) * abs($scopeList['amount'][$i]);
+                }
+                $model->$sumName = $total;
+            }
+
+            if ($model->save()) {
+                $oldScopes = CHtml::listData($model->scope, 'id', 'id');
+                if (isset($_POST['Scope'])) {
+                    $scopeList = $_POST['Scope'];
+                    for ($i = 0; $i < count($scopeList[$sumName]) || $i < count($scopeList['description']); $i++) {
+                        if ($scopeList['id'][$i]) {
+                            $scope = ActScope::model()->findByPk($scopeList['id'][$i]);
+                            $scope->$sumName = $scopeList[$sumName][$i];
+                            unset($oldScopes[$scopeList['id'][$i]]);
+                        } else {
+                            $scope = new ActScope();
+                            $scope->act_id = $model->id;
+                            $scope->income = $scope->expense = $scopeList[$sumName][$i];
+                        }
+                        $scope->description = $scopeList['description'][$i];
+                        $scope->amount = $scopeList['amount'][$i];
+                        $scope->save();
+                    }
+                }
+                foreach ($oldScopes as $scope) {
+                    $scope->delete();
+                }
+
+                $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : Yii::app()->createUrl('archive/error'));
+            }
+        }
+
+        $this->render("update", array(
+            'model' => $model
+        ));
+    }
+
+    protected function performAjaxValidation($model)
+    {
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'action-form') {
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
+        }
+    }
 }
