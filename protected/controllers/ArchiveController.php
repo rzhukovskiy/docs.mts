@@ -41,6 +41,14 @@ class ArchiveController extends Controller
         ));
     }
 
+    public function actionFix($id)
+    {
+        $model = Act::model()->findByPk((int)$id);
+        $model->is_fixed = 1;
+        $model->save();
+        $this->redirect(Yii::app()->createUrl('archive/error'));
+    }
+
     public function actionUpdate($id)
     {
         $model = Act::model()->findByPk((int)$id);

@@ -48,15 +48,10 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->client->name',
         ),
         array(
-            'header' => 'Город',
-            'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->partner->address',
-        ),
-        array(
             'name' => 'card_id',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->card->number',
-            'cssClassExpression' => 'isset($data->car->company_id) && $data->card->company_id != $data->car->company_id ? "error" : ""',
+            'cssClassExpression' => '$data->hasError("card") ? "error" : ""',
         ),
         array(
             'name' => 'mark_id',
@@ -67,7 +62,8 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'number',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'cssClassExpression' => 'Car::model()->find("number = :number" ,array(":number" => $data->number)) ? "" : "error"',
+            'value' => '$data->hasError("car") ? "error" : $data->number',
+            'cssClassExpression' => '$data->hasError("car") ? "error" : ""',
         ),
         array(
             'name' => 'type_id',
@@ -80,20 +76,25 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'expense',
             'value' => '$data->getFormattedField("expense")',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'cssClassExpression' => '$data->expense ? "" : "error"',
+            'cssClassExpression' => '$data->hasError("expense") ? "error" : ""',
         ),
         array(
             'header' => 'Приход',
             'name' => 'income',
             'value' => '$data->getFormattedField("income")',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'cssClassExpression' => '$data->income ? "" : "error"',
+            'cssClassExpression' => '$data->hasError("income") ? "error" : ""',
+        ),
+        array(
+            'header' => 'Город',
+            'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => '$data->partner->address',
         ),
         array(
             'name' => 'check',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->check ? $data->check : ($data->partner->type == Company::CARWASH_TYPE ? "error" : "")',
-            'cssClassExpression' => '!$data->check && $data->partner->type != Company::CARWASH_TYPE ? "error" : ""',
+            'value' => '$data->check ? $data->check : ($data->hasError("check") ? "error" : "")',
+            'cssClassExpression' => '$data->hasError("check") ? "error" : ""',
         ),
         array(
             'name' => 'check_image',
@@ -105,13 +106,18 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'class' => 'CButtonColumn',
-            'template' => '{update}',
+            'template' => '{update}{delete}',
             'header' => '',
             'buttons' => array(
                 'update' => array(
                     'label' => '',
                     'imageUrl' => false,
                     'url' => 'Yii::app()->createUrl("archive/update", array("id" => $data->id))',
+                ),
+                'delete' => array(
+                    'label' => '',
+                    'imageUrl' => false,
+                    'url' => 'Yii::app()->createUrl("archive/fix", array("id" => $data->id))',
                 ),
             ),
         ),
