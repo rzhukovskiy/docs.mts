@@ -282,6 +282,7 @@ class Act extends CActiveRecord
         $criteria->compare('income', 0);
         $criteria->compare('expense', 0, false, 'OR');
         $criteria->addCondition('`check` is NULL AND partner_service IN(0,1,2)', 'OR');
+        $criteria->addCondition('`check` = "" AND partner_service IN(0,1,2)', 'OR');
         $criteria->addCondition('card.company_id != car.company_id', 'OR');
         $criteria->addCondition('car.company_id is NULL', 'OR');
 

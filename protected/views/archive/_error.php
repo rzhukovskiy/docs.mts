@@ -62,7 +62,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'number',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->hasError("car") ? "error" : $data->number',
+            'value' => '$data->number ? $data->number : "error"',
             'cssClassExpression' => '$data->hasError("car") ? "error" : ""',
         ),
         array(
