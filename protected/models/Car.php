@@ -103,6 +103,11 @@ class Car extends CActiveRecord
         $criteria->group = 't.id';
         $criteria->compare('t.id', $this->id);
         $criteria->compare('t.number', $this->number, true);
+        if (count($this->company->children) > 0) {
+            $criteria->addCondition("clientParent.id = $this->client_id OR client_id = $this->client_id");
+        } else {
+            $criteria->compare('client_id', $this->client_id);
+        }
         $criteria->compare('t.company_id', $this->company_id);
         $criteria->compare('t.mark_id', $this->mark_id);
         $criteria->compare('t.type_id', $this->type_id);

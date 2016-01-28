@@ -24,6 +24,18 @@ $form = $this->beginWidget('CActiveForm', array(
     </span>
 </div>
 <div class="row">
+    <?= $form->labelEx($model, 'parent_id'); ?>
+    <span class="field">
+        <?=$form->dropDownList(
+            $model,
+            'parent_id',
+            CHtml::listData(Company::model()->findAll('type = :type', [':type' => 'company']), 'id', 'name'),
+            ['class' => 'span5', 'empty' => '']
+        ); ?>
+        <?= $form->error($model, 'parent_id'); ?>
+    </span>
+</div>
+<div class="row">
     <?= $form->labelEx($model, 'address'); ?>
     <span class="field">
         <?= $form->textField($model, 'address', array('class' => 'span5')); ?>

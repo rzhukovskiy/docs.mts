@@ -236,10 +236,14 @@ class Act extends CActiveRecord
             }
         }
 
-        $criteria->with = array('partner', 'client', 'card', 'type', 'mark');
+        $criteria->with = ['partner', 'client', 'client.parent' => ['alias'=>'clientParent'], 'card', 'type', 'mark'];
         $criteria->compare('partner.type', $this->companyType);
         $criteria->compare('partner_id', $this->partner_id);
-        $criteria->compare('client_id', $this->client_id);
+        if (count($this->client->children) > 0) {
+            $criteria->addCondition("clientParent.id = $this->client_id OR client_id = $this->client_id");
+        } else {
+            $criteria->compare('client_id', $this->client_id);
+        }
         $criteria->compare('t.type_id', $this->type_id);
         $criteria->compare('t.card_id', $this->card_id);
         $criteria->compare('t.number', $this->number, true);
