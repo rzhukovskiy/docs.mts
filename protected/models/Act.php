@@ -13,6 +13,7 @@
  * @property string $create_date
  * @property string $service_date
  * @property int $is_closed
+ * @property int $is_fixed
  * @property int $partner_service
  * @property int $client_service
  * @property string $check
@@ -94,7 +95,7 @@ class Act extends CActiveRecord
         return array(
             array('type_id, card_id, number, mark_id', 'required'),
             array('check', 'unique'),
-            array('from_date, to_date, period, month, day, check, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
+            array('is_fixed, from_date, to_date, period, month, day, check, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
             array('company_id, id, number, mark_id, type_id, card_id, service_date', 'safe', 'on' => 'search'),
         );
     }
@@ -108,6 +109,7 @@ class Act extends CActiveRecord
             'type' => array(self::BELONGS_TO, 'Type', 'type_id'),
             'mark' => array(self::BELONGS_TO, 'Mark', 'mark_id'),
             'scope' => array(self::HAS_MANY, 'ActScope', 'act_id'),
+            'car' => array(self::BELONGS_TO, 'Car', array('number' => 'number')),
         );
     }
 
@@ -237,10 +239,14 @@ class Act extends CActiveRecord
             }
         }
 
-        $criteria->with = array('partner', 'client', 'card', 'type', 'mark');
+        $criteria->with = ['partner', 'client', 'client.parent' => ['alias'=>'clientParent'], 'card', 'type', 'mark'];
         $criteria->compare('partner.type', $this->companyType);
         $criteria->compare('partner_id', $this->partner_id);
-        $criteria->compare('client_id', $this->client_id);
+        if (count($this->client->children) > 0) {
+            $criteria->addCondition("clientParent.id = $this->client_id OR client_id = $this->client_id");
+        } else {
+            $criteria->compare('client_id', $this->client_id);
+        }
         $criteria->compare('t.type_id', $this->type_id);
         $criteria->compare('t.card_id', $this->card_id);
         $criteria->compare('t.number', $this->number, true);
@@ -271,6 +277,29 @@ class Act extends CActiveRecord
         $this->setDbCriteria(new CDbCriteria());
 
         return $provider;
+    }
+
+    public function withErrors()
+    {
+        $criteria = new CDbCriteria();
+
+        $criteria->with = ['car'];
+        $criteria->order = 'service_date DESC';
+
+        $criteria->compare('income', 0);
+        $criteria->compare('expense', 0, false, 'OR');
+        $criteria->addCondition('`check` is NULL AND partner_service IN(0,1,2)', 'OR');
+        $criteria->addCondition('`check` = "" AND partner_service IN(0,1,2)', 'OR');
+        $criteria->addCondition('card.company_id != car.company_id', 'OR');
+        $criteria->addCondition('car.company_id is NULL', 'OR');
+
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        $criteria = new CDbCriteria();
+        $criteria->compare('is_fixed', 0);
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        return $this;
     }
 
     public function byDays()
@@ -377,6 +406,30 @@ class Act extends CActiveRecord
             'expense' => 'Сумма',
             'day' => 'День',
         );
+    }
+
+    public function hasError($error)
+    {
+        $hasError = false;
+        switch ($error) {
+            case 'expense':
+                $hasError = !$this->expense;
+                break;
+            case 'income':
+                $hasError = !$this->income;
+                break;
+            case 'check':
+                $hasError = !$this->check && $this->partner->type == Company::CARWASH_TYPE;
+                break;
+            case 'card':
+                $hasError = isset($this->car->company_id) && $this->card->company_id != $this->car->company_id;
+                break;
+            case 'car':
+                $hasError = !isset($this->car->company_id);
+                break;
+        }
+
+        return !$this->is_fixed && $hasError;
     }
 
     public function getFormattedField($field)

@@ -47,16 +47,20 @@
             <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
                 <td style="width: 100px;"><?=$data->partner->name?></td>
             <?php } ?>
-            <td style="width: 60px;" class="<?=$cardError ? "error" : ""?>"><?=$data->card->number?></td>
-            <td style="width: 80px; text-align:center;" class="<?=$numError ? "error" : ""?>"><?=$data->number?></td>
+            <td style="width: 60px;" class="<?=$data->hasError("card") ? "error" : ""?>"><?=$data->card->number?></td>
+            <td style="width: 80px; text-align:center;" class="<?=$data->hasError("car") ? "error" : ""?>">
+                <?=$data->number ? $data->number : "error"?>
+            </td>
             <td style="width: 80px;" class="<?=isset($data->mark) ? "" : "error"?>"><?=isset($data->mark) ? $data->mark->name : 'неизвестно'?></td>
             <td class="<?=isset($data->type) ? "" : "error"?>"><?=isset($data->type) ? $data->type->name : 'неизвестно'?></td>
             <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
                 <td style="width: 80px; text-align:center;"><?=Act::$fullList[$data->partner_service]?></td>
             <?php } ?>
-            <td style="width: 60px; text-align:center;" class="<?=$data->expense ? "" : "error"?>"><?=$data->getFormattedField('expense') ?></td>
+            <td style="width: 60px; text-align:center;" class="<?=$data->hasError("expense") ? "error" : ""?>"><?=$data->getFormattedField('expense') ?></td>
             <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
-                <td style="width: 60px; text-align:center;" class="<?=!empty($data->check) ? "" : "error"?>"><?=$data->check ? $data->check : "error"?></td>
+                <td style="width: 60px; text-align:center;" class="<?=$data->hasError("check") ? "error" : ""?>">
+                    <?=$data->check ? $data->check : ($data->hasError("check") ? "error" : "")?>
+                </td>
                 <td style="width: 40px;"><a class="preview" href="/files/checks/<?=$data->check_image?>"><?=!empty($data->check_image) ? 'image' : ''?></a></td>
             <?php } ?>
             <td style="width: 95px;" class="button-column">

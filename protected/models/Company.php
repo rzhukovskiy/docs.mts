@@ -5,6 +5,7 @@
  *
  * The followings are the available columns in table '{{company}}':
  * @property int $id
+ * @property int $parent_id
  * @property string $name
  * @property string $address
  * @property string $phone
@@ -53,7 +54,7 @@ class Company extends CActiveRecord
     {
         return array(
             array('name','required'),
-            array('address, phone, contact, contract, act_header, type, cardList','safe'),
+            array('paent_id, address, phone, contact, contract, act_header, type, cardList','safe'),
 
         );
     }
@@ -69,6 +70,7 @@ class Company extends CActiveRecord
             'contact' => 'Директор',
             'contract' => 'Договор',
             'act_header' => 'Заголовок акта',
+            'parent_id' => 'Родительская компания',
         );
     }
 
@@ -78,6 +80,8 @@ class Company extends CActiveRecord
             'users' => array(self::HAS_MANY, 'User', 'company_id'),
             'cards' => array(self::HAS_MANY, 'Card', 'company_id'),
             'cars' => array(self::HAS_MANY, 'Car', 'company_id'),
+            'parent' => array(self::BELONGS_TO, 'Company', 'parent_id'),
+            'children' => array(self::HAS_MANY, 'Company', 'parent_id'),
         );
     }
 

@@ -97,13 +97,17 @@ class Car extends CActiveRecord
             $this->company_id = Yii::app()->user->model->company_id;
         }
 
-        $criteria->with = 'act';
+        $criteria->with = ['act', 'company', 'company.parent' => ['alias'=>'clientParent']];
         $criteria->together = true;
         $criteria->select = '*, count(act.id) as service_count';
         $criteria->group = 't.id';
         $criteria->compare('t.id', $this->id);
         $criteria->compare('t.number', $this->number, true);
-        $criteria->compare('t.company_id', $this->company_id);
+        if ($this->company && count($this->company->children) > 0) {
+            $criteria->addCondition("clientParent.id = $this->company_id OR t.company_id = $this->company_id");
+        } else {
+            $criteria->compare('t.company_id', $this->company_id);
+        }
         $criteria->compare('t.mark_id', $this->mark_id);
         $criteria->compare('t.type_id', $this->type_id);
         if (isset($this->from_date)) {
