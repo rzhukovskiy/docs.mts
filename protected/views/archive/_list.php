@@ -5,7 +5,7 @@
  * @var $form CActiveForm
  */
 $provider = $model->search();
-$gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
+$gridWidget = $this->widget('ext.groupgridview.GroupGridView', array(
     'id' => 'act-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
@@ -26,6 +26,9 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'cssFile' => false,
     'template' => "{items}\n{pager}",
     'loadingCssClass' => false,
+    'extraRowColumns' => array('client'),
+    'extraRowExpression' => '$data->client->name',
+    'extraRowPos' => 'above',
     'columns' => array(
         array(
             'header' => '№',
@@ -86,6 +89,14 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'check',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'visible' => $model->companyType == Company::CARWASH_TYPE,
+        ),
+        array(
+            'name' => 'client',
+            'value' => '',
+            'header' => '',
+            'headerHtmlOptions' => array('style' => 'display:none'),
+            'htmlOptions' => array('style' => 'display:none'),
+            'footerHtmlOptions' => array('style' => 'display:none'),
         ),
         array(
             'name' => 'check_image',

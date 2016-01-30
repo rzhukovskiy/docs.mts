@@ -28,9 +28,12 @@
  * @property int $amount
  * @property string $from_date
  * @property string $to_date
+ * @property string $clientName
  */
 class Act extends CActiveRecord
 {
+    public $clientName;
+
     public $from_date;
     public $to_date;
     public $screen;
@@ -395,5 +398,10 @@ class Act extends CActiveRecord
         }
 
         return number_format($total, 0, ".", " ");
+    }
+
+    public function getClientName()
+    {
+        return $this->client->name;
     }
 }
