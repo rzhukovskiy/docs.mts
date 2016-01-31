@@ -47,15 +47,15 @@ $gridWidget = $this->widget('ext.groupgridview.GroupGridView', array(
             'value' => '$data->card->number',
         ),
         array(
+            'name' => 'number',
+            'htmlOptions' => array('style' => 'text-align:center;'),
+            'cssClassExpression' => 'Car::model()->find("number = :number" ,array(":number" => $data->number)) ? "" : "error"',
+        ),
+        array(
             'name' => 'mark_id',
             'htmlOptions' => array(),
             'value' => '$data->mark->name',
             'filter' => CHtml::listData(Mark::model()->findAll(array('order' => 'id')), 'id', 'name'),
-        ),
-        array(
-            'name' => 'number',
-            'htmlOptions' => array('style' => 'text-align:center;'),
-            'cssClassExpression' => 'Car::model()->find("number = :number" ,array(":number" => $data->number)) ? "" : "error"',
         ),
         array(
             'name' => 'type_id',
@@ -92,7 +92,7 @@ $gridWidget = $this->widget('ext.groupgridview.GroupGridView', array(
         ),
         array(
             'name' => 'client',
-            'value' => '',
+            'value' => '$data->client->name',
             'header' => '',
             'headerHtmlOptions' => array('style' => 'display:none'),
             'htmlOptions' => array('style' => 'display:none'),

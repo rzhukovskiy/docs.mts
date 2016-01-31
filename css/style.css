@@ -455,8 +455,8 @@ button,input,select,textarea { font-size: 12px; font-family: Arial, Helvetica, s
 .stdtable .con0 { background: #fcfcfc; }
 .stdtable .con1 { background: #f9f9f9; }
 .stdtable th, .stdtable td { line-height: 16px; vertical-align: middle; }
-.stdtable thead th, .stdtable thead td { padding: 5px 10px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc; }
-.stdtable tfoot th, .stdtable tfoot td { padding: 5px 10px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc; font-weight: bold; }
+.stdtable thead th, .stdtable thead td { padding: 8px 5px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc; }
+.stdtable tfoot th, .stdtable tfoot td { padding: 8px 5px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc; font-weight: bold; }
 .stdtable thead th:first-child, .stdtable tfoot th:first-child,
 .stdtable thead td:first-child, .stdtable tfoot td:first-child { border-left: 1px solid #ddd; }
 .stdtable thead th.head0, .stdtable tfoot th.head0, .stdtable thead td.head0, .stdtable tfoot td.head0 { background-color: #eee; }

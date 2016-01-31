@@ -13,6 +13,7 @@
  * @property string $type
  * @property string $contract
  * @property string $act_header
+ * @property string $month
  */
 class Company extends CActiveRecord
 {
@@ -22,6 +23,8 @@ class Company extends CActiveRecord
           TIRES_TYPE   = 'tires';
 
     public $cardList;
+    public $month;
+
     static $listService = [
         self::COMPANY_TYPE => 'Компания',
         self::CARWASH_TYPE => 'Мойка',
@@ -54,7 +57,7 @@ class Company extends CActiveRecord
     {
         return array(
             array('name','required'),
-            array('paent_id, address, phone, contact, contract, act_header, type, cardList','safe'),
+            array('parent_id, address, phone, contact, contract, act_header, type, cardList','safe'),
 
         );
     }
@@ -80,6 +83,7 @@ class Company extends CActiveRecord
             'users' => array(self::HAS_MANY, 'User', 'company_id'),
             'cards' => array(self::HAS_MANY, 'Card', 'company_id'),
             'cars' => array(self::HAS_MANY, 'Car', 'company_id'),
+            'acts' => array(self::HAS_MANY, 'Act', 'client_id'),
             'parent' => array(self::BELONGS_TO, 'Company', 'parent_id'),
             'children' => array(self::HAS_MANY, 'Company', 'parent_id'),
         );
@@ -92,29 +96,46 @@ class Company extends CActiveRecord
     public function search() {
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
+        $criteria = new CDbCriteria();
 
-        $criteria = new CDbCriteria;
-
-        $criteria->compare('id', $this->id);
-        $criteria->compare('name', $this->name, true);
-        $criteria->compare('address', $this->address, true);
-        $criteria->compare('phone', $this->phone, true);
-        $criteria->compare('contact', $this->contact, true);
-        $criteria->compare('type', $this->type, true);
+        $criteria->compare('t.id', $this->id);
+        $criteria->compare('t.parent_id', $this->parent_id);
+        $criteria->compare('t.name', $this->name, true);
+        $criteria->compare('t.address', $this->address, true);
+        $criteria->compare('t.phone', $this->phone, true);
+        $criteria->compare('t.contact', $this->contact, true);
+        $criteria->compare('t.type', $this->type, true);
 
         $sort = new CSort;
         $sort->attributes = array('id', 'name', 'address', 'phone', 'contact');
         $sort->defaultOrder = 'id DESC';
         $sort->applyOrder($criteria);
 
+        $this->getDbCriteria()->mergeWith($criteria);
 
         return new CActiveDataProvider(get_class($this), array(
-            'criteria' => $criteria,
+            'criteria' => $this->getDbCriteria(),
             'sort' => $sort,
             'pagination' => array(
                 'pageSize' => 100,
             ),
         ));
+    }
+
+    /**
+     * @return Company
+     */
+    public function withEmptyActs() {
+        // Warning: Please modify the following code to remove attributes that
+        // should not be searched.
+
+        $criteria = new CDbCriteria;
+
+        $criteria->addCondition('NOT EXISTS (SELECT * FROM mts_act WHERE mts_act.client_id = t.id AND date_format(mts_act.service_date, "%Y-%m") = "' . $this->month . '")');
+
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        return $this;
     }
 
     public function afterSave()

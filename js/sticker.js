@@ -3,9 +3,13 @@ $(document).ready(function() {
     $(window).scroll(function(e) {
         if (!sticked && $(window).scrollTop() > $('.maintabmenu').offset().top) {
             sticked = true;
-            $('thead').css({
+            $('.selector').css({
                 'position':'fixed',
                 'top': 35
+            });
+            $('.grid thead').css({
+                'position':'fixed',
+                'top': 121
             });
             $('.maintabmenu').css({
                 'position':'fixed',
@@ -13,20 +17,20 @@ $(document).ready(function() {
             });
 
             $('tbody tr.even:first td').each(function(id, value) {
-                var etalon = $(value).outerWidth();
-                $('thead .selector th').slice(id).outerWidth(etalon);
+                var etalon = $(value).width();
+                console.log(etalon);
+                $('.grid thead th').slice(id).width(etalon);
             });
 
-            $('thead').width($('tbody').width() + 1);
+            $('.selector, .grid thead').width($('tbody').width() + 1);
         }
 
         if (sticked && $(window).scrollTop() == 0) {
             sticked = false;
-            $('thead').css({
-                'position':'relative'
-            });
-            $('.maintabmenu').css({
+
+            $('.selector, .grid thead, .maintabmenu').css({
                 'position':'relative',
+                'top': 0
             });
         }
     })

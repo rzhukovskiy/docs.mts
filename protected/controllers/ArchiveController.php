@@ -21,9 +21,13 @@ class ArchiveController extends Controller
         if (isset($_GET['Act'])) {
             $model->attributes = $_GET['Act'];
         }
+        $company = new Company();
+        $company->month = $model->month;
+        $company->parent_id = Yii::app()->user->model->company_id;
 
         $this->render('list', array(
             'model' => $model,
+            'company' => $company,
         ));
     }
 

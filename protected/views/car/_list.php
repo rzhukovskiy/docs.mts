@@ -8,7 +8,7 @@
  */
 $this->renderPartial('_selector', array('model' => $model, 'id' => $model->id));
 
-$this->widget('zii.widgets.grid.CGridView', array(
+$this->widget('ext.groupgridview.GroupGridView', array(
     'id' => 'car-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
@@ -19,6 +19,9 @@ $this->widget('zii.widgets.grid.CGridView', array(
     'cssFile' => false,
     'template' => "{items}",
     'loadingCssClass' => false,
+    'extraRowColumns' => array('company_id'),
+    'extraRowExpression' => '$data->company->name . " - " . $data->company->address',
+    'extraRowPos' => 'above',
     'columns' => array(
         array(
             'header' => '№',

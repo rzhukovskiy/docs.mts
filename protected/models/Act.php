@@ -213,7 +213,6 @@ class Act extends CActiveRecord
 
         //клиентам всегда показываем только закрытые акты
         if (Yii::app()->user->model->role == User::CLIENT_ROLE) {
-            $this->is_closed = 1;
             $this->showCompany = 1;
         }
 

@@ -28,3 +28,4 @@ if (Yii::app()->user->model->company->type == Company::COMPANY_TYPE) {
 <?php
 $this->renderPartial('_selector', array('model' => $model));
 $this->renderPartial('_list', array('model' => $model));
+$this->renderPartial('_empty', array('model' => $company));
