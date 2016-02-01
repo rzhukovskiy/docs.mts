@@ -27,8 +27,14 @@ $gridWidget = $this->widget('ext.groupgridview.GroupGridView', array(
     'template' => "{items}\n{pager}",
     'loadingCssClass' => false,
     'extraRowColumns' => array('client'),
-    'extraRowExpression' => '$data->client->name',
-    'extraRowPos' => 'above',
+    'extraRowExpression' => '$data->client->name . " - " . $data->client->address',
+    'extraTotalRowColumns' => array('client'),
+    'extraRowTotals' => function($data, $row, &$totals) {
+        if(!isset($totals['income'])) $totals['income'] = 0;
+        $totals['income'] += $data['income'];
+    },
+    'extraTotalRowExpression' => '$totals["income"]',
+    'subFooterColumns' => array('income'),
     'columns' => array(
         array(
             'header' => '№',

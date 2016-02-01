@@ -323,10 +323,10 @@ class GroupGridView extends CGridView {
                 if (in_array($column->name, $this->subFooterColumns)) {
                     echo '<td class="extrarow" style="' . (isset($column->footerHtmlOptions['style']) ? $column->footerHtmlOptions['style'] : '') . '">' . $content . '</td>';
                 } else {
-                    echo '<td class="extrarow">&nbsp;</td>';
+                    echo '<td class="extrarow" style="' . (isset($column->footerHtmlOptions['style']) ? $column->footerHtmlOptions['style'] : '') . '">&nbsp;</td>';
                 }
             } else {
-                echo '<td class="extrarow">&nbsp;</td>';
+                echo '<td class="extrarow" style="' . (isset($column->footerHtmlOptions['style']) ? $column->footerHtmlOptions['style'] : '') . '">&nbsp;</td>';
             }
         }
         echo '</tr>';
