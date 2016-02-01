@@ -25,19 +25,24 @@ class GroupGridView extends CGridView {
     
     //list of columns on which change extrarow will be triggered
     public $extraRowColumns = array();
+    public $extraTotalRowColumns = array();
     //expression to get value shown in extrarow
     public $extraRowExpression;
+    public $extraTotalRowExpression;
     //position of extraRow relative to group: 'above' | 'below' 
     public $extraRowPos = 'above';
+    public $extraTotalRowPos = 'above';
     //totals expression: function($data, $row, &$totals)
     public $extraRowTotals;
+
+    public $subFooterColumns = array();
     
     //array with groups
     private $_groups = array();
 
     public function renderTableBody()
     {
-        if(!empty($this->mergeColumns) || !empty($this->extraRowColumns)) {
+        if(!empty($this->mergeColumns) || !empty($this->extraRowColumns) || !empty($this->extraTotalRowColumns)) {
             $this->groupByColumns();
         }
         parent::renderTableBody();
@@ -55,6 +60,7 @@ class GroupGridView extends CGridView {
 
         if(!is_array($this->mergeColumns)) $this->mergeColumns = array($this->mergeColumns);
         if(!is_array($this->extraRowColumns)) $this->extraRowColumns = array($this->extraRowColumns);
+        if(!is_array($this->extraTotalRowColumns)) $this->extraTotalRowColumns = array($this->extraTotalRowColumns);
 
         //store columns for group. Set object for existing columns in grid and string for attributes
         $groupColumns = array_unique(array_merge($this->mergeColumns, $this->extraRowColumns));
@@ -233,6 +239,10 @@ class GroupGridView extends CGridView {
         if(count($this->extraRowColumns) && $this->extraRowPos == 'below' && isset($extraRowEdge['end'])) {
             $this->renderExtraRow($row, $extraRowEdge['group']['totals']);
         }
+        //totalRow
+        if(count($this->extraTotalRowColumns) && isset($extraRowEdge['end'])) {
+            $this->renderTotalRow($row, $extraRowEdge['group']['totals']);
+        }
     }    
     
     /**
@@ -283,6 +293,42 @@ class GroupGridView extends CGridView {
 
         echo '<tr class="header">';
         echo '<td class="extrarow" colspan="'.$colspan.'">'.$content.'</td>';
+        echo '</tr>';
+    }
+
+    /**
+     * renders extra row
+     *
+     * @param mixed $row
+     * @param mixed $change
+     */
+    private function renderTotalRow($row, $totals)
+    {
+        $data = $this->dataProvider->data[$row];
+        if($this->extraTotalRowExpression) { //user defined expression, use it!
+            $content = $this->evaluateExpression($this->extraTotalRowExpression, array('data'=>$data, 'row'=>$row, 'totals' => $totals));
+        } else {  //generate value
+            $values = array();
+            foreach($this->extraRowColumns as $colName) {
+                $values[] = CHtml::encode(CHtml::value($data, $colName));
+            }
+            $content = '<strong>'.implode(' :: ', $values).'</strong>';
+        }
+
+        $colspan = count($this->columns);
+
+        echo '<tr class="total">';
+        foreach ($this->columns as $column) {
+            if ($column->footer) {
+                if (in_array($column->name, $this->subFooterColumns)) {
+                    echo '<td class="extrarow" style="' . (isset($column->footerHtmlOptions['style']) ? $column->footerHtmlOptions['style'] : '') . '">' . $content . '</td>';
+                } else {
+                    echo '<td class="extrarow">&nbsp;</td>';
+                }
+            } else {
+                echo '<td class="extrarow">&nbsp;</td>';
+            }
+        }
         echo '</tr>';
     }
 

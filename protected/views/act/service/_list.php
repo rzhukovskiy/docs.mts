@@ -33,18 +33,21 @@ $gridWidget = $this->widget('ext.groupgridview.GroupGridView', array(
     'template' => "{items}\n{pager}",
     'loadingCssClass' => false,
     'extraRowColumns' => array('partner'),
+    'extraTotalRowColumns' => array('partner'),
     'extraRowExpression' => '$data->partner->name . " - " . $data->partner->address',
-    'extraRowPos' => 'above',
     'extraRowTotals' => function($data, $row, &$totals) {
         if(!isset($totals['expense'])) $totals['expense'] = 0;
         $totals['expense'] += $data['expense'];
     },
+    'extraTotalRowExpression' => '$totals["expense"]',
+    'subFooterColumns' => array('expense'),
     'columns' => array(
         array(
             'header' => '№',
             'htmlOptions' => array('style' => 'width: 40px; text-align:center;'),
             'value' => '++$row',
             'footer' => 'Итого',
+            'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
             'name' => 'service_date',
@@ -86,6 +89,7 @@ $gridWidget = $this->widget('ext.groupgridview.GroupGridView', array(
             'htmlOptions' => array(),
             'filter' => false,
             'value' => '$data->type->name',
+            'footer' => count($provider->getData()) . ' ' . StringNum::getNumEnding(count($provider->getData()), array('машина', 'машины', 'машин')),
         ),
         array(
             'name' => 'partner_service',
