@@ -268,3 +268,84 @@ this.imagePreview = function() {
             .css("left", "10px");
     });
 };
+
+this.addHeaders = function(options) {
+    var tableSelector = options.tableSelector;
+    var headers = options.headers;
+    var footers = options.footers;
+    var headerClass = 'header';
+    var footerClass = 'total';
+
+    $(tableSelector).ready(function() {
+        footers.forEach(function(trigger, i) {
+            var previousValue = 'empty';
+            var total = 0;
+            var len = $(tableSelector).find('tbody tr')
+                .not('.' + headerClass)
+                .not('.' + footerClass).length;
+
+            $(tableSelector).find('tbody tr')
+                .not('.' + headerClass)
+                .not('.' + footerClass)
+                .each(function(id, row) {
+
+                    var currentValue = $(row).find(trigger).text();
+                    var pos = $(row).find('td').index($(row).find('.sum'));
+
+                    if (previousValue != 'empty' && previousValue != currentValue) {
+                        if (previousValue != '') {
+                            var tr = $('<tr>').addClass(footerClass)
+                            for (var i = 0; i < $(row).find('td:visible').length; i++) {
+                                if (i == pos) {
+                                    var td = $('<td>').text(total).css('text-align', 'center');
+                                    tr.append(td);
+                                } else {
+                                    var td = $('<td>');
+                                    tr.append(td);
+                                }
+                            }
+                            $(row).before(tr);
+                        }
+
+                        total = 0;
+                    }
+
+                    if (id == len - 1 ) {
+                        var tr = $('<tr>').addClass(footerClass)
+                        for (var i = 0; i < $(row).find('td:visible').length; i++) {
+                            if (i == pos) {
+                                var td = $('<td>').text(total).css('text-align', 'center');
+                                tr.append(td);
+                            } else {
+                                var td = $('<td>');
+                                tr.append(td);
+                            }
+                        }
+                        $(row).after(tr);
+                        total = 0;
+                    }
+
+                    total += parseInt($(row).find('.sum').text().replace(" ", ""));
+                    previousValue = currentValue;
+                });
+        });
+
+        headers.forEach(function(trigger, i) {
+            var previousValue = '';
+            $(tableSelector).find('tbody tr')
+                .not('.' + headerClass)
+                .not('.' + footerClass)
+                .each(function(id, row) {
+
+                var currentValue = $(row).find(trigger).text();
+
+                if (previousValue != currentValue) {
+                    var td = $('<td>').text(currentValue).attr("colspan", $(row).find('td').length);
+                    var tr = $('<tr>').addClass(headerClass).append(td);
+                    $(row).before(tr);
+                }
+                previousValue = currentValue;
+            });
+        });
+    });
+};

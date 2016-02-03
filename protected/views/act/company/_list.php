@@ -2,80 +2,138 @@
 /**
  * @var $this ActController
  * @var $model Act
+ * @var $form CActiveForm
  */
 $provider = $model->search();
+
+if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+    $this->renderPartial('_selector', array('model' => $model));
+}
 ?>
-<div class="my-grid" id="act-grid">
-    <table class="stdtable grid table-fixed">
-        <thead>
-        <?php
-        $totalCount = count($provider->getData());
-        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $this->renderPartial('_selector', array('model' => $model));
-        }
-        ?>
-        <tr class="selector">
-            <th id="act-grid_c0">№</th>
-            <th id="act-grid_c1"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=service_date">Дата</a></th>
-            <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
-                <th id="act-grid_c2"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=client_id">Клиент</a></th>
-            <?php } ?>
-            <th id="act-grid_c3"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=card_id">Карта</a></th>
-            <th id="act-grid_c4"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=number">Госномер</a></th>
-            <th id="act-grid_c5"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=mark_id">Марка</a></th>
-            <th id="act-grid_c6"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=type_id">Тип ТС</a></th>
-            <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
-                <th id="act-grid_c7"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=client_service">Услуга</a></th>
-            <?php } ?>
-            <th id="act-grid_c8"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=income">Сумма</a></th>
-            <th id="act-grid_c9"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=address">Город</a></th>
-            <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
-                <th id="act-grid_c10"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=check">Номер чека</a></th>
-                <th id="act-grid_c11"><a class="sort-link">Чек</a></th>
-            <?php } ?>
-            <th class="button-column" id="act-grid_c12">&nbsp;</th>
-        </tr>
-        <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
-            <tr class="filters">
-                <td>&nbsp;</td>
-                <td>
-                    <?=CHtml::dropDownList('Act[day]',
-                        $model->day,
-                        range(0, date('t', strtotime("$model->month-$model->day"))),
-                        array('empty' => 'Все'))?>
-                </td>
-                <td><?=CHtml::dropDownList('Act[client_id]',
-                        $model->client_id,
-                        CHtml::listData(Company::model()->findAll('type = :type' , array(':type' => Company::COMPANY_TYPE)),'id', 'name'),
-                        array('empty' => 'Все', 'style' => 'width: 80px;'))?>
-                </td>
-                <td><input name="Act[card_id]" type="text"></td>
-                <td><input name="Act[number]" type="text"></td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
-                    <td>&nbsp;</td>
-                    <td><input name="Act[check]" type="text"></td>
-                    <td>&nbsp;</td>
-                <?php } ?>
-                <td>&nbsp;</td>
-            </tr>
-        <?php } ?>
-        </thead>
-        <tbody>
-            <?=$this->renderPartial('company/_item', array('model' => $model))?>
-            <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
-                <tr class="total">
-                    <td><strong>Общее</strong></td>
-                    <td colspan="<?=Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $model->companyType == Company::CARWASH_TYPE ? 7 : (Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 6 : 5); ?>">
-                        <?=$totalCount . ' ' . StringNum::getNumEnding($totalCount, array('машина', 'машины', 'машин'))?>
-                    </td>
-                    <td style="text-align:center;"><strong><?=$model->totalField($provider, 'income')?></strong></td>
-                    <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 4 : 2?>"></td>
-                </tr>
-            <?php } ?>
-        </tbody>
-    </table>
-</div>
+
+    <script type="text/javascript">
+        addHeaders({
+            tableSelector: "#act-grid",
+            headers: ['.parent', '.client'],
+            footers: ['.parent', '.client']
+        });
+    </script>
+<?php
+$gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
+    'id' => 'act-grid',
+    'htmlOptions' => array('class' => 'my-grid'),
+    'itemsCssClass' => 'stdtable grid',
+    'filter' => $model,
+    'dataProvider' => $provider,
+    'template' => "{items}",
+    'columns' => array(
+        array(
+            'header' => '№',
+            'htmlOptions' => array('style' => 'width: 40px; text-align:center;'),
+            'value' => '++$row',
+            'footer' => 'Всего',
+            'footerHtmlOptions' => array('style' => 'text-align:center;'),
+        ),
+        array(
+            'name' => 'service_date',
+            'htmlOptions' => array('style' => ' width: 70px; text-align:center;'),
+            'value' => 'date("j", strtotime($data->service_date))',
+            'filter' => CHtml::dropDownList('Act[day]',
+                $model->day,
+                range(1, date('t', strtotime("$model->month-$model->day"))),
+                array('empty' => 'Все')),
+        ),
+        array(
+            'header' => 'Клиент',
+            'name' => 'client',
+            'value' => '$data->client->name',
+            'htmlOptions' => array('style' => 'width: 100px;', 'class' => 'client'),
+            'filter' => CHtml::dropDownList('Act[client_id]',
+                $model->client_id,
+                CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name'),
+                array('empty' => 'Все', 'style' => 'width: 80px;')),
+        ),
+        array(
+            'name' => 'card_id',
+            'htmlOptions' => array('style' => 'width: 60px;'),
+            'value' => '$data->card->number',
+        ),
+        array(
+            'name' => 'number',
+            'htmlOptions' => array('style' => 'width: 80px; text-align:center;'),
+            'cssClassExpression' => 'Car::model()->find("number = :number" ,array(":number" => $data->number)) ? "" : "error"',
+        ),
+        array(
+            'name' => 'mark_id',
+            'htmlOptions' => array('style' => 'width: 80px; text-align:center;'),
+            'value' => '$data->mark->name',
+            'filter' => false,
+        ),
+        array(
+            'name' => 'type_id',
+            'htmlOptions' => array(),
+            'filter' => false,
+            'value' => '$data->type->name',
+            'footer' => count($provider->getData()) . ' ' . StringNum::getNumEnding(count($provider->getData()), array('машина', 'машины', 'машин')),
+        ),
+        array(
+            'name' => 'client_service',
+            'htmlOptions' => array('style' => 'width: 80px; text-align:center;'),
+            'value' => 'Act::$fullList[$data->client_service]',
+            'filter' => false,
+            'visible' => $model->companyType == Company::CARWASH_TYPE,
+        ),
+        array(
+            'header' => 'Сумма',
+            'name' => 'income',
+            'value' => '$data->getFormattedField("income")',
+            'htmlOptions' => array('style' => 'width: 60px; text-align:center;', 'class' => 'sum'),
+            'cssClassExpression' => '$data->income ? "" : "error"',
+            'footer' => $model->totalField($provider, 'income'),
+            'footerHtmlOptions' => array('style' => 'text-align:center;'),
+            'filter' => false,
+        ),
+        array(
+            'name' => 'check',
+            'htmlOptions' => array('style' => 'width: 60px; text-align:center;'),
+            'visible' => $model->companyType == Company::CARWASH_TYPE,
+        ),
+        array(
+            'name' => 'check_image',
+            'type' => 'raw',
+            'value' => '!empty($data->check_image) ? '
+                . 'CHtml::link("image", "/files/checks/" . $data->check_image,'
+                . 'array("class"=>"preview")) : "no image"',
+            'htmlOptions' => array('style' => 'width: 40px;'),
+            'visible' => $model->companyType == Company::CARWASH_TYPE,
+            'filter' => false,
+        ),
+        array(
+            'header' => '',
+            'value' => 'isset($data->client->parent) ? $data->client->parent->name : ""',
+            'htmlOptions' => array('style' => 'display:none', 'class' => 'parent'),
+            'headerHtmlOptions' => array('style' => 'display:none'),
+            'footerHtmlOptions' => array('style' => 'display:none'),
+            'filterHtmlOptions' => array('style' => 'display:none'),
+        ),
+        array(
+            'class' => 'CButtonColumn',
+            'template' => '{update}{delete}',
+            'header' => '',
+            'buttons' => array(
+                'update' => array(
+                    'label' => '',
+                    'imageUrl' => false,
+                    'url' => 'Yii::app()->createUrl("/act/update", ["id" => $data->id, "showCompany" => 1])',
+                    'options' => array('class' => 'update')
+                ),
+                'delete' => array(
+                    'label' => '',
+                    'imageUrl' => false,
+                    'url' => 'Yii::app()->createUrl("/act/delete", ["id" => $data->id])',
+                    'options' => array('class' => 'delete')
+                ),
+            ),
+        ),
+    ),
+));

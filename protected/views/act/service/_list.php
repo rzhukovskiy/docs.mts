@@ -9,7 +9,16 @@ $provider = $model->search();
 if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
     $this->renderPartial('_selector', array('model' => $model));
 }
+?>
 
+    <script type="text/javascript">
+        addHeaders({
+            tableSelector: "#act-grid",
+            headers: ['.partner'],
+            footers: ['.partner']
+        });
+    </script>
+<?php
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'act-grid',
     'htmlOptions' => array('class' => 'my-grid'),
@@ -38,10 +47,10 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => 'Партнер',
             'name' => 'partner',
             'value' => '$data->partner->name',
-            'htmlOptions' => array('style' => 'width: 100px;'),
-            'filter' => CHtml::dropDownList('Act[client_id]',
+            'htmlOptions' => array('style' => 'width: 100px;', 'class' => 'partner'),
+            'filter' => CHtml::dropDownList('Act[parent_id]',
                 $model->client_id,
-                CHtml::listData(Company::model()->findAll('type = :type' , array(':type' => $model->companyType)),'id', 'name'),
+                CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name'),
                 array('empty' => 'Все', 'style' => 'width: 80px;')),
         ),
         array(
@@ -78,7 +87,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => 'Сумма',
             'name' => 'expense',
             'value' => '$data->getFormattedField("expense")',
-            'htmlOptions' => array('style' => 'width: 60px; text-align:center;'),
+            'htmlOptions' => array('style' => 'width: 60px; text-align:center;', 'class' => 'sum'),
             'cssClassExpression' => '$data->expense ? "" : "error"',
             'footer' => $model->totalField($provider, 'expense'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
@@ -93,8 +102,8 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'check_image',
             'type' => 'raw',
             'value' => '!empty($data->check_image) ? '
-                      . 'CHtml::link("image", "/files/checks/" . $data->check_image,'
-                      . 'array("class"=>"preview")) : "no image"',
+                . 'CHtml::link("image", "/files/checks/" . $data->check_image,'
+                . 'array("class"=>"preview")) : "no image"',
             'htmlOptions' => array('style' => 'width: 40px;'),
             'visible' => $model->companyType == Company::CARWASH_TYPE,
             'filter' => false,
