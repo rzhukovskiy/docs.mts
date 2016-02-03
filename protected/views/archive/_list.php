@@ -9,23 +9,8 @@ $gridWidget = $this->widget('ext.groupgridview.GroupGridView', array(
     'id' => 'act-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
-    'pagerCssClass' => 'dataTables_paginate paging_full_numbers',
-    'pager' => array(
-        'header' => '',
-        'maxButtonCount' => 9,
-        'prevPageLabel' => 'Предыдущая',
-        'nextPageLabel' => 'Следующая',
-        'firstPageLabel' => 'Первая',
-        'lastPageLabel' => 'Последняя',
-        'htmlOptions' => array(
-            'class' => '',
-        )
-    ),
     'dataProvider' => $provider,
-    'emptyText' => '',
-    'cssFile' => false,
-    'template' => "{items}\n{pager}",
-    'loadingCssClass' => false,
+    'template' => "{items}",
     'extraRowColumns' => array('client'),
     'extraRowExpression' => '$data->client->name . " - " . $data->client->address',
     'extraTotalRowColumns' => array('client'),
@@ -33,43 +18,49 @@ $gridWidget = $this->widget('ext.groupgridview.GroupGridView', array(
         if(!isset($totals['income'])) $totals['income'] = 0;
         $totals['income'] += $data['income'];
     },
-    'extraTotalRowExpression' => '$totals["income"]',
+    'extraTotalRowExpression' => 'number_format($totals["income"], 0, ".", " ")',
     'subFooterColumns' => array('income'),
     'columns' => array(
         array(
             'header' => '№',
             'htmlOptions' => array('style' => 'width: 40px; text-align:center;'),
             'value' => '++$row',
-            'footer' => 'Итого',
+            'footer' => 'Всего',
         ),
         array(
+            'header' => 'День',
             'name' => 'service_date',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => 'date("d-m-Y", strtotime($data->service_date))',
         ),
         array(
+            'header' => 'Карта',
             'name' => 'card_id',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->card->number',
         ),
         array(
+            'header' => 'Номер',
             'name' => 'number',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'cssClassExpression' => 'Car::model()->find("number = :number" ,array(":number" => $data->number)) ? "" : "error"',
         ),
         array(
+            'header' => 'Марка',
             'name' => 'mark_id',
             'htmlOptions' => array(),
             'value' => '$data->mark->name',
             'filter' => CHtml::listData(Mark::model()->findAll(array('order' => 'id')), 'id', 'name'),
         ),
         array(
+            'header' => 'Тип',
             'name' => 'type_id',
             'htmlOptions' => array(),
             'filter' => CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name'),
             'value' => '$data->type->name',
         ),
         array(
+            'header' => 'Услуга',
             'name' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? 'partner_service' : 'client_service',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? 'Act::$fullList[$data->partner_service]' : 'Act::$fullList[$data->client_service]',

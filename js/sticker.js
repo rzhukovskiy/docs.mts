@@ -16,7 +16,7 @@ $(document).ready(function() {
                 'top': 0
             });
 
-            $('tbody tr.even:first td').each(function(id, value) {
+            $('tbody tr.even:last td').each(function(id, value) {
                 var etalon = $(value).width();
                 console.log(etalon);
                 $('.grid thead th').slice(id).width(etalon);

@@ -10,37 +10,13 @@ if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
     $this->renderPartial('_selector', array('model' => $model));
 }
 
-$gridWidget = $this->widget('ext.groupgridview.GroupGridView', array(
+$gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'act-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
-    'pagerCssClass' => 'dataTables_paginate paging_full_numbers',
-    'pager' => array(
-        'header' => '',
-        'maxButtonCount' => 9,
-        'prevPageLabel' => 'Предыдущая',
-        'nextPageLabel' => 'Следующая',
-        'firstPageLabel' => 'Первая',
-        'lastPageLabel' => 'Последняя',
-        'htmlOptions' => array(
-            'class' => '',
-        )
-    ),
     'filter' => $model,
     'dataProvider' => $provider,
-    'emptyText' => '',
-    'cssFile' => false,
-    'template' => "{items}\n{pager}",
-    'loadingCssClass' => false,
-    'extraRowColumns' => array('partner'),
-    'extraTotalRowColumns' => array('partner'),
-    'extraRowExpression' => '$data->partner->name . " - " . $data->partner->address',
-    'extraRowTotals' => function($data, $row, &$totals) {
-        if(!isset($totals['expense'])) $totals['expense'] = 0;
-        $totals['expense'] += $data['expense'];
-    },
-    'extraTotalRowExpression' => '$totals["expense"]',
-    'subFooterColumns' => array('expense'),
+    'template' => "{items}",
     'columns' => array(
         array(
             'header' => '№',
@@ -59,9 +35,9 @@ $gridWidget = $this->widget('ext.groupgridview.GroupGridView', array(
                 array('empty' => 'Все')),
         ),
         array(
+            'header' => 'Партнер',
             'name' => 'partner',
             'value' => '$data->partner->name',
-            'header' => 'Партнер',
             'htmlOptions' => array('style' => 'width: 100px;'),
             'filter' => CHtml::dropDownList('Act[client_id]',
                 $model->client_id,
