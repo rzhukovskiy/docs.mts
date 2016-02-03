@@ -8,9 +8,7 @@ $provider = $model->search();
 
 if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
     $this->renderPartial('_selector', array('model' => $model));
-}
 ?>
-
     <script type="text/javascript">
         addHeaders({
             tableSelector: "#act-grid",
@@ -19,6 +17,8 @@ if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
         });
     </script>
 <?php
+}
+
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'act-grid',
     'htmlOptions' => array('class' => 'my-grid'),
