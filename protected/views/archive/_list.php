@@ -5,21 +5,35 @@
  * @var $form CActiveForm
  */
 $provider = $model->search();
-$gridWidget = $this->widget('ext.groupgridview.GroupGridView', array(
+?>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            addHeaders({
+                tableSelector: "#act-grid",
+                footers: [
+                    {
+                        className: '.client',
+                        title: 'Итого',
+                        rowClass: 'total'
+                    }
+                ],
+                headers: [
+                    {
+                        className: '.client',
+                        rowClass: 'header'
+                    }
+                ]
+            });
+        });
+    </script>
+<?php
+
+$gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'act-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
     'dataProvider' => $provider,
     'template' => "{items}",
-    'extraRowColumns' => array('client'),
-    'extraRowExpression' => '$data->client->name . " - " . $data->client->address',
-    'extraTotalRowColumns' => array('client'),
-    'extraRowTotals' => function($data, $row, &$totals) {
-        if(!isset($totals['income'])) $totals['income'] = 0;
-        $totals['income'] += $data['income'];
-    },
-    'extraTotalRowExpression' => 'number_format($totals["income"], 0, ".", " ")',
-    'subFooterColumns' => array('income'),
     'columns' => array(
         array(
             'header' => '№',
@@ -70,7 +84,7 @@ $gridWidget = $this->widget('ext.groupgridview.GroupGridView', array(
             'header' => 'Сумма',
             'name' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? 'expense' : 'income',
             'value' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? '$data->getFormattedField("expense")' : '$data->getFormattedField("income")',
-            'htmlOptions' => array('style' => 'text-align:center;'),
+            'htmlOptions' => array('style' => 'text-align:center;', 'class' => 'sum'),
             'cssClassExpression' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? '$data->expense ? "" : "error"' : '$data->income ? "" : "error"',
             'footer' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? $model->totalField($provider, 'expense') : $model->totalField($provider, 'income'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
@@ -91,9 +105,9 @@ $gridWidget = $this->widget('ext.groupgridview.GroupGridView', array(
             'name' => 'client',
             'value' => '$data->client->name',
             'header' => '',
-            'headerHtmlOptions' => array('style' => 'display:none'),
-            'htmlOptions' => array('style' => 'display:none'),
-            'footerHtmlOptions' => array('style' => 'display:none'),
+            'headerHtmlOptions' => array('style' => 'display:none', 'class' => 'client'),
+            'htmlOptions' => array('style' => 'display:none', 'class' => 'client'),
+            'footerHtmlOptions' => array('style' => 'display:none', 'class' => 'client'),
         ),
         array(
             'name' => 'check_image',

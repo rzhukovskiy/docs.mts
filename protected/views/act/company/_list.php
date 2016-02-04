@@ -9,10 +9,36 @@ if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
     $this->renderPartial('_selector', array('model' => $model));
 ?>
     <script type="text/javascript">
-        addHeaders({
-            tableSelector: "#act-grid",
-            headers: ['.parent', '.client'],
-            footers: ['.parent', '.client']
+        function createHeaders() {
+            addHeaders({
+                tableSelector: "#act-grid",
+                footers: [
+                    {
+                        className: '.parent',
+                        title: 'Всего',
+                        rowClass: 'main total'
+                    },
+                    {
+                        className: '.client',
+                        title: 'Итого',
+                        rowClass: 'total'
+                    }
+                ],
+                headers: [
+                    {
+                        className: '.parent',
+                        rowClass: 'main header'
+                    },
+                    {
+                        className: '.client',
+                        rowClass: 'header'
+                    }
+                ]
+            });
+        }
+
+        $(document).ready(function() {
+            createHeaders();
         });
     </script>
 <?php
@@ -29,6 +55,7 @@ $this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
 $provider = $model->search();
 
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
+    'afterAjaxUpdate' => 'function(id, data){searchHighlight(id, data);createHeaders();}',
     'id' => 'act-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
@@ -40,7 +67,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => '№',
             'htmlOptions' => array('style' => 'width: 40px; text-align:center;'),
             'value' => '++$row',
-            'footer' => 'Всего',
+            'footer' => 'Итого',
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
@@ -51,6 +78,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 $model->day,
                 range(1, date('t', strtotime("$model->month-$model->day"))),
                 array('empty' => 'Все')),
+            'footer' => count($provider->getData()) . ' ' . StringNum::getNumEnding(count($provider->getData()), array('машина', 'машины', 'машин')),
         ),
         array(
             'header' => 'Клиент',
@@ -83,7 +111,6 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array(),
             'filter' => false,
             'value' => '$data->type->name',
-            'footer' => count($provider->getData()) . ' ' . StringNum::getNumEnding(count($provider->getData()), array('машина', 'машины', 'машин')),
         ),
         array(
             'name' => 'client_service',

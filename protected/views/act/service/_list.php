@@ -8,10 +8,27 @@ if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
     $this->renderPartial('_selector', array('model' => $model));
 ?>
     <script type="text/javascript">
-        addHeaders({
-            tableSelector: "#act-grid",
-            headers: ['.partner'],
-            footers: ['.partner']
+        function createHeaders() {
+            addHeaders({
+                tableSelector: "#act-grid",
+                footers: [
+                    {
+                        className: '.partner',
+                        title: 'Итого',
+                        rowClass: 'total'
+                    }
+                ],
+                headers: [
+                    {
+                        className: '.partner',
+                        rowClass: 'header'
+                    }
+                ]
+            });
+        }
+
+        $(document).bind('ready', function() {
+            createHeaders();
         });
     </script>
 <?php
@@ -28,7 +45,7 @@ $this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
 $provider = $model->search();
 
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
-    'afterAjaxUpdate' => 'function(id, data){searchHighlight(id, data);}',
+    'afterAjaxUpdate' => 'function(id, data){searchHighlight(id, data);createHeaders();}',
     'id' => 'act-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
@@ -51,6 +68,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 $model->day,
                 range(1, date('t', strtotime("$model->month-$model->day"))),
                 array('empty' => 'Все')),
+            'footer' => count($provider->getData()) . ' ' . StringNum::getNumEnding(count($provider->getData()), array('машина', 'машины', 'машин')),
         ),
         array(
             'header' => 'Партнер',
@@ -61,6 +79,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 $model->client_id,
                 CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name'),
                 array('empty' => 'Все', 'style' => 'width: 80px;')),
+            'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
         ),
         array(
             'name' => 'card_id',
@@ -83,7 +102,6 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array(),
             'filter' => false,
             'value' => '$data->type->name',
-            'footer' => count($provider->getData()) . ' ' . StringNum::getNumEnding(count($provider->getData()), array('машина', 'машины', 'машин')),
         ),
         array(
             'name' => 'partner_service',
@@ -121,6 +139,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'class' => 'CButtonColumn',
             'template' => '{update}{delete}',
             'header' => '',
+            'cssClassExpression' => !Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? '$data->is_closed ? "hidden" : ""' : '',
             'buttons' => array(
                 'update' => array(
                     'label' => '',
