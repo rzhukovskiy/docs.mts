@@ -4,7 +4,6 @@
  * @var $model Act
  * @var $form CActiveForm
  */
-$provider = $model->search();
 
 if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
     $this->renderPartial('_selector', array('model' => $model));
@@ -18,6 +17,16 @@ if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
     </script>
 <?php
 }
+
+$attributes = array_values(array_filter($model->attributes));
+$model->unsetAttributes();
+echo CHtml::hiddenField('query', CJSON::encode($attributes));
+$this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
+    'selector' => '.my-grid',
+    'words' => $attributes
+));
+
+$provider = $model->search();
 
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'act-grid',

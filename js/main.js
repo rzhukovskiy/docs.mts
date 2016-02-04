@@ -177,7 +177,7 @@ function pageSearch(selector, query) {
     $(selector).find('span.highlight').parents('tr').addClass('highlight');
     if (!isScrolledIntoView("span.highlight")) {
         $('html, body').animate({
-            scrollTop: $("span.highlight").offset().top - 400
+            scrollTop: $("span.highlight").offset().top - 600
         }, 2000);
     }
     setTimeout(function(){
