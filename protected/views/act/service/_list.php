@@ -31,7 +31,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => '№',
             'htmlOptions' => array('style' => 'width: 40px; text-align:center;'),
             'value' => '++$row',
-            'footer' => 'Итого',
+            'footer' => 'Всего',
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(

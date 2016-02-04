@@ -275,6 +275,7 @@ this.addHeaders = function(options) {
     var footers = options.footers;
     var headerClass = 'header';
     var footerClass = 'total';
+    var footerTitle = 'Итого';
 
     $(tableSelector).ready(function() {
         footers.forEach(function(trigger, i) {
@@ -299,6 +300,9 @@ this.addHeaders = function(options) {
                                 if (i == pos) {
                                     var td = $('<td>').text(total).css('text-align', 'center');
                                     tr.append(td);
+                                } else if (i == 0) {
+                                    var td = $('<td>').text(footerTitle).css('text-align', 'center');
+                                    tr.append(td);
                                 } else {
                                     var td = $('<td>');
                                     tr.append(td);
@@ -315,6 +319,9 @@ this.addHeaders = function(options) {
                         for (var i = 0; i < $(row).find('td:visible').length; i++) {
                             if (i == pos) {
                                 var td = $('<td>').text(total).css('text-align', 'center');
+                                tr.append(td);
+                            } else if (i == 0) {
+                                var td = $('<td>').text(footerTitle).css('text-align', 'center');
                                 tr.append(td);
                             } else {
                                 var td = $('<td>');
