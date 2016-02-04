@@ -314,6 +314,9 @@ this.addHeaders = function(options) {
                         total = 0;
                     }
 
+                    total += parseInt($(row).find('.sum').text().replace(" ", ""));
+                    previousValue = currentValue;
+
                     if (id == len - 1 ) {
                         var tr = $('<tr>').addClass(footerClass)
                         for (var i = 0; i < $(row).find('td:visible').length; i++) {
@@ -331,9 +334,6 @@ this.addHeaders = function(options) {
                         $(row).after(tr);
                         total = 0;
                     }
-
-                    total += parseInt($(row).find('.sum').text().replace(" ", ""));
-                    previousValue = currentValue;
                 });
         });
 
