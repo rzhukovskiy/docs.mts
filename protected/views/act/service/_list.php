@@ -45,7 +45,7 @@ $this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
 $provider = $model->search();
 
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
-    'afterAjaxUpdate' => 'function(id, data){searchHighlight(id, data);createHeaders();}',
+    'afterAjaxUpdate' => 'function(id, data){searchHighlight(id, data);createHeaders();stick();}',
     'id' => 'act-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
@@ -85,11 +85,12 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'card_id',
             'htmlOptions' => array('style' => 'width: 60px;'),
             'value' => '$data->card->number',
+            'cssClassExpression' => '$data->hasError("card") ? "error" : ""',
         ),
         array(
             'name' => 'number',
             'htmlOptions' => array('style' => 'width: 80px; text-align:center;'),
-            'cssClassExpression' => 'Car::model()->find("number = :number" ,array(":number" => $data->number)) ? "" : "error"',
+            'cssClassExpression' => '$data->hasError("car") ? "error" : ""',
         ),
         array(
             'name' => 'mark_id',
@@ -115,7 +116,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'expense',
             'value' => '$data->getFormattedField("expense")',
             'htmlOptions' => array('style' => 'width: 60px; text-align:center;', 'class' => 'sum'),
-            'cssClassExpression' => '$data->expense ? "" : "error"',
+            'cssClassExpression' => '$data->hasError("expense") ? "error" : ""',
             'footer' => $model->totalField($provider, 'expense'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
             'filter' => false,
@@ -123,6 +124,8 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'check',
             'htmlOptions' => array('style' => 'width: 60px; text-align:center;'),
+            'value' => '$data->check ? $data->check : ($data->hasError("check") ? "error" : "")',
+            'cssClassExpression' => '$data->hasError("check") ? "error" : ""',
             'visible' => $model->companyType == Company::CARWASH_TYPE,
         ),
         array(

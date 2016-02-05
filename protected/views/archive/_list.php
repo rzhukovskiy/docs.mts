@@ -52,12 +52,13 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'card_id',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->card->number',
+            'cssClassExpression' => '$data->hasError("card") ? "error" : ""',
         ),
         array(
             'header' => 'Номер',
             'name' => 'number',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'cssClassExpression' => 'Car::model()->find("number = :number" ,array(":number" => $data->number)) ? "" : "error"',
+            'cssClassExpression' => '$data->hasError("car") ? "error" : ""',
         ),
         array(
             'header' => 'Марка',
@@ -85,9 +86,9 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'name' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? 'expense' : 'income',
             'value' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? '$data->getFormattedField("expense")' : '$data->getFormattedField("income")',
             'htmlOptions' => array('style' => 'text-align:center;', 'class' => 'sum'),
-            'cssClassExpression' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? '$data->expense ? "" : "error"' : '$data->income ? "" : "error"',
             'footer' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? $model->totalField($provider, 'expense') : $model->totalField($provider, 'income'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
+            'cssClassExpression' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? '$data->hasError("expense") ? "error" : ""' : '$data->hasError("income") ? "error" : ""',
         ),
         array(
             'name' => 'city',
@@ -99,6 +100,8 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'check',
             'htmlOptions' => array('style' => 'text-align:center;'),
+            'value' => '$data->check ? $data->check : ($data->hasError("check") ? "error" : "")',
+            'cssClassExpression' => '$data->hasError("check") ? "error" : ""',
             'visible' => $model->companyType == Company::CARWASH_TYPE,
         ),
         array(
