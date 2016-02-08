@@ -44,8 +44,6 @@ class HomeController extends Controller
     public function actionError()
     {
         if ($error = Yii::app()->errorHandler->error) {
-            print_r($error);
-            die;
             if (Yii::app()->request->isAjaxRequest)
                 echo $error['message'];
             else

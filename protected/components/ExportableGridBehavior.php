@@ -288,7 +288,29 @@ class ExportableGridBehavior extends CBehavior
             $headers = array('№', 'Число', '№ Карты', 'Марка ТС', 'Госномер', 'Вид услуги', 'Стоимость', '№ Чека');
             $companyWorkSheet->fromArray($headers, null, 'B12');
             /** @var Act $data */
+            $currentId = 0;
+            $isParent = false;
+            if ($this->showCompany && count($company->children) > 0) {
+                $isParent = true;
+            }
             foreach ($dataList as $data) {
+                if ($isParent && $currentId != $data->client_id) {
+                    $row++;
+                    $num++;
+
+                    $companyWorkSheet->getStyle("B$row:I$row")->applyFromArray(array(
+                            'font' => array(
+                                'bold' => true,
+                                'color' => array('argb' => 'FF006699'),
+                            ),
+                        )
+                    );
+
+                    $companyWorkSheet->mergeCells("B$row:I$row");
+                    $companyWorkSheet->setCellValue("B$row", $data->client->name);
+                    $currentId = $data->client_id;
+                }
+
                 $row++;
                 $num++;
                 $column = 1;

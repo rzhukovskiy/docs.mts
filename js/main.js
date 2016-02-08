@@ -293,7 +293,7 @@ this.addHeaders = function(options) {
                         var tr = $('<tr>').addClass(trigger.rowClass).addClass(defaultClass);
                         for (var i = 0; i < $(row).find('td:visible').length; i++) {
                             if (i == pos) {
-                                var td = $('<td>').text(total).css('text-align', 'center');
+                                var td = $('<td>').text(numeral(total).format()).css('text-align', 'center');
                                 tr.append(td);
                             } else if (i == 0) {
                                 var td = $('<td>').text(trigger.title).css('text-align', 'center');
@@ -316,7 +316,7 @@ this.addHeaders = function(options) {
                     var tr = $('<tr>').addClass(trigger.rowClass).addClass(defaultClass);
                     for (var i = 0; i < $(row).find('td:visible').length; i++) {
                         if (i == pos) {
-                            var td = $('<td>').text(total).css('text-align', 'center');
+                            var td = $('<td>').text(numeral(total).format()).css('text-align', 'center');
                             tr.append(td);
                         } else if (i == 0) {
                             var td = $('<td>').text(trigger.title).css('text-align', 'center');

@@ -240,7 +240,8 @@ class Act extends CActiveRecord
         $criteria->with = ['partner', 'client', 'client.parent' => ['alias'=>'clientParent'], 'card', 'type', 'mark'];
         $criteria->compare('partner.type', $this->companyType);
         $criteria->compare('partner_id', $this->partner_id);
-        if ($this->client && count($this->client->children) > 0) {
+
+        if ($this->client_id && count(Company::model()->findByPk($this->client_id)->children) > 0) {
             $criteria->addCondition("clientParent.id = $this->client_id OR client_id = $this->client_id");
         } else {
             $criteria->compare('client_id', $this->client_id);
