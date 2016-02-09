@@ -29,12 +29,18 @@ $form = $this->beginWidget('CActiveForm', array(
         </td>
         <td>
             <?=$form->textField($model, 'outside'); ?>
+            <? if ($model->company->is_split) {
+                echo $form->textField($model->extra, 'outside');
+            } ?>
         </td>
         <td>
             <?=$form->labelEx($model, 'inside'); ?>
         </td>
         <td>
             <?=$form->textField($model, 'inside'); ?>
+            <? if ($model->company->is_split) {
+                echo $form->textField($model->extra, 'inside');
+            } ?>
         </td>
         <td>
             <?=$form->hiddenField($model, 'company_id'); ?>

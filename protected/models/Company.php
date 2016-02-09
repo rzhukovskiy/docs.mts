@@ -6,6 +6,7 @@
  * The followings are the available columns in table '{{company}}':
  * @property int $id
  * @property int $parent_id
+ * @property int $is_split
  * @property string $name
  * @property string $address
  * @property string $phone
@@ -57,7 +58,7 @@ class Company extends CActiveRecord
     {
         return array(
             array('name','required'),
-            array('parent_id, address, phone, contact, contract, act_header, type, cardList','safe'),
+            array('parent_id, is_split, address, phone, contact, contract, act_header, type, cardList','safe'),
 
         );
     }
@@ -66,6 +67,7 @@ class Company extends CActiveRecord
     {
         return array(
             'id' => 'ID',
+            'is_split' => 'Разделять тягач и п/п',
             'name' => 'Название',
             'address' => 'Город',
             'phone' => 'Телефон',
@@ -91,7 +93,7 @@ class Company extends CActiveRecord
 
     /**
      * Retrieves a list of models based on the current search/filter conditions.
-     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+     * @return CActiveDataProvider the data provider that can return the  models based on the search/filter conditions.
      */
     public function search() {
         // Warning: Please modify the following code to remove attributes that

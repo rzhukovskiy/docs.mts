@@ -38,6 +38,9 @@ $form = $this->beginWidget('CActiveForm', array(
                 <?=$attributes['number']; ?>
             </th>
             <th>
+                <?=$attributes['extra_number']; ?>
+            </th>
+            <th>
                 <?=$attributes['mark_id']; ?>
             </th>
             <th>
@@ -73,6 +76,9 @@ $form = $this->beginWidget('CActiveForm', array(
             </td>
             <td>
                 <?=$form->textField($model, 'number', array('class' => 'number_fill', 'style' => 'width:80px')); ?>
+            </td>
+            <td>
+                <?=$form->textField($model, 'extra_number', array('class' => 'number_fill', 'style' => 'width:80px')); ?>
             </td>
             <td>
                 <?=$form->dropDownList($model, 'mark_id', CHtml::listData(Mark::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>

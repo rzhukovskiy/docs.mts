@@ -296,7 +296,6 @@ class ExportableGridBehavior extends CBehavior
             foreach ($dataList as $data) {
                 if ($isParent && $currentId != $data->client_id) {
                     $row++;
-                    $num++;
 
                     $companyWorkSheet->getStyle("B$row:I$row")->applyFromArray(array(
                             'font' => array(

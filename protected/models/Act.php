@@ -9,6 +9,7 @@
  * @property int $type_id
  * @property int $card_id
  * @property string $number
+ * @property string $extra_number
  * @property int $mark_id
  * @property string $create_date
  * @property string $service_date
@@ -94,7 +95,7 @@ class Act extends CActiveRecord
         return array(
             array('type_id, card_id, number, mark_id', 'required'),
             array('check', 'unique'),
-            array('is_fixed, from_date, to_date, period, month, day, check, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
+            array('extra_number, is_fixed, from_date, to_date, period, month, day, check, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
             array('company_id, id, number, mark_id, type_id, card_id, service_date', 'safe', 'on' => 'search'),
         );
     }
@@ -166,9 +167,9 @@ class Act extends CActiveRecord
                 $this->income = 0;
             } else {
                 $servicePrice = array(
-                    $washPrice->outside,
-                    $washPrice->inside,
-                    $washPrice->outside + $washPrice->inside,
+                    $washPrice->fullOutside,
+                    $washPrice->fullInside,
+                    $washPrice->fullOutside + $washPrice->fullInside,
                 );
 
                 $this->income = $servicePrice[$this->client_service];
@@ -188,9 +189,9 @@ class Act extends CActiveRecord
                 $this->expense = 0;
             } else {
                 $servicePrice = array(
-                    $washPrice->outside,
-                    $washPrice->inside,
-                    $washPrice->outside + $washPrice->inside,
+                    $washPrice->fullOutside,
+                    $washPrice->fullInside,
+                    $washPrice->fullOutside + $washPrice->fullInside,
                 );
 
                 $this->expense = $servicePrice[$this->partner_service];
@@ -394,6 +395,7 @@ class Act extends CActiveRecord
             'client_id' => 'Клиент',
             'card_id' => 'Карта',
             'number' => 'Госномер',
+            'extra_number' => 'Номер п/прицепа',
             'mark_id' => 'Марка',
             'service_date' => 'Дата',
             'partner_service' => 'Услуга',
@@ -425,6 +427,9 @@ class Act extends CActiveRecord
                 break;
             case 'car':
                 $hasError = !isset($this->car->company_id);
+                break;
+            case 'truck':
+                $hasError = !($this->extra_number && Car::model()->find('number = :number', [':number' => $this->extra_number]));
                 break;
         }
 

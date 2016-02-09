@@ -13,6 +13,7 @@ $form = $this->beginWidget('CActiveForm', array(
         'enableAjaxValidation' => true,
         'clientOptions' => array('validateOnSubmit' => true),
     ));
+
 ?>
 <table class="stdtable grid">
     <tr>
@@ -27,12 +28,18 @@ $form = $this->beginWidget('CActiveForm', array(
         </td>
         <td>
             <?=$form->textField($priceList, 'outside'); ?>
+            <? if ($model->is_split) {
+                echo $form->textField($priceList->extra, 'outside');
+            } ?>
         </td>
         <td>
             <?=$form->labelEx($priceList, 'inside'); ?>
         </td>
         <td>
             <?=$form->textField($priceList, 'inside'); ?>
+            <? if ($model->is_split) {
+                echo $form->textField($priceList->extra, 'inside');
+            } ?>
         </td>
         <td>
             <?=$form->hiddenField($priceList, 'company_id'); ?>

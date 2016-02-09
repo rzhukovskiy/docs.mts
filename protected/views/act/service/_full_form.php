@@ -49,6 +49,14 @@ $form = $this->beginWidget('CActiveForm', array(
     </div>
 
     <div class="row">
+        <?=$form->labelEx($model, 'extra_number'); ?>
+        <span class="field">
+                <?=$form->textField($model, 'extra_number'); ?>
+                <?=$form->error($model, 'extra_number'); ?>
+            </span>
+    </div>
+
+    <div class="row">
         <?=$form->labelEx($model, 'mark_id'); ?>
         <span class="field">
             <?=$form->dropDownList($model, 'mark_id', CHtml::listData(Mark::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>

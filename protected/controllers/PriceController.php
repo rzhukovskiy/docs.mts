@@ -36,6 +36,12 @@ class PriceController extends Controller
             $model->attributes = $_POST['Price'];
             $this->performAjaxValidation($model);
             if ($model->save()) {
+                if (isset($_POST['ExtraPrice'])) {
+                    $extraPrice = ExtraPrice::model()->findByPk($model->extra->id);
+                    $extraPrice->attributes = $_POST['ExtraPrice'];
+                    $extraPrice->save();
+                }
+
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : Yii::app()->createUrl('Price/list'));
             }
         }

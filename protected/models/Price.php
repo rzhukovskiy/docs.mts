@@ -57,6 +57,7 @@ class Price extends CActiveRecord
         return array(
             'type' => array(self::BELONGS_TO, 'Type', 'type_id'),
             'company' => array(self::BELONGS_TO, 'Company', 'company_id'),
+            'extra' => array(self::HAS_ONE, 'ExtraPrice', 'price_id'),
         );
     }
 
@@ -88,5 +89,23 @@ class Price extends CActiveRecord
                 'pageSize' => 100,
             ),
         ));
+    }
+
+    public function getFullOutside()
+    {
+        if (isset($this->extra)) {
+            return $this->outside + $this->extra->outside;
+        } else {
+            return $this->outside;
+        }
+    }
+
+    public function getFullInside()
+    {
+        if (isset($this->extra)) {
+            return $this->inside + $this->extra->inside;
+        } else {
+            return $this->inside;
+        }
     }
 }

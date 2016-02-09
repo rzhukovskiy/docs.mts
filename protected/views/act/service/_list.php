@@ -32,18 +32,17 @@ if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
         });
     </script>
 <?php
+
+    $attributes = array_values(array_filter($model->attributes));
+    $model->unsetAttributes();
+    echo CHtml::hiddenField('query', CJSON::encode($attributes));
+    $this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
+        'selector' => '.my-grid',
+        'words' => $attributes
+    ));
 }
 
-$attributes = array_values(array_filter($model->attributes));
-$model->unsetAttributes();
-echo CHtml::hiddenField('query', CJSON::encode($attributes));
-$this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
-    'selector' => '.my-grid',
-    'words' => $attributes
-));
-
 $provider = $model->search();
-
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'afterAjaxUpdate' => 'function(id, data){searchHighlight(id, data);createHeaders();stick();}',
     'id' => 'act-grid',
@@ -91,6 +90,12 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'number',
             'htmlOptions' => array('style' => 'width: 80px; text-align:center;'),
             'cssClassExpression' => '$data->hasError("car") ? "error" : ""',
+        ),
+        array(
+            'name' => 'extra_number',
+            'htmlOptions' => array('style' => 'width: 80px; text-align:center;'),
+            'cssClassExpression' => '$data->hasError("truck") ? "error" : ""',
+            'visible' => false,
         ),
         array(
             'name' => 'mark_id',

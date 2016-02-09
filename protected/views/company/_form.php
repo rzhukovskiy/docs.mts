@@ -24,6 +24,13 @@ $form = $this->beginWidget('CActiveForm', array(
     </span>
 </div>
 <div class="row">
+    <?= $form->labelEx($model, 'is_split'); ?>
+    <span class="field">
+        <?= $form->checkBox($model, 'is_split', array('class' => 'span5')); ?>
+        <?= $form->error($model, 'is_split'); ?>
+    </span>
+</div>
+<div class="row">
     <?= $form->labelEx($model, 'parent_id'); ?>
     <span class="field">
         <?=$form->dropDownList(
