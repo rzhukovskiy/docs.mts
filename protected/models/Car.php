@@ -93,7 +93,7 @@ class Car extends CActiveRecord
 
         $criteria = new CDbCriteria;
 
-        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+        if (!$this->company_id && !Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
             $this->company_id = Yii::app()->user->model->company_id;
         }
 

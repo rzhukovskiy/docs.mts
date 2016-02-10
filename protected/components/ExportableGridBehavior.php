@@ -96,9 +96,10 @@ class ExportableGridBehavior extends CBehavior
         $this->objPHPExcel->addSheet($companyWorkSheet);
 
         $companyWorkSheet->getPageMargins()->setTop(2);
+        $companyWorkSheet->getPageMargins()->setLeft(0.5);
         $companyWorkSheet->getRowDimension(1)->setRowHeight(1);
         $companyWorkSheet->getRowDimension(10)->setRowHeight(100);
-        $companyWorkSheet->getColumnDimension('A')->setWidth(5);
+        $companyWorkSheet->getColumnDimension('A')->setWidth(2);
         $companyWorkSheet->getDefaultRowDimension()->setRowHeight(20);
 
         //headers;
@@ -113,6 +114,9 @@ class ExportableGridBehavior extends CBehavior
             )
         ));
         $companyWorkSheet->mergeCells('B2:I2');
+        if($company->is_split) {
+            $companyWorkSheet->mergeCells('B2:J2');
+        }
         $text = "АКТ СДАЧИ-ПРИЕМКИ РАБОТ (УСЛУГ)";
         $companyWorkSheet->setCellValue('B2', $text);
         $companyWorkSheet->mergeCells('B3:I3');
@@ -129,6 +133,9 @@ class ExportableGridBehavior extends CBehavior
             )
         ));
         $companyWorkSheet->mergeCells('H5:I5');
+        if($company->is_split) {
+            $companyWorkSheet->mergeCells('H5:J5');
+        }
         if ($this->showCompany) {
             $companyWorkSheet->setCellValue('H5', date("t ", $this->time) . $monthName[1] . date(' Y', $this->time));
         } else {
@@ -284,8 +291,14 @@ class ExportableGridBehavior extends CBehavior
             $companyWorkSheet->getColumnDimension('G')->setAutoSize(true);
             $companyWorkSheet->getColumnDimension('H')->setAutoSize(true);
             $companyWorkSheet->getColumnDimension('I')->setAutoSize(true);
+            if($company->is_split) {
+                $companyWorkSheet->getColumnDimension('J')->setAutoSize(true);
+            }
 
-            $headers = array('№', 'Число', '№ Карты', 'Марка ТС', 'Госномер', 'Вид услуги', 'Стоимость', '№ Чека');
+            $headers = ['№', 'Число', '№ Карты', 'Марка ТС', 'Госномер', 'Вид услуги', 'Стоимость', '№ Чека'];
+            if($company->is_split) {
+                $headers = ['№', 'Число', '№ Карты', 'Марка ТС', 'Госномер', 'Гоcномер п/п', 'Вид услуги', 'Стоимость', '№ Чека'];
+            }
             $companyWorkSheet->fromArray($headers, null, 'B12');
             /** @var Act $data */
             $currentId = 0;
@@ -319,6 +332,9 @@ class ExportableGridBehavior extends CBehavior
                 $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->card->number);
                 $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->mark->name);
                 $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->number);
+                if($company->is_split) {
+                    $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->extra_number);
+                }
                 if ($this->showCompany) {
                     $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, Act::$fullList[$data->client_service]);
                     $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->income);
@@ -344,6 +360,16 @@ class ExportableGridBehavior extends CBehavior
                     ),
                 )
             );
+            if($company->is_split) {
+                $companyWorkSheet->getStyle('J12')->applyFromArray(array(
+                        'font' => array(
+                            'bold' => true,
+                            'color' => array('argb' => 'FF006699'),
+                        ),
+                    )
+                );
+            }
+
             $companyWorkSheet->getStyle("B12:I$row")
                 ->applyFromArray(array(
                     'borders' => array(
@@ -354,13 +380,30 @@ class ExportableGridBehavior extends CBehavior
                     ),
                 )
             );
+            if($company->is_split) {
+                $companyWorkSheet->getStyle("J12:J$row")
+                    ->applyFromArray(array(
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'color' => array('argb' => 'FF000000'),
+                                ),
+                            ),
+                        )
+                    );
+            }
         }
 
         //footer
         $row++;
         if ($this->companyType == Company::CARWASH_TYPE) {
-            $companyWorkSheet->setCellValue("G$row", "ВСЕГО:");
-            $companyWorkSheet->setCellValue("H$row", "$total");
+            if($company->is_split) {
+                $companyWorkSheet->setCellValue("H$row", "ВСЕГО:");
+                $companyWorkSheet->setCellValue("I$row", "$total");
+            } else {
+                $companyWorkSheet->setCellValue("G$row", "ВСЕГО:");
+                $companyWorkSheet->setCellValue("H$row", "$total");
+            }
         } else {
             $companyWorkSheet->setCellValue("H$row", "ВСЕГО:");
             $companyWorkSheet->setCellValue("I$row", "$total");
@@ -368,6 +411,9 @@ class ExportableGridBehavior extends CBehavior
 
         $row++; $row++;
         $companyWorkSheet->mergeCells("B$row:I$row");
+        if($company->is_split) {
+            $companyWorkSheet->mergeCells("B$row:J$row");
+        }
         $companyWorkSheet->getRowDimension($row)->setRowHeight(30);
         $companyWorkSheet->getStyle("B$row:I$row")->getAlignment()->setWrapText(true);
         $text = "Общая стоимость выполненных услуг составляет: $total (" . StringNum::num2str($total) . ") рублей. НДС нет.";
@@ -375,6 +421,9 @@ class ExportableGridBehavior extends CBehavior
 
         $row++;
         $companyWorkSheet->mergeCells("B$row:I$row");
+        if($company->is_split) {
+            $companyWorkSheet->mergeCells("B$row:J$row");
+        }
         $companyWorkSheet->getRowDimension($row)->setRowHeight(30);
         $companyWorkSheet->getStyle("B$row:I$row")->getAlignment()->setWrapText(true);
         $text = "Настоящий Акт составлен в 2 (двух) экземплярах, один из которых находится у Исполнителя, второй – у Заказчика.";
@@ -383,6 +432,9 @@ class ExportableGridBehavior extends CBehavior
         $row++; $row++;
         $companyWorkSheet->mergeCells("B$row:E$row");
         $companyWorkSheet->mergeCells("G$row:I$row");
+        if($company->is_split) {
+            $companyWorkSheet->mergeCells("G$row:J$row");
+        }
         if ($this->showCompany) {
             $companyWorkSheet->setCellValue("B$row", "Работу сдал");
             $companyWorkSheet->setCellValue("G$row", "Работу принял");
@@ -394,6 +446,9 @@ class ExportableGridBehavior extends CBehavior
         $row++; $row++;
         $companyWorkSheet->mergeCells("B$row:E$row");
         $companyWorkSheet->mergeCells("G$row:I$row");
+        if($company->is_split) {
+            $companyWorkSheet->mergeCells("G$row:J$row");
+        }
         if ($this->showCompany) {
             $companyWorkSheet->setCellValue("B$row", "Исполнитель");
             $companyWorkSheet->setCellValue("G$row", "Заказчик");
@@ -405,6 +460,9 @@ class ExportableGridBehavior extends CBehavior
         $row++; $row++;
         $companyWorkSheet->mergeCells("B$row:E$row");
         $companyWorkSheet->mergeCells("G$row:I$row");
+        if($company->is_split) {
+            $companyWorkSheet->mergeCells("G$row:J$row");
+        }
         if ($this->showCompany) {
             $companyWorkSheet->setCellValue("B$row", "____________Мосесян Г.А.");
             $companyWorkSheet->setCellValue("G$row", "____________$company->contact");

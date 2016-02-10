@@ -29,7 +29,7 @@ $form = $this->beginWidget('CActiveForm', array(
         </td>
         <td>
             <?=$form->textField($model, 'outside'); ?>
-            <? if ($model->company->is_split) {
+            <? if (false /*model->company->is_split*/) {
                 echo $form->textField($model->extra, 'outside');
             } ?>
         </td>
@@ -38,7 +38,7 @@ $form = $this->beginWidget('CActiveForm', array(
         </td>
         <td>
             <?=$form->textField($model, 'inside'); ?>
-            <? if ($model->company->is_split) {
+            <? if (false /*model->company->is_split*/) {
                 echo $form->textField($model->extra, 'inside');
             } ?>
         </td>

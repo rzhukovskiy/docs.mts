@@ -28,7 +28,7 @@ $form = $this->beginWidget('CActiveForm', array(
         </td>
         <td>
             <?=$form->textField($priceList, 'outside'); ?>
-            <? if ($model->is_split) {
+            <? if (false /*$model->is_split*/) {
                 echo $form->textField($priceList->extra, 'outside');
             } ?>
         </td>
@@ -37,7 +37,7 @@ $form = $this->beginWidget('CActiveForm', array(
         </td>
         <td>
             <?=$form->textField($priceList, 'inside'); ?>
-            <? if ($model->is_split) {
+            <? if (false /*$model->is_split*/) {
                 echo $form->textField($priceList->extra, 'inside');
             } ?>
         </td>

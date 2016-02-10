@@ -395,7 +395,7 @@ class Act extends CActiveRecord
             'client_id' => 'Клиент',
             'card_id' => 'Карта',
             'number' => 'Госномер',
-            'extra_number' => 'Номер п/прицепа',
+            'extra_number' => 'Госномер п/прицепа',
             'mark_id' => 'Марка',
             'service_date' => 'Дата',
             'partner_service' => 'Услуга',
@@ -429,7 +429,7 @@ class Act extends CActiveRecord
                 $hasError = !isset($this->car->company_id);
                 break;
             case 'truck':
-                $hasError = !($this->extra_number && Car::model()->find('number = :number', [':number' => $this->extra_number]));
+                $hasError = $this->client->is_split && $this->extra_number && !Car::model()->find('number = :number', [':number' => $this->extra_number]);
                 break;
         }
 

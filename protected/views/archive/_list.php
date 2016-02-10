@@ -33,6 +33,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
     'dataProvider' => $provider,
+    'filter' => $model,
     'template' => "{items}",
     'columns' => array(
         array(
@@ -46,6 +47,13 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'service_date',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => 'date("d-m-Y", strtotime($data->service_date))',
+        ),
+        array(
+            'name' => 'client',
+            'value' => '$data->client->name',
+            'header' => '',
+            'filter' => CHtml::listData(Company::model()->findAll('parent_id = :parent_id', [':parent_id' => $model->client_id]), 'id', 'name'),
+            'visible' => Yii::app()->user->model->company->children,
         ),
         array(
             'header' => 'Карта',
@@ -64,7 +72,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'extra_number',
             'htmlOptions' => array('style' => 'width: 80px; text-align:center;'),
             'cssClassExpression' => '$data->hasError("truck") ? "error" : ""',
-            'visible' => $model->client->is_split,
+            'visible' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) || $model->client->is_split,
         ),
         array(
             'header' => 'Марка',
@@ -97,7 +105,6 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'cssClassExpression' => Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? '$data->hasError("expense") ? "error" : ""' : '$data->hasError("income") ? "error" : ""',
         ),
         array(
-            'name' => 'city',
             'header' => 'Город',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->partner->address',
@@ -109,14 +116,6 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->check ? $data->check : ($data->hasError("check") ? "error" : "")',
             'cssClassExpression' => '$data->hasError("check") ? "error" : ""',
             'visible' => $model->companyType == Company::CARWASH_TYPE,
-        ),
-        array(
-            'name' => 'client',
-            'value' => '$data->client->name',
-            'header' => '',
-            'headerHtmlOptions' => array('style' => 'display:none', 'class' => 'client'),
-            'htmlOptions' => array('style' => 'display:none', 'class' => 'client'),
-            'footerHtmlOptions' => array('style' => 'display:none', 'class' => 'client'),
         ),
         array(
             'name' => 'check_image',

@@ -105,7 +105,6 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'extra_number',
             'htmlOptions' => array('style' => 'width: 80px; text-align:center;'),
             'cssClassExpression' => '$data->hasError("truck") ? "error" : ""',
-            'visible' => false,
         ),
         array(
             'name' => 'mark_id',
