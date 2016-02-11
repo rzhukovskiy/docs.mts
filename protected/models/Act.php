@@ -110,6 +110,7 @@ class Act extends CActiveRecord
             'mark' => array(self::BELONGS_TO, 'Mark', 'mark_id'),
             'scope' => array(self::HAS_MANY, 'ActScope', 'act_id'),
             'car' => array(self::BELONGS_TO, 'Car', array('number' => 'number')),
+            'truck' => array(self::BELONGS_TO, 'Car', array('extra_number' => 'number')),
         );
     }
 
@@ -283,7 +284,7 @@ class Act extends CActiveRecord
     {
         $criteria = new CDbCriteria();
 
-        $criteria->with = ['car'];
+        $criteria->with = ['car', 'truck'];
         $criteria->order = 'service_date DESC';
 
         $criteria->compare('income', 0);
@@ -291,6 +292,7 @@ class Act extends CActiveRecord
         $criteria->addCondition('`check` is NULL AND partner_service IN(0,1,2)', 'OR');
         $criteria->addCondition('`check` = "" AND partner_service IN(0,1,2)', 'OR');
         $criteria->addCondition('card.company_id != car.company_id', 'OR');
+        $criteria->addCondition('client.is_split = 1 AND truck.company_id is NULL', 'OR');
         $criteria->addCondition('car.company_id is NULL', 'OR');
 
         $this->getDbCriteria()->mergeWith($criteria);
