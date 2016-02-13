@@ -9,6 +9,7 @@
  * @property int $mark_id
  * @property int $type_id
  * @property int $service_count
+ * @property int $client_id
  * @property string $from_date
  * @property string $to_date
  */
@@ -16,6 +17,7 @@ class Car extends CActiveRecord
 {
     public $from_date;
     public $to_date;
+    public $client_id;
     public $service_count;
     public $period;
     public $month;
@@ -41,7 +43,7 @@ class Car extends CActiveRecord
         return array(
             array('company_id, number, mark_id, type_id', 'required'),
             array('number', 'unique'),
-            array('from_date, to_date', 'safe'),
+            array('client_id, from_date, to_date', 'safe'),
             array('service_count, id, number, mark_id', 'safe', 'on' => 'search'),
         );
     }
@@ -103,10 +105,10 @@ class Car extends CActiveRecord
         $criteria->group = 't.id';
         $criteria->compare('t.id', $this->id);
         $criteria->compare('t.number', $this->number, true);
-        if ($this->company && count($this->company->children) > 0) {
-            $criteria->addCondition("clientParent.id = $this->company_id OR t.company_id = $this->company_id");
+        if ($this->client_id) {
+            $criteria->compare('clientParent.id', $this->client_id);
         } else {
-            $criteria->compare('t.company_id', $this->company_id);
+            $criteria->compare('company_id', $this->company_id);
         }
         $criteria->compare('t.mark_id', $this->mark_id);
         $criteria->compare('t.type_id', $this->type_id);

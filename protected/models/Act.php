@@ -218,10 +218,13 @@ class Act extends CActiveRecord
         }
 
         //на всякий случай для партнеров и клиентов показываем только их акты
-        if (Yii::app()->user->model->role == User::PARTNER_ROLE) {
+        if (Yii::app()->user->model->role == User::PARTNER_ROLE && $this->partner_id != Yii::app()->user->model->company_id) {
             $this->partner_id = Yii::app()->user->model->company_id;
         }
-        if (Yii::app()->user->model->role == User::CLIENT_ROLE) {
+        if (Yii::app()->user->model->role == User::CLIENT_ROLE
+            && $this->client_id != Yii::app()->user->model->company_id
+            && !$this->hasChild($this->client_id)
+        ) {
             $this->client_id = Yii::app()->user->model->company_id;
         }
 
@@ -462,5 +465,11 @@ class Act extends CActiveRecord
     public function getClientName()
     {
         return $this->client->name;
+    }
+
+    public function hasChild($childId)
+    {
+        $child = Company::model()->findByPk($childId);
+        return $child && $child->parent_id == Yii::app()->user->model->company_id;
     }
 }

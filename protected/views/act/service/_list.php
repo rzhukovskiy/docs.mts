@@ -34,7 +34,7 @@ if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
 <?php
 
     $attributes = array_values(array_filter($model->attributes));
-    $model->unsetAttributes();
+    $model->unsetAttributes(['card_id', 'number', 'extra_number', 'check']);
     echo CHtml::hiddenField('query', CJSON::encode($attributes));
     $this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
         'selector' => '.my-grid',
@@ -58,6 +58,13 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '++$row',
             'footer' => 'Всего',
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
+        ),
+        array(
+            'name' => 'month',
+            'htmlOptions' => array('style' => 'display:none'),
+            'headerHtmlOptions' => array('style' => 'display:none'),
+            'footerHtmlOptions' => array('style' => 'display:none'),
+            'filterHtmlOptions' => array('style' => 'display:none'),
         ),
         array(
             'name' => 'service_date',

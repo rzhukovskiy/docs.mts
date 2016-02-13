@@ -6,7 +6,7 @@ $(document).ready(function() {
             stick();
         }
 
-        if (sticked && $(window).scrollTop() == 0) {
+        if ($(window).scrollTop() == 0) {
             sticked = false;
 
             $('.selector, .grid thead, .maintabmenu').css({
