@@ -286,7 +286,7 @@ this.addHeaders = function(options) {
             .each(function(id, row) {
 
                 var currentValue = $(row).find(trigger.className).text();
-                var pos = $(row).find('td').index($(row).find('.sum'));
+                var pos = $(row).find('td:visible').index($(row).find('.sum'));
 
                 if (previousValue != 'empty' && previousValue != currentValue) {
                     if (previousValue != '') {

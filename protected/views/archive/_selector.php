@@ -20,7 +20,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 <?=CHtml::label('Выбор периода', '')?>
                 <?=$form->textField($model, 'month')?>
             </th>
-            <th style="width: 300px">
+            <th style="width: 400px">
                 <?php if(count(Yii::app()->user->model->company->children)) { ?>
                     <?=CHtml::label('Выбор филиала', '')?>
                     <?=$form->dropDownList($model,
@@ -30,7 +30,7 @@ $form = $this->beginWidget('CActiveForm', array(
                     )?>
                 <?php } ?>
             </th>
-            <th><?=CHtml::submitButton('Показать', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?></th>
+            <th><?=CHtml::submitButton('Показать', array('class' => 'submit radius2 date-send', 'style' => 'opacity: 1;')); ?></th>
         </tr>
         <tr class="header">
             <td colspan="3">&nbsp;</td>
