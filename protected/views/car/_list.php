@@ -32,7 +32,7 @@ $this->widget('ext.groupgridview.GroupGridView', array(
             'name' => 'company_id',
             'htmlOptions' => array('style' => 'width: 60px; text-align:center;'),
             'value' => '$data->company->name',
-            'filter' => $model->company->children
+            'filter' => isset($model->company->children)
                 ? CHtml::listData(Company::model()->findAll('parent_id = :parent_id', [':parent_id' => $model->company_id]), 'id', 'name')
                 : CHtml::listData(Company::model()->findAll('type = :type', [':type' => Company::COMPANY_TYPE]), 'id', 'name'),
             'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) || Yii::app()->user->model->company->children,
