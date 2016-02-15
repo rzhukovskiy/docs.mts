@@ -94,7 +94,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'width: 100px;', 'class' => 'client'),
             'filter' => CHtml::dropDownList('Act[client_id]',
                 $model->client_id,
-                CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name'),
+                CHtml::listData(Company::model()->findAll('type = :type', array(':type' => Company::COMPANY_TYPE)), 'id', 'name'),
                 array('empty' => 'Все', 'style' => 'width: 80px;')),
         ),
         array(

@@ -78,7 +78,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 <?=CHtml::dropDownList('month', '', $months, ['class' => 'autoinput', 'style' => $diff == 1 ? '' : 'display:none'])?>
                 <?=$form->hiddenField($model, 'from_date', ['class' => 'from_date'])?>
                 <?=$form->hiddenField($model, 'to_date', ['class' => 'to_date'])?>
-                <?php if(count(Yii::app()->user->model->company->children)) { ?>
+                <?php if(Yii::app()->user->model->company && count(Yii::app()->user->model->company->children)) { ?>
                     <?=CHtml::label('Выбор филиала', '')?>
                     <?=$form->dropDownList($model,
                         'client_id',
