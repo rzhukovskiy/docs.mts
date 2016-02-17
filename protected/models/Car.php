@@ -54,7 +54,7 @@ class Car extends CActiveRecord
             'company' => array(self::BELONGS_TO, 'Company', 'company_id'),
             'mark' => array(self::BELONGS_TO, 'Mark', 'mark_id'),
             'type' => array(self::BELONGS_TO, 'Type', 'type_id'),
-            'act' => array(self::HAS_MANY, 'Act', '', 'on'=>'act.number = t.number', 'joinType' => 'INNER JOIN', 'alias' => 'act'),
+            'act' => array(self::HAS_MANY, 'Act', '', 'on'=>'act.number = t.number AND act.client_id = t.company_id', 'joinType' => 'JOIN', 'alias' => 'act'),
         );
     }
 
@@ -99,7 +99,7 @@ class Car extends CActiveRecord
             $this->company_id = Yii::app()->user->model->company_id;
         }
 
-        $criteria->with = ['act', 'company', 'company.parent' => ['alias'=>'clientParent']];
+        $criteria->with = ['act', 'company'];
         $criteria->together = true;
         $criteria->select = '*, count(act.id) as service_count';
         $criteria->group = 't.id';
@@ -120,11 +120,13 @@ class Car extends CActiveRecord
         $sort->defaultOrder = 't.company_id, service_count DESC';
         $sort->applyOrder($criteria);
 
-        return new CActiveDataProvider(get_class($this), array(
+        $provider = new CActiveDataProvider(get_class($this), array(
             'criteria' => $criteria,
             'sort' => $sort,
             'pagination' => false,
         ));
+
+        return $provider;
     }
 
     public function attributeLabels()
