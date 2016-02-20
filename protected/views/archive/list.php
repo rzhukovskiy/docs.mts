@@ -4,11 +4,11 @@
  * @var $model Act
  */
 if (Yii::app()->user->model->company->type == Company::COMPANY_TYPE) {
-    $this->tabs = array(
-        $model->companyType != Company::CARWASH_TYPE ? Company::CARWASH_TYPE : 'list' => array('url' => Yii::app()->createUrl('archive/' . Company::CARWASH_TYPE), 'name' => 'Мойка'),
-        $model->companyType != Company::SERVICE_TYPE ? Company::SERVICE_TYPE : 'list' => array('url' => Yii::app()->createUrl('archive/' . Company::SERVICE_TYPE), 'name' => 'Сервис'),
-        $model->companyType != Company::TIRES_TYPE ? Company::TIRES_TYPE : 'list' => array('url' => Yii::app()->createUrl('archive/' . Company::TIRES_TYPE), 'name' => 'Шиномонтаж'),
-    );
+    foreach(Company::$listService as $service => $name) {
+        //не показываем самих себя
+        if ($service == Yii::app()->user->model->company->type) continue;
+        $this->tabs[$model->companyType != $service ? $service : 'list'] = ['url' => Yii::app()->createUrl("archive/$service"), 'name' => $name];
+    }
 } else {
     $this->tabs = array(
         'list' => array('url' => Yii::app()->createUrl('archive/' . Yii::app()->user->model->company->type), 'name' => 'Акты'),

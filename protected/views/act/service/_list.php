@@ -77,10 +77,12 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'footer' => count($provider->getData()) . ' ' . StringNum::getNumEnding(count($provider->getData()), array('машина', 'машины', 'машин')),
         ),
         array(
+            'class' => 'DataColumn',
+            'evaluateHtmlOptions' => true,
             'header' => 'Партнер',
             'name' => 'partner',
             'value' => '$data->partner->name',
-            'htmlOptions' => array('style' => 'width: 100px;', 'class' => 'partner'),
+            'htmlOptions' => array('style' => '"width: 100px;"', 'class' => '"partner"', 'data-header' => '"{$data->partner->name} - {$data->partner->address}"'),
             'filter' => CHtml::dropDownList('Act[parent_id]',
                 $model->client_id,
                 CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name'),

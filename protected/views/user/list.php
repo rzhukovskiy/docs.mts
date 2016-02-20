@@ -4,12 +4,9 @@
  * @var $model User
  * @var $type string
  */
-$this->tabs = array(
-    $model->companyType != Company::COMPANY_TYPE ? Company::COMPANY_TYPE : 'list' => array('url' => Yii::app()->createUrl('user/' . Company::COMPANY_TYPE), 'name' => 'Компании'),
-    $model->companyType != Company::CARWASH_TYPE ? Company::CARWASH_TYPE : 'list' => array('url' => Yii::app()->createUrl('user/' . Company::CARWASH_TYPE), 'name' => 'Мойки'),
-    $model->companyType != Company::SERVICE_TYPE ? Company::SERVICE_TYPE : 'list' => array('url' => Yii::app()->createUrl('user/' . Company::SERVICE_TYPE), 'name' => 'Сервисы'),
-    $model->companyType != Company::TIRES_TYPE ? Company::TIRES_TYPE : 'list'   => array('url' => Yii::app()->createUrl('user/' . Company::TIRES_TYPE), 'name' => 'Шиномонтаж'),
-);
+foreach(Company::$listService as $service => $name) {
+    $this->tabs[$model->companyType != $service ? $service : 'list'] = ['url' => Yii::app()->createUrl("user/$service"), 'name' => $name];
+}
 
 $this->renderPartial('_form', array('model'=>$model));
 $this->renderPartial('_list', array('model'=>$model));

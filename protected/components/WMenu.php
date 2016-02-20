@@ -42,6 +42,12 @@ class WMenu extends CWidget
                     'action' => 'list',
                     'role'   => User::ADMIN_ROLE
                 ),
+                'desinfection' => array(
+                    'title'  => 'Дезинфекция',
+                    'class'  => 'empty',
+                    'action' => 'list',
+                    'role'   => User::ADMIN_ROLE
+                ),
                 'user' => array(
                     'title'  => 'Пользователи',
                     'class'  => 'empty',

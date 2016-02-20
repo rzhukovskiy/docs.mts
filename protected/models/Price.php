@@ -36,8 +36,8 @@ class Price extends CActiveRecord
     public function rules()
     {
         return array(
-            array('type_id, company_id, inside, outside','required'),
-
+            ['type_id, company_id, outside','required'],
+            ['inside','save'],
         );
     }
 

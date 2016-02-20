@@ -88,10 +88,12 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'footer' => count($provider->getData()) . ' ' . StringNum::getNumEnding(count($provider->getData()), array('машина', 'машины', 'машин')),
         ),
         array(
+            'class' => 'DataColumn',
+            'evaluateHtmlOptions' => true,
             'header' => 'Клиент',
             'name' => 'client',
             'value' => '$data->client->name',
-            'htmlOptions' => array('style' => 'width: 100px;', 'class' => 'client'),
+            'htmlOptions' => array('style' => '"width: 100px;"', 'class' => '"client"', 'data-header' => '"{$data->partner->name} - {$data->partner->address}"'),
             'filter' => CHtml::dropDownList('Act[client_id]',
                 $model->client_id,
                 CHtml::listData(Company::model()->findAll('type = :type', array(':type' => Company::COMPANY_TYPE)), 'id', 'name'),
