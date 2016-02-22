@@ -17,14 +17,14 @@ $form = $this->beginWidget('CActiveForm', array(
     ));
 ?>
 <div class="row">
-    <?=$form->labelEx($model, 'name'); ?>
+    <?=$form->label($model, 'name'); ?>
     <span class="field">
         <?=$form->textField($model, 'name', array('class' => 'span5')); ?>
         <?=$form->error($model, 'name'); ?>
     </span>
 </div>
 <div class="row">
-    <?=$form->labelEx($model, 'address'); ?>
+    <?=$form->label($model, 'address'); ?>
     <span class="field">
         <?=$form->textField($model, 'address', array('class' => 'span5')); ?>
         <?=$form->error($model, 'address'); ?>

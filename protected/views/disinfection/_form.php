@@ -9,7 +9,7 @@
  */
 $form = $this->beginWidget('CActiveForm', array(
         'id' => 'action-form',
-        'action' => array($model->isNewRecord ? Yii::app()->createUrl("/desinfection/create") : Yii::app()->createUrl("/desinfection/update", array("id" => $model->id))),
+        'action' => array($model->isNewRecord ? Yii::app()->createUrl("/disinfection/create") : Yii::app()->createUrl("/disinfection/update", array("id" => $model->id))),
         'errorMessageCssClass' => 'help-inline',
         'htmlOptions' => array('class' => 'stdform'),
         'enableAjaxValidation' => true,
@@ -17,14 +17,14 @@ $form = $this->beginWidget('CActiveForm', array(
     ));
 ?>
 <div class="row">
-    <?=$form->labelEx($model, 'name'); ?>
+    <?=$form->label($model, 'name'); ?>
     <span class="field">
         <?=$form->textField($model, 'name', array('class' => 'span5')); ?>
         <?=$form->error($model, 'name'); ?>
     </span>
 </div>
 <div class="row">
-    <?=$form->labelEx($model, 'address'); ?>
+    <?=$form->label($model, 'address'); ?>
     <span class="field">
         <?=$form->textField($model, 'address', array('class' => 'span5')); ?>
         <?=$form->error($model, 'address'); ?>
@@ -36,21 +36,21 @@ $form = $this->beginWidget('CActiveForm', array(
     </span>
 </div>
 <div class="row">
-    <?=$form->labelEx($model, 'contact'); ?>
+    <?=$form->label($model, 'contact'); ?>
     <span class="field">
         <?=$form->textField($model, 'contact', array('class' => 'span5')); ?>
         <?=$form->error($model, 'contact'); ?>
     </span>
 </div>
 <div class="row">
-    <?=$form->labelEx($model, 'contract'); ?>
+    <?=$form->label($model, 'contract'); ?>
     <span class="field">
         <?=$form->textField($model, 'contract', array('class' => 'span5')); ?>
         <?=$form->error($model, 'contract'); ?>
     </span>
 </div>
 <div class="row">
-    <?=$form->labelEx($model, 'act_header'); ?>
+    <?=$form->label($model, 'act_header'); ?>
     <span class="field">
         <?=$form->textArea($model, 'act_header', array('class' => 'span5')); ?>
         <?=$form->error($model, 'act_header'); ?>

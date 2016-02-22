@@ -21,7 +21,7 @@ class Company extends CActiveRecord
     const COMPANY_TYPE = 'company',
           CARWASH_TYPE = 'carwash',
           SERVICE_TYPE = 'service',
-          DESINFECTION_TYPE = 'desinfection',
+          DISINFECTION_TYPE = 'disinfection',
           TIRES_TYPE   = 'tires';
 
     public $cardList;
@@ -32,7 +32,7 @@ class Company extends CActiveRecord
         self::CARWASH_TYPE => 'Мойка',
         self::SERVICE_TYPE => 'Сервис',
         self::TIRES_TYPE => 'Шиномонтаж',
-        self::DESINFECTION_TYPE => 'Дезинфекция',
+        self::DISINFECTION_TYPE => 'Дезинфекция',
     ];
 
     /**
@@ -60,6 +60,7 @@ class Company extends CActiveRecord
     {
         return array(
             array('name','required'),
+            array('name','unique'),
             array('parent_id, is_split, address, phone, contact, contract, act_header, type, cardList','safe'),
 
         );

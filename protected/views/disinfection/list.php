@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $this DesinfectionController
+ * @var $this DisinfectionController
  * @var $model Company
  */
 

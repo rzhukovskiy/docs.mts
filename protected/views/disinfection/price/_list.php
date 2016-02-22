@@ -24,8 +24,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array(),
         ),
         array(
-            'name' => 'outside',
-            'header' => 'Стоимость',
+            'name' => 'disinfection',
             'htmlOptions' => array(),
         ),
         array(

@@ -1,6 +1,6 @@
 <?php
 
-class DesinfectionController extends Controller
+class DisinfectionController extends Controller
 {
     public $type;
 
@@ -79,8 +79,8 @@ class DesinfectionController extends Controller
         $model = new Price();
         if (isset($_POST['Price'])) {
             $model->attributes = $_POST['Price'];
-            $model->inside = 0;
             $this->performAjaxValidation($model);
+
             $model->save();
         }
 

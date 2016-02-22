@@ -17,14 +17,14 @@ $form = $this->beginWidget('CActiveForm', array(
 ?>
 <table class="stdtable grid">
     <tr>
-        <td>
-            <?=$form->labelEx($priceList, 'type_id'); ?>
+        <td rowspan="2">
+            <?=$form->label($priceList, 'type_id'); ?>
         </td>
-        <td>
+        <td rowspan="2">
             <?=$form->dropDownList($priceList, 'type_id', CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
         </td>
         <td>
-            <?=$form->labelEx($priceList, 'outside'); ?>
+            <?=$form->label($priceList, 'outside'); ?>
         </td>
         <td>
             <?=$form->textField($priceList, 'outside'); ?>
@@ -33,7 +33,7 @@ $form = $this->beginWidget('CActiveForm', array(
             } ?>
         </td>
         <td>
-            <?=$form->labelEx($priceList, 'inside'); ?>
+            <?=$form->label($priceList, 'inside'); ?>
         </td>
         <td>
             <?=$form->textField($priceList, 'inside'); ?>
@@ -41,11 +41,21 @@ $form = $this->beginWidget('CActiveForm', array(
                 echo $form->textField($priceList->extra, 'inside');
             } ?>
         </td>
-        <td>
+        <td rowspan="2">
             <?=$form->hiddenField($priceList, 'company_id'); ?>
             <?=CHtml::submitButton('Добавить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
         </td>
+    </tr>
     <tr>
+        <td>
+            <?=$form->label($priceList, 'disinfection'); ?>
+        </td>
+        <td>
+            <?=$form->textField($priceList, 'disinfection'); ?>
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
 </table>
 <?php $this->endWidget(); ?>
 <!-- form -->

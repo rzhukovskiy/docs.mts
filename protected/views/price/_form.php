@@ -19,13 +19,23 @@ $form = $this->beginWidget('CActiveForm', array(
 <table class="stdtable grid">
     <tr>
         <td>
-            <?=$form->labelEx($model, 'type_id'); ?>
+            <?=$form->label($model, 'type_id'); ?>
         </td>
+        <td>
+            <?=$form->label($model, 'outside'); ?>
+        </td>
+        <td>
+            <?=$form->label($model, 'inside'); ?>
+        </td>
+        <td>
+            <?=$form->label($model, 'disinfection'); ?>
+        </td>
+        <td>
+        </td>
+    <tr>
+    <tr>
         <td>
             <?=$form->dropDownList($model, 'type_id', CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
-        </td>
-        <td>
-            <?=$form->labelEx($model, 'outside'); ?>
         </td>
         <td>
             <?=$form->textField($model, 'outside'); ?>
@@ -34,12 +44,15 @@ $form = $this->beginWidget('CActiveForm', array(
             } ?>
         </td>
         <td>
-            <?=$form->labelEx($model, 'inside'); ?>
-        </td>
-        <td>
             <?=$form->textField($model, 'inside'); ?>
             <? if (false /*model->company->is_split*/) {
                 echo $form->textField($model->extra, 'inside');
+            } ?>
+        </td>
+        <td>
+            <?=$form->textField($model, 'disinfection'); ?>
+            <? if (false /*model->company->is_split*/) {
+                echo $form->textField($model->extra, 'disinfection');
             } ?>
         </td>
         <td>

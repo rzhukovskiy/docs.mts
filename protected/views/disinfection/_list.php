@@ -3,7 +3,7 @@
 </div>
 <?php
 /**
- * @var $this DesinfectionController
+ * @var $this DisinfectionController
  * @var $model Company
  */
 $attributes = array_values(array_filter($model->attributes));

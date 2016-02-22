@@ -33,6 +33,10 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->inside . (isset($data->extra) ? " + " . $data->extra->inside : "")',
         ),
         array(
+            'name' => 'disinfection',
+            'htmlOptions' => array(),
+        ),
+        array(
             'class' => 'CButtonColumn',
             'template' => '{update}{delete}',
             'header' => '',

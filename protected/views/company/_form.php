@@ -17,21 +17,21 @@ $form = $this->beginWidget('CActiveForm', array(
 ));
 ?>
 <div class="row">
-    <?= $form->labelEx($model, 'name'); ?>
+    <?= $form->label($model, 'name'); ?>
     <span class="field">
         <?= $form->textField($model, 'name', array('class' => 'span5')); ?>
         <?= $form->error($model, 'name'); ?>
     </span>
 </div>
 <div class="row">
-    <?= $form->labelEx($model, 'is_split'); ?>
+    <?= $form->label($model, 'is_split'); ?>
     <span class="field">
         <?= $form->checkBox($model, 'is_split', array('class' => 'span5')); ?>
         <?= $form->error($model, 'is_split'); ?>
     </span>
 </div>
 <div class="row">
-    <?= $form->labelEx($model, 'parent_id'); ?>
+    <?= $form->label($model, 'parent_id'); ?>
     <span class="field">
         <?=$form->dropDownList(
             $model,
@@ -43,14 +43,14 @@ $form = $this->beginWidget('CActiveForm', array(
     </span>
 </div>
 <div class="row">
-    <?= $form->labelEx($model, 'address'); ?>
+    <?= $form->label($model, 'address'); ?>
     <span class="field">
         <?= $form->textField($model, 'address', array('class' => 'span5')); ?>
         <?= $form->error($model, 'address'); ?>
     </span>
 </div>
 <div class="row">
-    <?= $form->labelEx($model, 'cardList'); ?>
+    <?= $form->label($model, 'cardList'); ?>
     <span class="field">
         <?= $form->textField($model, 'cardList', array('class' => 'span5')); ?>
         <?= $form->error($model, 'cardList'); ?>
@@ -62,21 +62,21 @@ $form = $this->beginWidget('CActiveForm', array(
     </span>
 </div>
 <div class="row">
-    <?= $form->labelEx($model, 'contact'); ?>
+    <?= $form->label($model, 'contact'); ?>
     <span class="field">
         <?= $form->textField($model, 'contact', array('class' => 'span5')); ?>
         <?= $form->error($model, 'contact'); ?>
     </span>
 </div>
 <div class="row">
-    <?= $form->labelEx($model, 'contract'); ?>
+    <?= $form->label($model, 'contract'); ?>
     <span class="field">
         <?= $form->textField($model, 'contract', array('class' => 'span5')); ?>
         <?= $form->error($model, 'contract'); ?>
     </span>
 </div>
 <div class="row">
-    <?= $form->labelEx($model, 'act_header'); ?>
+    <?= $form->label($model, 'act_header'); ?>
     <span class="field">
         <?= $form->textArea($model, 'act_header', array('class' => 'span5')); ?>
         <?= $form->error($model, 'act_header'); ?>

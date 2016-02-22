@@ -57,6 +57,7 @@ class Act extends CActiveRecord
     public static $serviceList = array(
         3 => 'сервис',
         4 => 'шиномонатж',
+        5 => 'дезинфекция',
     );
     public static $fullList = array(
         'снаружи',
@@ -64,6 +65,7 @@ class Act extends CActiveRecord
         'снаружи+внутри',
         'сервис',
         'шиномонтаж',
+        'дезинфекция',
     );
     public static $shortList = array(
         'мойка снаружи',
@@ -71,6 +73,7 @@ class Act extends CActiveRecord
         'мойка снаружи+внутри',
         'сервис',
         'шиномонтаж',
+        'дезинфекция',
     );
 
     public $month;
@@ -142,11 +145,16 @@ class Act extends CActiveRecord
             $this->type_id = $car->type_id;
         }
 
-        if ($this->partner->type == Company::SERVICE_TYPE) {
-            $this->client_service = $this->partner_service = 3;
-        }
-        if ($this->partner->type == Company::TIRES_TYPE) {
-            $this->client_service = $this->partner_service = 4;
+        switch ($this->partner->type) {
+            case Company::SERVICE_TYPE:
+                $this->client_service = $this->partner_service = 3;
+                break;
+            case Company::TIRES_TYPE:
+                $this->client_service = $this->partner_service = 4;
+                break;
+            case Company::DISINFECTION_TYPE:
+                $this->client_service = $this->partner_service = 5;
+                break;
         }
 
         if ($this->isNewRecord) {
@@ -156,7 +164,11 @@ class Act extends CActiveRecord
         $this->client_id = $this->card->company_id;
 
         if (($this->isNewRecord && !$this->income)
-            || (!$this->is_closed && $this->partner->type == Company::CARWASH_TYPE && $this->old_income == $this->income)
+            || (
+                !$this->is_closed
+                && ($this->partner->type == Company::CARWASH_TYPE || $this->partner->type == Company::DISINFECTION_TYPE)
+                && $this->old_income == $this->income
+            )
         ) {
             $washPrice = Price::model()->find('company_id = :company_id AND type_id = :type_id',
                 array(
@@ -171,6 +183,9 @@ class Act extends CActiveRecord
                     $washPrice->fullOutside,
                     $washPrice->fullInside,
                     $washPrice->fullOutside + $washPrice->fullInside,
+                    0,
+                    0,
+                    $washPrice->disinfection,
                 );
 
                 $this->income = $servicePrice[$this->client_service];
@@ -178,7 +193,11 @@ class Act extends CActiveRecord
         }
 
         if (($this->isNewRecord && !$this->expense)
-            || (!$this->is_closed && $this->partner->type == Company::CARWASH_TYPE && $this->old_expense == $this->expense)
+            || (
+                !$this->is_closed
+                && ($this->partner->type == Company::CARWASH_TYPE || $this->partner->type == Company::DISINFECTION_TYPE)
+                && $this->old_expense == $this->expense
+            )
         ) {
             $washPrice = Price::model()->find('company_id = :company_id AND type_id = :type_id',
                 array(
@@ -193,6 +212,9 @@ class Act extends CActiveRecord
                     $washPrice->fullOutside,
                     $washPrice->fullInside,
                     $washPrice->fullOutside + $washPrice->fullInside,
+                    0,
+                    0,
+                    $washPrice->disinfection,
                 );
 
                 $this->expense = $servicePrice[$this->partner_service];

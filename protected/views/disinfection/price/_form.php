@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $this DesinfectionController
+ * @var $this DisinfectionController
  * @var $form CActiveForm
  * @var $model Company
  * @var $priceList Price
@@ -17,13 +17,16 @@ $form = $this->beginWidget('CActiveForm', array(
 <table class="stdtable grid">
     <tr>
         <td>
-            <?=$form->labelEx($priceList, 'type_id'); ?>
+            <?=$form->label($priceList, 'type_id'); ?>
         </td>
         <td>
             <?=$form->dropDownList($priceList, 'type_id', CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
         </td>
         <td>
-            <?=$form->textField($priceList, 'outside'); ?>
+            <?=$form->label($priceList, 'disinfection'); ?>
+        </td>
+        <td>
+            <?=$form->textField($priceList, 'disinfection'); ?>
         </td>
         <td>
             <?=$form->hiddenField($priceList, 'company_id'); ?>

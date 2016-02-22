@@ -17,19 +17,19 @@ $form = $this->beginWidget('CActiveForm', array(
 <table class="stdtable grid">
     <tr>
         <td>
-            <?=$form->labelEx($priceList, 'type_id'); ?>
+            <?=$form->label($priceList, 'type_id'); ?>
         </td>
         <td>
             <?=$form->dropDownList($priceList, 'type_id', CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
         </td>
         <td>
-            <?=$form->labelEx($priceList, 'outside'); ?>
+            <?=$form->label($priceList, 'outside'); ?>
         </td>
         <td>
             <?=$form->textField($priceList, 'outside'); ?>
         </td>
         <td>
-            <?=$form->labelEx($priceList, 'inside'); ?>
+            <?=$form->label($priceList, 'inside'); ?>
         </td>
         <td>
             <?=$form->textField($priceList, 'inside'); ?>

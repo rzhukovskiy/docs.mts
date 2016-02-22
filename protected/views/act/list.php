@@ -4,20 +4,18 @@
  * @var $model Act
  */
 if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-    $this->tabs = array(
-        $model->companyType != Company::CARWASH_TYPE || $model->showCompany ? Company::CARWASH_TYPE : 'list' => array('url' => Yii::app()->createUrl('act/carwash'), 'name' => 'Акты моек'),
-        $model->companyType != Company::CARWASH_TYPE || !$model->showCompany ? Company::CARWASH_TYPE . '_company' : 'list' => array('url' => Yii::app()->createUrl('act/carwash', array('showCompany' => 1)), 'name' => 'Для компаний'),
-        $model->companyType != Company::SERVICE_TYPE || $model->showCompany ? Company::SERVICE_TYPE : 'list' => array('url' => Yii::app()->createUrl('act/service'), 'name' => 'Акты сервисов'),
-        $model->companyType != Company::SERVICE_TYPE || !$model->showCompany ? Company::SERVICE_TYPE . '_company' : 'list' => array('url' => Yii::app()->createUrl('act/service', array('showCompany' => 1)), 'name' => 'Для компаний'),
-        $model->companyType != Company::TIRES_TYPE || $model->showCompany ? Company::TIRES_TYPE : 'list' => array('url' => Yii::app()->createUrl('act/tires'), 'name' => 'Акты шиномонтажа'),
-        $model->companyType != Company::TIRES_TYPE || !$model->showCompany ? Company::TIRES_TYPE . '_company' : 'list' => array('url' => Yii::app()->createUrl('act/tires', array('showCompany' => 1)), 'name' => 'Для компаний'),
-    );
-} elseif (Yii::app()->user->model->company->type == Company::COMPANY_TYPE) {
-    $this->tabs = array(
-        $model->companyType != Company::CARWASH_TYPE ? Company::CARWASH_TYPE : 'list' => array('url' => Yii::app()->createUrl('act/' . Company::CARWASH_TYPE), 'name' => 'Акты моек'),
-        $model->companyType != Company::SERVICE_TYPE ? Company::SERVICE_TYPE : 'list' => array('url' => Yii::app()->createUrl('act/' . Company::SERVICE_TYPE), 'name' => 'Акты сервисов'),
-        $model->companyType != Company::TIRES_TYPE ? Company::TIRES_TYPE : 'list' => array('url' => Yii::app()->createUrl('act/' . Company::TIRES_TYPE), 'name' => 'Акты шиномонтажа'),
-    );
+    foreach(Company::$listService as $service => $name) {
+        //не показываем компании
+        if ($service == Company::COMPANY_TYPE) continue;
+        $this->tabs[$model->companyType != $service || $model->showCompany ? $service : 'list'] = [
+            'url' => Yii::app()->createUrl("act/$service"),
+            'name' => $name
+        ];
+        $this->tabs[$model->companyType != $service || !$model->showCompany ? $service . '_company' : 'list'] = [
+            'url' => Yii::app()->createUrl("act/$service", ['showCompany' => 1]),
+            'name' => 'Для компании'
+        ];
+    }
 } else {
     $this->tabs = array(
         'list' => array('url' => Yii::app()->createUrl('act/' . Yii::app()->user->model->company->type), 'name' => 'Акты'),

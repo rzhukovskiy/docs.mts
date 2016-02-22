@@ -17,7 +17,7 @@ $form = $this->beginWidget('CActiveForm', array(
 ));
 ?>
 <div class="row">
-    <?php echo $form->labelEx($model, 'name'); ?>
+    <?php echo $form->label($model, 'name'); ?>
     <span class="field">
         <?php echo $form->textField($model, 'name'); ?>
         <?php echo $form->error($model, 'name'); ?>

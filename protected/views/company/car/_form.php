@@ -19,7 +19,7 @@ $form = $this->beginWidget('CActiveForm', array(
 <table class="stdtable grid">
     <tr>
         <td>
-            <?=$form->labelEx($model, 'mark_id'); ?>
+            <?=$form->label($model, 'mark_id'); ?>
         </td>
         <td>
             <?=$form->dropDownList($model, 'mark_id', CHtml::listData(Mark::model()->findAll(array('order' => 'id')), 'id', 'name'), array('style' => 'width: 300px;min-width: 300px')); ?>
@@ -28,7 +28,7 @@ $form = $this->beginWidget('CActiveForm', array(
     </tr>
     <tr>
         <td style="width: 200px">
-            <?=$form->labelEx($model, 'number'); ?>
+            <?=$form->label($model, 'number'); ?>
         </td>
         <td>
             <?=$form->textField($model, 'number', array('style' => 'width: 290px;')); ?>
@@ -37,7 +37,7 @@ $form = $this->beginWidget('CActiveForm', array(
     </tr>
     <tr>
         <td>
-            <?=$form->labelEx($model, 'type_id'); ?>
+            <?=$form->label($model, 'type_id'); ?>
         </td>
         <td>
             <?=$form->dropDownList($model, 'type_id', CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name'), array('style' => 'width: 300px;min-width: 300px')); ?>
