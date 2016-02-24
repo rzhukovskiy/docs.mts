@@ -6,8 +6,8 @@ return array(
     'password' => '',
     'charset' => 'utf8',
     'tablePrefix' => 'mts_',
-    'enableProfiling' => false,
-    'enableParamLogging' => false,
+    'enableProfiling' => true,
+    'enableParamLogging' => true,
     'schemaCachingDuration' => 0,
     'class'=>'CDbConnection',
 );

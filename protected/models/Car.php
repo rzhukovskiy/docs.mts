@@ -120,8 +120,50 @@ class Car extends CActiveRecord
         $sort->defaultOrder = 't.company_id, service_count DESC';
         $sort->applyOrder($criteria);
 
+        $this->getDbCriteria()->mergeWith($criteria);
+
         $provider = new CActiveDataProvider(get_class($this), array(
-            'criteria' => $criteria,
+            'criteria' => $this->getDbCriteria(),
+            'sort' => $sort,
+            'pagination' => false,
+        ));
+
+        return $provider;
+    }
+
+    /**
+     * @return CActiveDataProvider
+     */
+    public function dirty()
+    {
+        $criteria = new CDbCriteria;
+
+        if (!$this->company_id && !Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+            $this->company_id = Yii::app()->user->model->company_id;
+        }
+
+        $criteria->with = ['company'];
+        if ($this->from_date) {
+            $criteria->addCondition('NOT EXISTS (SELECT * FROM mts_act WHERE mts_act.number = t.number AND mts_act.service_date BETWEEN "' . $this->from_date . '" AND "' . $this->to_date .'")');
+        } else {
+            $criteria->addCondition('NOT EXISTS (SELECT * FROM mts_act WHERE mts_act.number = t.number)');
+        }
+        $criteria->group = 't.id';
+        $criteria->compare('t.id', $this->id);
+        if ($this->client_id) {
+            $criteria->compare('clientParent.id', $this->client_id);
+        } else {
+            $criteria->compare('company_id', $this->company_id);
+        }
+
+        $sort = new CSort();
+        $sort->defaultOrder = 't.company_id, t.number DESC';
+        $sort->applyOrder($criteria);
+
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        $provider = new CActiveDataProvider(get_class($this), array(
+            'criteria' => $this->getDbCriteria(),
             'sort' => $sort,
             'pagination' => false,
         ));
