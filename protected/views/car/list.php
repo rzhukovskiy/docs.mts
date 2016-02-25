@@ -5,7 +5,7 @@
  */
 
 $this->tabs['list'] = ['url' => Yii::app()->createUrl('car/list'), 'name' => 'Машины'];
-if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) || Yii::app()->user->model->company->is_infected) {
+if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
     $this->tabs['dirty'] = ['url' => Yii::app()->createUrl('car/dirty'), 'name' => 'Немытые'];
 }
 
