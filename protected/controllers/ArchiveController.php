@@ -14,7 +14,7 @@ class ArchiveController extends Controller
     {
         $model = new Act('search');
         $model->unsetAttributes();
-        $model->companyType = $type;
+        $model->companyType = $type != 'list' ? $type : Company::CARWASH_TYPE;
 
         $model->month = date('Y-m', time() - 30 * 24 * 3600);
 

@@ -63,6 +63,15 @@ class Price extends CActiveRecord
         );
     }
 
+    public function afterSave()
+    {
+        if ($this->disinfection && $this->company->type == Company::COMPANY_TYPE) {
+            $this->company->is_infected = 1;
+            $this->company->save();
+        }
+        parent::afterSave();
+    }
+
     /**
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.

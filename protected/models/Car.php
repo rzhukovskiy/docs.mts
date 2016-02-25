@@ -150,6 +150,7 @@ class Car extends CActiveRecord
         }
         $criteria->group = 't.id';
         $criteria->compare('t.id', $this->id);
+        $criteria->compare('company.is_infected', 1);
         if ($this->client_id) {
             $criteria->compare('clientParent.id', $this->client_id);
         } else {

@@ -7,6 +7,7 @@
  * @property int $id
  * @property int $parent_id
  * @property int $is_split
+ * @property int $is_infected
  * @property string $name
  * @property string $address
  * @property string $phone
@@ -61,7 +62,7 @@ class Company extends CActiveRecord
         return array(
             array('name','required'),
             array('name','unique'),
-            array('parent_id, is_split, address, phone, contact, contract, act_header, type, cardList','safe'),
+            array('is_infected, parent_id, is_split, address, phone, contact, contract, act_header, type, cardList','safe'),
 
         );
     }
