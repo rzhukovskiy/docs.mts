@@ -67,6 +67,7 @@ $form = $this->beginWidget('CActiveForm', array(
     <tbody>
         <tr>
             <td>
+                <?=CHtml::hiddenField('Act[service]', $model->companyType); ?>
                 <?=$form->textField($model, 'service_date', array('class' => 'date-select', 'style' => 'width:70px')); ?>
             </td>
             <?php if(Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>

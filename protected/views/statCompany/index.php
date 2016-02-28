@@ -5,8 +5,6 @@
  */
 
 foreach(Company::$listService as $service => $name) {
-    //не показываем компании
-    if ($service == Company::COMPANY_TYPE) continue;
     $this->tabs[$model->companyType != $service ? $service : 'index'] = ['url' => Yii::app()->createUrl('statCompany/index', ['type' => $service]), 'name' => $name];
 }
 $this->tabs[$model->companyType ? 'total' : 'index'] = ['url' => Yii::app()->createUrl('statCompany/total'), 'name' => 'Общее'];

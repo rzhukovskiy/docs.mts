@@ -31,6 +31,7 @@
  * @property string $from_date
  * @property string $to_date
  * @property string $clientName
+ * @property string $service
  */
 class Act extends CActiveRecord
 {
@@ -98,7 +99,7 @@ class Act extends CActiveRecord
         return array(
             array('type_id, card_id, number, mark_id', 'required'),
             array('check', 'unique'),
-            array('extra_number, is_fixed, from_date, to_date, period, month, day, check, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
+            array('service, extra_number, is_fixed, from_date, to_date, period, month, day, check, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
             array('company_id, id, number, mark_id, type_id, card_id, service_date', 'safe', 'on' => 'search'),
         );
     }
@@ -145,7 +146,7 @@ class Act extends CActiveRecord
             $this->type_id = $car->type_id;
         }
 
-        switch ($this->partner->type) {
+        switch ($this->service) {
             case Company::SERVICE_TYPE:
                 $this->client_service = $this->partner_service = 3;
                 break;
@@ -166,7 +167,7 @@ class Act extends CActiveRecord
         if (($this->isNewRecord && !$this->income)
             || (
                 !$this->is_closed
-                && ($this->partner->type == Company::CARWASH_TYPE || $this->partner->type == Company::DISINFECTION_TYPE)
+                && ($this->service == Company::CARWASH_TYPE || $this->service == Company::DISINFECTION_TYPE)
                 && $this->old_income == $this->income
             )
         ) {
@@ -195,7 +196,7 @@ class Act extends CActiveRecord
         if (($this->isNewRecord && !$this->expense)
             || (
                 !$this->is_closed
-                && ($this->partner->type == Company::CARWASH_TYPE || $this->partner->type == Company::DISINFECTION_TYPE)
+                && ($this->service == Company::CARWASH_TYPE || $this->service == Company::DISINFECTION_TYPE)
                 && $this->old_expense == $this->expense
             )
         ) {
@@ -265,7 +266,6 @@ class Act extends CActiveRecord
         }
 
         $criteria->with = ['partner', 'client', 'client.parent' => ['alias'=>'clientParent'], 'card', 'type', 'mark'];
-        $criteria->compare('partner.type', $this->companyType);
         $criteria->compare('partner_id', $this->partner_id);
 
         if ($this->client_id && count(Company::model()->findByPk($this->client_id)->children) > 0) {
@@ -277,6 +277,7 @@ class Act extends CActiveRecord
         $criteria->compare('t.card_id', $this->card_id);
         $criteria->compare('t.number', $this->number, true);
         $criteria->compare('t.mark_id', $this->mark_id);
+        $criteria->compare('service', $this->companyType);
         if ($this->is_closed) {
             $criteria->compare('t.is_closed', $this->is_closed);
         }
@@ -301,7 +302,6 @@ class Act extends CActiveRecord
         ));
 
         $this->setDbCriteria(new CDbCriteria());
-
         return $provider;
     }
 

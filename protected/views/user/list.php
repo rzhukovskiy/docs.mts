@@ -4,7 +4,7 @@
  * @var $model User
  * @var $type string
  */
-foreach(Company::$listService as $service => $name) {
+foreach(Company::$listType as $service => $name) {
     $this->tabs[$model->companyType != $service ? $service : 'list'] = ['url' => Yii::app()->createUrl("user/$service"), 'name' => $name];
 }
 

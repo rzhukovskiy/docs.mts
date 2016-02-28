@@ -3,10 +3,11 @@
  * @var $this ArchiveController
  * @var $model Act
  */
-if (Yii::app()->user->model->company->type == Company::COMPANY_TYPE) {
+if (
+    Yii::app()->user->model->company->type == Company::COMPANY_TYPE
+    || Yii::app()->user->model->company->type == Company::UNIVERSAL_TYPE
+) {
     foreach(Company::$listService as $service => $name) {
-        //не показываем самих себя
-        if ($service == Yii::app()->user->model->company->type) continue;
         $this->tabs[$model->companyType != $service ? $service : 'list'] = ['url' => Yii::app()->createUrl("archive/$service"), 'name' => $name];
     }
 } else {

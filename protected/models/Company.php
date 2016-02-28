@@ -19,17 +19,26 @@
  */
 class Company extends CActiveRecord
 {
-    const COMPANY_TYPE = 'company',
-          CARWASH_TYPE = 'carwash',
-          SERVICE_TYPE = 'service',
+    const COMPANY_TYPE      = 'company',
+          CARWASH_TYPE      = 'carwash',
+          SERVICE_TYPE      = 'service',
           DISINFECTION_TYPE = 'disinfection',
-          TIRES_TYPE   = 'tires';
+          TIRES_TYPE        = 'tires',
+          UNIVERSAL_TYPE    = 'universal';
 
     public $cardList;
     public $month;
 
-    static $listService = [
+    static $listType = [
         self::COMPANY_TYPE => 'Компания',
+        self::CARWASH_TYPE => 'Мойка',
+        self::SERVICE_TYPE => 'Сервис',
+        self::TIRES_TYPE => 'Шиномонтаж',
+        self::DISINFECTION_TYPE => 'Дезинфекция',
+        self::UNIVERSAL_TYPE => 'Универсальная',
+    ];
+
+    static $listService = [
         self::CARWASH_TYPE => 'Мойка',
         self::SERVICE_TYPE => 'Сервис',
         self::TIRES_TYPE => 'Шиномонтаж',

@@ -118,6 +118,7 @@ $form = $this->beginWidget('CActiveForm', array(
 
     <div class="row">
         <span class="field">
+            <?=CHtml::hiddenField('Act[service]', $model->companyType); ?>
             <?=CHtml::hiddenField('Act[old_expense]', $model->expense)?>
             <?=CHtml::hiddenField('Act[old_income]', $model->income)?>
             <?=CHtml::hiddenField('returnUrl', Yii::app()->request->urlReferrer)?>
