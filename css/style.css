@@ -1622,6 +1622,7 @@ a.btn_table { background-position: -82px -480px; }
 .my-grid a.delete, a.del-img-icon { background: url(../images/icons/default/trash.png); }
 .my-grid a.calendar { background: url(../images/icons/default/calendar.png); }
 .my-grid a.decline { background: url(../images/icons/default/trash.png); }
+.my-grid a.door { background: url(../images/icons/default/door.png); }
 #createPayForm input[type="text"]{
 	width: 200px;
 }

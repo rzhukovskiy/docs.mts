@@ -62,7 +62,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
                     'label' => '',
                     'imageUrl' => false,
                     'url' => 'Yii::app()->createUrl("user/login", array("id" => $data->id))',
-                    'options' => array('class' => 'calendar')
+                    'options' => array('class' => 'door')
                 ),
                 'update' => array(
                     'label' => '',

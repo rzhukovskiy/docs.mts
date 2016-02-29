@@ -1,0 +1,71 @@
+2016/03/01 00:05:50 [info] [application] User: admin (ID: 1)
+
+$_GET=array (
+  'type' => 'company',
+)
+
+$_COOKIE=array (
+  'PHPSESSID' => '2b6g14veasqgc6vq3m8eb3e0q5',
+)
+
+$_SESSION=array (
+  '394755210ceb922b00ecd949d65d6c81__returnUrl' => '/',
+  '394755210ceb922b00ecd949d65d6c81__id' => '1',
+  '394755210ceb922b00ecd949d65d6c81__name' => 'admin',
+  '394755210ceb922b00ecd949d65d6c81__states' => 
+  array (
+  ),
+)
+
+$_SERVER=array (
+  'REDIRECT_STATUS' => '200',
+  'HTTP_HOST' => 'docs.mts',
+  'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:44.0) Gecko/20100101 Firefox/44.0',
+  'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5',
+  'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+  'HTTP_REFERER' => 'http://docs.mts/card/list',
+  'HTTP_COOKIE' => 'PHPSESSID=2b6g14veasqgc6vq3m8eb3e0q5',
+  'HTTP_CONNECTION' => 'keep-alive',
+  'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+  'SERVER_SIGNATURE' => '<address>Apache/2.4.7 (Ubuntu) Server at docs.mts Port 80</address>
+',
+  'SERVER_SOFTWARE' => 'Apache/2.4.7 (Ubuntu)',
+  'SERVER_NAME' => 'docs.mts',
+  'SERVER_ADDR' => '127.0.0.1',
+  'SERVER_PORT' => '80',
+  'REMOTE_ADDR' => '127.0.0.1',
+  'DOCUMENT_ROOT' => '/home/val/public_html/docs.mts',
+  'REQUEST_SCHEME' => 'http',
+  'CONTEXT_PREFIX' => '',
+  'CONTEXT_DOCUMENT_ROOT' => '/home/val/public_html/docs.mts',
+  'SERVER_ADMIN' => 'webmaster@localhost',
+  'SCRIPT_FILENAME' => '/home/val/public_html/docs.mts/index.php',
+  'REMOTE_PORT' => '56548',
+  'REDIRECT_URL' => '/user/company',
+  'GATEWAY_INTERFACE' => 'CGI/1.1',
+  'SERVER_PROTOCOL' => 'HTTP/1.1',
+  'REQUEST_METHOD' => 'GET',
+  'QUERY_STRING' => '',
+  'REQUEST_URI' => '/user/company',
+  'SCRIPT_NAME' => '/index.php',
+  'PHP_SELF' => '/index.php',
+  'REQUEST_TIME_FLOAT' => 1456779950.766,
+  'REQUEST_TIME' => 1456779950,
+)
+2016/03/01 00:05:50 [profile] [system.db.CDbCommand.query] begin:system.db.CDbCommand.query(SHOW FULL COLUMNS FROM `mts_user`)
+2016/03/01 00:05:50 [profile] [system.db.CDbCommand.query] end:system.db.CDbCommand.query(SHOW FULL COLUMNS FROM `mts_user`)
+2016/03/01 00:05:50 [profile] [system.db.CDbCommand.query] begin:system.db.CDbCommand.query(SHOW CREATE TABLE `mts_user`)
+2016/03/01 00:05:50 [profile] [system.db.CDbCommand.query] end:system.db.CDbCommand.query(SHOW CREATE TABLE `mts_user`)
+2016/03/01 00:05:50 [profile] [system.db.CDbCommand.query] begin:system.db.CDbCommand.query(SELECT * FROM `mts_user` `t` WHERE `t`.`id`='1' LIMIT 1)
+2016/03/01 00:05:50 [profile] [system.db.CDbCommand.query] end:system.db.CDbCommand.query(SELECT * FROM `mts_user` `t` WHERE `t`.`id`='1' LIMIT 1)
+2016/03/01 00:05:50 [profile] [system.db.CDbCommand.query] begin:system.db.CDbCommand.query(SHOW FULL COLUMNS FROM `mts_company`)
+2016/03/01 00:05:50 [profile] [system.db.CDbCommand.query] end:system.db.CDbCommand.query(SHOW FULL COLUMNS FROM `mts_company`)
+2016/03/01 00:05:50 [profile] [system.db.CDbCommand.query] begin:system.db.CDbCommand.query(SHOW CREATE TABLE `mts_company`)
+2016/03/01 00:05:50 [profile] [system.db.CDbCommand.query] end:system.db.CDbCommand.query(SHOW CREATE TABLE `mts_company`)
+2016/03/01 00:05:50 [profile] [system.db.CDbCommand.query] begin:system.db.CDbCommand.query(SELECT `company`.`id` AS `t1_c0`, `company`.`parent_id` AS `t1_c1`, `company`.`name` AS `t1_c2`, `company`.`address` AS `t1_c3`, `company`.`phone` AS `t1_c4`, `company`.`contact` AS `t1_c5`, `company`.`type` AS `t1_c6`, `company`.`contract` AS `t1_c7`, `company`.`act_header` AS `t1_c8`, `company`.`is_split` AS `t1_c9`, `company`.`is_infected` AS `t1_c10` FROM `mts_company` `company`  WHERE (`company`.`id`=:ypl0). Bound with :ypl0=NULL)
+2016/03/01 00:05:50 [profile] [system.db.CDbCommand.query] end:system.db.CDbCommand.query(SELECT `company`.`id` AS `t1_c0`, `company`.`parent_id` AS `t1_c1`, `company`.`name` AS `t1_c2`, `company`.`address` AS `t1_c3`, `company`.`phone` AS `t1_c4`, `company`.`contact` AS `t1_c5`, `company`.`type` AS `t1_c6`, `company`.`contract` AS `t1_c7`, `company`.`act_header` AS `t1_c8`, `company`.`is_split` AS `t1_c9`, `company`.`is_infected` AS `t1_c10` FROM `mts_company` `company`  WHERE (`company`.`id`=:ypl0). Bound with :ypl0=NULL)
+2016/03/01 00:05:50 [profile] [system.db.CDbCommand.query] begin:system.db.CDbCommand.query(SELECT * FROM `mts_company` `t` WHERE type = :type. Bound with :type='company')
+2016/03/01 00:05:50 [profile] [system.db.CDbCommand.query] end:system.db.CDbCommand.query(SELECT * FROM `mts_company` `t` WHERE type = :type. Bound with :type='company')
+2016/03/01 00:05:50 [profile] [system.db.CDbCommand.query] begin:system.db.CDbCommand.query(SELECT `t`.`id` AS `t0_c0`, `t`.`name` AS `t0_c1`, `t`.`email` AS `t0_c2`, `t`.`password` AS `t0_c3`, `t`.`salt` AS `t0_c4`, `t`.`active` AS `t0_c5`, `t`.`create_date` AS `t0_c6`, `t`.`role` AS `t0_c7`, `t`.`company_id` AS `t0_c8`, `company`.`id` AS `t1_c0`, `company`.`parent_id` AS `t1_c1`, `company`.`name` AS `t1_c2`, `company`.`address` AS `t1_c3`, `company`.`phone` AS `t1_c4`, `company`.`contact` AS `t1_c5`, `company`.`type` AS `t1_c6`, `company`.`contract` AS `t1_c7`, `company`.`act_header` AS `t1_c8`, `company`.`is_split` AS `t1_c9`, `company`.`is_infected` AS `t1_c10` FROM `mts_user` `t`  LEFT OUTER JOIN `mts_company` `company` ON (`t`.`company_id`=`company`.`id`) WHERE (company.type=:ycp0). Bound with :ycp0='company')
+2016/03/01 00:05:50 [profile] [system.db.CDbCommand.query] end:system.db.CDbCommand.query(SELECT `t`.`id` AS `t0_c0`, `t`.`name` AS `t0_c1`, `t`.`email` AS `t0_c2`, `t`.`password` AS `t0_c3`, `t`.`salt` AS `t0_c4`, `t`.`active` AS `t0_c5`, `t`.`create_date` AS `t0_c6`, `t`.`role` AS `t0_c7`, `t`.`company_id` AS `t0_c8`, `company`.`id` AS `t1_c0`, `company`.`parent_id` AS `t1_c1`, `company`.`name` AS `t1_c2`, `company`.`address` AS `t1_c3`, `company`.`phone` AS `t1_c4`, `company`.`contact` AS `t1_c5`, `company`.`type` AS `t1_c6`, `company`.`contract` AS `t1_c7`, `company`.`act_header` AS `t1_c8`, `company`.`is_split` AS `t1_c9`, `company`.`is_infected` AS `t1_c10` FROM `mts_user` `t`  LEFT OUTER JOIN `mts_company` `company` ON (`t`.`company_id`=`company`.`id`) WHERE (company.type=:ycp0). Bound with :ycp0='company')
