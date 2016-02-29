@@ -2,78 +2,174 @@
 /**
  * @var $this ActController
  * @var $model Act
+ * @var $form CActiveForm
  */
-$provider = $model->search();
+if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+    $this->renderPartial('_selector', array('model' => $model));
 ?>
-<div class="my-grid" id="act-grid">
-    <table class="stdtable grid table-fixed">
-        <thead>
-        <?php
-        $totalCount = count($provider->getData());
-        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $this->renderPartial('_selector', array('model' => $model));
+    <script type="text/javascript">
+        function createHeaders() {
+            addHeaders({
+                tableSelector: "#act-grid",
+                footers: [
+                    {
+                        className: '.partner',
+                        title: 'Итого',
+                        rowClass: 'total'
+                    }
+                ],
+                headers: [
+                    {
+                        className: '.partner',
+                        rowClass: 'header'
+                    }
+                ]
+            });
         }
-        ?>
-        <tr class="selector">
-            <th id="act-grid_c0">№</th>
-            <th id="act-grid_c1"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=service_date">Дата</a></th>
-            <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
-                <th id="act-grid_c2"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=partner_id">Партнер</a></th>
-            <?php } ?>
-            <th id="act-grid_c3"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=card_id">Карта</a></th>
-            <th id="act-grid_c4"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=number">Госномер</a></th>
-            <th id="act-grid_c5"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=mark_id">Марка</a></th>
-            <th id="act-grid_c6"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=type_id">Тип ТС</a></th>
-            <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
-                <th id="act-grid_c7"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=partner_service">Услуга</a></th>
-            <?php } ?>
-            <th id="act-grid_c8"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=expense">Сумма</a></th>
-            <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
-                <th id="act-grid_c10"><a class="sort-link" href="/act/<?=$model->companyType?>?Act_sort=check">Номер чека</a></th>
-                <th id="act-grid_c11"><a class="sort-link">Чек</a></th>
-            <?php } ?>
-            <th class="button-column" id="act-grid_c12">&nbsp;</th>
-        </tr>
-        <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
-            <tr class="filters">
-                <td>&nbsp;</td>
-                <td>
-                    <?=CHtml::dropDownList('Act[day]',
-                        $model->day,
-                        range(0, date('t', strtotime("$model->month-$model->day"))),
-                        array('empty' => 'Все'))?>
-                </td>
-                <td><?=CHtml::dropDownList('Act[partner_id]',
-                        $model->partner_id,
-                        CHtml::listData(Company::model()->findAll('type = :type' , array(':type' => $model->companyType)),'id', 'name'),
-                        array('empty' => 'Все', 'style' => 'width: 80px;'))?>
-                </td>
-                <td><input name="Act[card_id]" type="text"></td>
-                <td><input name="Act[number]" type="text"></td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <?php if ($model->companyType == Company::CARWASH_TYPE)  { ?>
-                    <td>&nbsp;</td>
-                    <td><input name="Act[check]" type="text"></td>
-                    <td>&nbsp;</td>
-                <?php } ?>
-                <td>&nbsp;</td>
-            </tr>
-        <?php } ?>
-        </thead>
-        <tbody>
-        <?=$this->renderPartial('service/_item', array('model' => $model))?>
-        <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
-            <tr class="total">
-                <td><strong>Общее</strong></td>
-                <td colspan="<?=Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $model->companyType == Company::CARWASH_TYPE ? 7 : (Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 6 : 5); ?>">
-                    <?=$totalCount . ' ' . StringNum::getNumEnding($totalCount, array('машина', 'машины', 'машин'))?>
-                </td>
-                <td style="text-align:center;"><strong><?=$model->totalField($provider, 'expense')?></strong></td>
-                <td colspan="<?=$model->companyType == Company::CARWASH_TYPE ? 3 : 1?>"></td>
-            </tr>
-        <?php } ?>
-        </tbody>
-    </table>
-</div>
+
+        $(document).bind('ready', function() {
+            createHeaders();
+        });
+    </script>
+<?php
+
+    $attributes = array_values(array_filter($model->attributes));
+    $model->unsetAttributes(['card_id', 'number', 'extra_number', 'check']);
+    echo CHtml::hiddenField('query', CJSON::encode($attributes));
+    $this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
+        'selector' => '.my-grid',
+        'words' => $attributes
+    ));
+}
+
+$provider = $model->search();
+$gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
+    'afterAjaxUpdate' => 'function(id, data){searchHighlight(id, data);createHeaders();stick();}',
+    'id' => 'act-grid',
+    'htmlOptions' => array('class' => 'my-grid'),
+    'itemsCssClass' => 'stdtable grid',
+    'filter' => $model,
+    'dataProvider' => $provider,
+    'template' => "{items}",
+    'columns' => array(
+        array(
+            'header' => '№',
+            'htmlOptions' => array('style' => 'width: 40px; text-align:center;'),
+            'value' => '++$row',
+            'footer' => 'Всего',
+            'footerHtmlOptions' => array('style' => 'text-align:center;'),
+        ),
+        array(
+            'name' => 'month',
+            'htmlOptions' => array('style' => 'display:none'),
+            'headerHtmlOptions' => array('style' => 'display:none'),
+            'footerHtmlOptions' => array('style' => 'display:none'),
+            'filterHtmlOptions' => array('style' => 'display:none'),
+        ),
+        array(
+            'name' => 'service_date',
+            'htmlOptions' => array('style' => ' width: 70px; text-align:center;'),
+            'value' => 'date("j", strtotime($data->service_date))',
+            'filter' => CHtml::dropDownList('Act[day]',
+                $model->day,
+                range(1, date('t', strtotime("$model->month-$model->day"))),
+                array('empty' => 'Все')),
+            'footer' => count($provider->getData()) . ' ' . StringNum::getNumEnding(count($provider->getData()), array('машина', 'машины', 'машин')),
+        ),
+        array(
+            'class' => 'DataColumn',
+            'evaluateHtmlOptions' => true,
+            'header' => 'Партнер',
+            'name' => 'partner',
+            'value' => '$data->partner->name',
+            'htmlOptions' => array('style' => '"width: 100px;"', 'class' => '"partner"', 'data-header' => '"{$data->partner->name} - {$data->partner->address}"'),
+            'filter' => CHtml::dropDownList('Act[parent_id]',
+                $model->client_id,
+                CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name'),
+                array('empty' => 'Все', 'style' => 'width: 80px;')),
+            'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
+        ),
+        array(
+            'name' => 'card_id',
+            'htmlOptions' => array('style' => 'width: 60px;'),
+            'value' => '$data->card->number',
+            'cssClassExpression' => '$data->hasError("card") ? "error" : ""',
+        ),
+        array(
+            'name' => 'number',
+            'htmlOptions' => array('style' => 'width: 80px; text-align:center;'),
+            'cssClassExpression' => '$data->hasError("car") ? "error" : ""',
+        ),
+        array(
+            'name' => 'extra_number',
+            'htmlOptions' => array('style' => 'width: 80px; text-align:center;'),
+            'cssClassExpression' => '$data->hasError("truck") ? "error" : ""',
+        ),
+        array(
+            'name' => 'mark_id',
+            'htmlOptions' => array('style' => 'width: 80px; text-align:center;'),
+            'value' => '$data->mark->name',
+            'filter' => false,
+        ),
+        array(
+            'name' => 'type_id',
+            'htmlOptions' => array(),
+            'filter' => false,
+            'value' => '$data->type->name',
+        ),
+        array(
+            'name' => 'partner_service',
+            'htmlOptions' => array('style' => 'width: 80px; text-align:center;'),
+            'value' => 'Act::$fullList[$data->partner_service]',
+            'filter' => false,
+            'visible' => $model->companyType == Company::CARWASH_TYPE,
+        ),
+        array(
+            'header' => 'Сумма',
+            'name' => 'expense',
+            'value' => '$data->getFormattedField("expense")',
+            'htmlOptions' => array('style' => 'width: 60px; text-align:center;', 'class' => 'sum'),
+            'cssClassExpression' => '$data->hasError("expense") ? "error" : ""',
+            'footer' => $model->totalField($provider, 'expense'),
+            'footerHtmlOptions' => array('style' => 'text-align:center;'),
+            'filter' => false,
+        ),
+        array(
+            'name' => 'check',
+            'htmlOptions' => array('style' => 'width: 60px; text-align:center;'),
+            'value' => '$data->check ? $data->check : ($data->hasError("check") ? "error" : "")',
+            'cssClassExpression' => '$data->hasError("check") ? "error" : ""',
+            'visible' => $model->companyType == Company::CARWASH_TYPE,
+        ),
+        array(
+            'name' => 'check_image',
+            'type' => 'raw',
+            'value' => '!empty($data->check_image) ? '
+                . 'CHtml::link("image", "/files/checks/" . $data->check_image,'
+                . 'array("class"=>"preview")) : "no image"',
+            'htmlOptions' => array('style' => 'width: 40px;'),
+            'visible' => $model->companyType == Company::CARWASH_TYPE,
+            'filter' => false,
+        ),
+        array(
+            'class' => 'CButtonColumn',
+            'template' => '{update}{delete}',
+            'header' => '',
+            'cssClassExpression' => !Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? '$data->is_closed ? "hidden" : ""' : '',
+            'buttons' => array(
+                'update' => array(
+                    'label' => '',
+                    'imageUrl' => false,
+                    'url' => 'Yii::app()->createUrl("/act/update", array("id" => $data->id))',
+                    'options' => array('class' => 'update')
+                ),
+                'delete' => array(
+                    'label' => '',
+                    'imageUrl' => false,
+                    'url' => 'Yii::app()->createUrl("/act/delete", array("id" => $data->id))',
+                    'options' => array('class' => 'delete')
+                ),
+            ),
+        ),
+    ),
+));

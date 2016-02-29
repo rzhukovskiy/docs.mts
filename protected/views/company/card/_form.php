@@ -18,7 +18,7 @@ $form = $this->beginWidget('CActiveForm', array(
 ?>
 <div class="row">
     <span class="field">
-        <?=$form->labelEx($model, 'number'); ?>
+        <?=$form->label($model, 'number'); ?>
         <?=$form->hiddenField($model, 'company_id'); ?>
         <?=$form->textField($model, 'number'); ?>
         <?=$form->error($model, 'number');?>

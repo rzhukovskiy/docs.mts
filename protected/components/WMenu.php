@@ -17,31 +17,16 @@ class WMenu extends CWidget
     public function getItems()
     {
         if(empty($this->items)) {
-            $this->items = array(
-                'company' => array(
-                    'title'  => 'Компании',
+            foreach (Company::$listType as $controller => $title) {
+                $this->items[$controller] = [
+                    'title'  => $title,
                     'class'  => 'empty',
                     'action' => 'list',
                     'role'   => User::ADMIN_ROLE
-                ),
-                'carwash' => array(
-                    'title'  => 'Мойки',
-                    'class'  => 'empty',
-                    'action' => 'list',
-                    'role'   => User::ADMIN_ROLE
-                ),
-                'service' => array(
-                    'title'  => 'Сервисы',
-                    'class'  => 'empty',
-                    'action' => 'list',
-                    'role'   => User::ADMIN_ROLE
-                ),
-                'tires' => array(
-                    'title'  => 'Шиномонтаж',
-                    'class'  => 'empty',
-                    'action' => 'list',
-                    'role'   => User::ADMIN_ROLE
-                ),
+                ];
+            }
+
+            $this->items = array_merge($this->items, [
                 'user' => array(
                     'title'  => 'Пользователи',
                     'class'  => 'empty',
@@ -91,17 +76,20 @@ class WMenu extends CWidget
                 'act' => array(
                     'title'  => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? 'Акты' : 'Добавить машину',
                     'class'  => 'empty',
-                    'action' => Yii::app()->user->checkAccess(User::CLIENT_ROLE) ? Company::CARWASH_TYPE : Yii::app()->user->model->company->type,
+                    'action' => Yii::app()->user->checkAccess(User::CLIENT_ROLE) || Yii::app()->user->model->company->type == Company::UNIVERSAL_TYPE ? Company::CARWASH_TYPE : Yii::app()->user->model->company->type,
                     'role'   => User::PARTNER_ROLE,
                 ),
                 'archive' => array(
-                    'title'  => Yii::app()->user->model->role == User::CLIENT_ROLE ? 'Услуги' : 'Архив',
+                    'title'  => Yii::app()->user->model->role == User::ADMIN_ROLE
+                        ? 'Ошибочные акты'
+                        : (Yii::app()->user->model->role == User::CLIENT_ROLE ? 'Услуги' : 'Архив'),
                     'class'  => 'empty',
-                    'action' => Yii::app()->user->checkAccess(User::CLIENT_ROLE) ? Company::CARWASH_TYPE : Yii::app()->user->model->company->type,
+                    'action' => Yii::app()->user->model->role == User::ADMIN_ROLE
+                        ? 'error'
+                        : (Yii::app()->user->checkAccess(User::CLIENT_ROLE) || Yii::app()->user->model->company->type == Company::UNIVERSAL_TYPE ? Company::CARWASH_TYPE : Yii::app()->user->model->company->type),
                     'role'   => User::GUEST_ROLE,
-                    'visible' => !Yii::app()->user->checkAccess(User::ADMIN_ROLE),
                 ),
-            );
+            ]);
         }
 
         return $this->items;

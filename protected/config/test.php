@@ -38,6 +38,12 @@ return array(
             'class' => 'CLogRouter',
             'routes' => array(
                 array(
+                    'class' => 'CWebLogRoute',
+                    'enabled' => 1,
+                    'categories' => 'system.db.*',
+
+                ),
+                array(
                     'class' => 'CProfileLogRoute',
                     'levels' => 'profile',
                     'enabled' => 0,

@@ -13,32 +13,49 @@ $form = $this->beginWidget('CActiveForm', array(
         'enableAjaxValidation' => true,
         'clientOptions' => array('validateOnSubmit' => true),
     ));
+
 ?>
 <table class="stdtable grid">
     <tr>
-        <td>
-            <?=$form->labelEx($priceList, 'type_id'); ?>
+        <td rowspan="2">
+            <?=$form->label($priceList, 'type_id'); ?>
         </td>
-        <td>
+        <td rowspan="2">
             <?=$form->dropDownList($priceList, 'type_id', CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
         </td>
         <td>
-            <?=$form->labelEx($priceList, 'outside'); ?>
+            <?=$form->label($priceList, 'outside'); ?>
         </td>
         <td>
             <?=$form->textField($priceList, 'outside'); ?>
+            <? if (false /*$model->is_split*/) {
+                echo $form->textField($priceList->extra, 'outside');
+            } ?>
         </td>
         <td>
-            <?=$form->labelEx($priceList, 'inside'); ?>
+            <?=$form->label($priceList, 'inside'); ?>
         </td>
         <td>
             <?=$form->textField($priceList, 'inside'); ?>
+            <? if (false /*$model->is_split*/) {
+                echo $form->textField($priceList->extra, 'inside');
+            } ?>
         </td>
-        <td>
+        <td rowspan="2">
             <?=$form->hiddenField($priceList, 'company_id'); ?>
             <?=CHtml::submitButton('Добавить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
         </td>
+    </tr>
     <tr>
+        <td>
+            <?=$form->label($priceList, 'disinfection'); ?>
+        </td>
+        <td>
+            <?=$form->textField($priceList, 'disinfection'); ?>
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
 </table>
 <?php $this->endWidget(); ?>
 <!-- form -->

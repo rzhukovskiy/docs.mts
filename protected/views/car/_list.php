@@ -8,7 +8,7 @@
  */
 $this->renderPartial('_selector', array('model' => $model, 'id' => $model->id));
 
-$this->widget('zii.widgets.grid.CGridView', array(
+$this->widget('ext.groupgridview.GroupGridView', array(
     'id' => 'car-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
@@ -19,6 +19,9 @@ $this->widget('zii.widgets.grid.CGridView', array(
     'cssFile' => false,
     'template' => "{items}",
     'loadingCssClass' => false,
+    'extraRowColumns' => array('company_id'),
+    'extraRowExpression' => '$data->company->name . " - " . $data->company->address',
+    'extraRowPos' => 'above',
     'columns' => array(
         array(
             'header' => '№',
@@ -29,8 +32,10 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'company_id',
             'htmlOptions' => array('style' => 'width: 60px; text-align:center;'),
             'value' => '$data->company->name',
-            'filter' => CHtml::listData(Company::model()->findAll('type = :type', array(':type' => Company::COMPANY_TYPE)), 'id', 'name'),
-            'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
+            'filter' => isset($model->company->children)
+                ? CHtml::listData(Company::model()->findAll('parent_id = :parent_id', [':parent_id' => $model->company_id]), 'id', 'name')
+                : CHtml::listData(Company::model()->findAll('type = :type', [':type' => Company::COMPANY_TYPE]), 'id', 'name'),
+            'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) || Yii::app()->user->model->company->children,
         ),
         array(
             'name' => 'mark_id',

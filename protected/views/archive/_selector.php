@@ -19,9 +19,18 @@ $form = $this->beginWidget('CActiveForm', array(
             <th style="width: 250px">
                 <?=CHtml::label('Выбор периода', '')?>
                 <?=$form->textField($model, 'month')?>
-                <?=CHtml::submitButton('Показать', array('class' => 'submit radius2 date-send', 'style' => 'display: none; opacity: 1;')); ?>
             </th>
-            <th>&nbsp;</th>
+            <th style="width: 400px">
+                <?php if(count(Yii::app()->user->model->company->children)) { ?>
+                    <?=CHtml::label('Выбор филиала', '')?>
+                    <?=$form->dropDownList($model,
+                        'client_id',
+                        CHtml::listData(Yii::app()->user->model->company->children, 'id', 'name'),
+                        ['class' => 'autoinput', 'empty' => 'все']
+                    )?>
+                <?php } ?>
+            </th>
+            <th><?=CHtml::submitButton('Показать', array('class' => 'submit radius2 date-send', 'style' => 'opacity: 1;')); ?></th>
         </tr>
         <tr class="header">
             <td colspan="3">&nbsp;</td>

@@ -6,6 +6,10 @@ body.errorpage { background: #dededc; }
 h1, h2, h3 { color: #283038; }
 th {color: #069;}
 
+.main{
+    font-weight: bold;
+    font-size: 14px;
+}
 tr.highlight td, .stdtable tbody tr.highlight:hover td { background: #75A3CC; color: #fff; }
 .stdtable tbody tr.total td, .stdtable tfoot {border-bottom: 2px solid #ddd; color: #069;}
 .total, .stdform input.total { font-weight: bold; color: #069;}

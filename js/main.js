@@ -9,7 +9,6 @@ $(document).ready(function() {
     $('td a').click(function(e) {
         var storageName = window.location.href + '_pos';
         localStorage[storageName] = $(window).scrollTop();
-        console.log(localStorage[storageName]);
     });
 
     $('body').on('mouseover',"input[name='Act[create_date]']",function() {
@@ -175,9 +174,9 @@ function pageSearch(selector, query) {
     $('span.highlight').removeClass('highlight');
     $(selector).highlight(query);
     $(selector).find('span.highlight').parents('tr').addClass('highlight');
-    if (!isScrolledIntoView("span.highlight")) {
+    if ($( "span.highlight" ).length && !isScrolledIntoView("span.highlight")) {
         $('html, body').animate({
-            scrollTop: $("span.highlight").offset().top - 400
+            scrollTop: $("span.highlight").offset().top - 600
         }, 2000);
     }
     setTimeout(function(){
@@ -266,5 +265,90 @@ this.imagePreview = function() {
         $("#preview")
             .css("top", "100px")
             .css("left", "10px");
+    });
+};
+
+this.addHeaders = function(options) {
+    var tableSelector = options.tableSelector;
+    var headers = options.headers;
+    var footers = options.footers;
+    var defaultClass = 'extra-row';
+
+
+    footers.forEach(function(trigger, i) {
+        var previousValue = 'empty';
+        var total = 0;
+        var len = $(tableSelector).find('tbody tr')
+            .not('.' + defaultClass).length;
+
+        $(tableSelector).find('tbody tr')
+            .not('.' + defaultClass)
+            .each(function(id, row) {
+
+                var currentValue = $(row).find(trigger.className).text();
+                var pos = $(row).find('td:visible').index($(row).find('.sum'));
+
+                if (previousValue != 'empty' && previousValue != currentValue) {
+                    if (previousValue != '') {
+                        var tr = $('<tr>').addClass(trigger.rowClass).addClass(defaultClass);
+                        for (var i = 0; i < $(row).find('td:visible').length; i++) {
+                            if (i == pos) {
+                                var td = $('<td>').text(numeral(total).format()).css('text-align', 'center');
+                                tr.append(td);
+                            } else if (i == 0) {
+                                var td = $('<td>').text(trigger.title).css('text-align', 'center');
+                                tr.append(td);
+                            } else {
+                                var td = $('<td>');
+                                tr.append(td);
+                            }
+                        }
+                        $(row).before(tr);
+                    }
+
+                    total = 0;
+                }
+
+                total += parseInt($(row).find('.sum').text().replace(" ", ""));
+                previousValue = currentValue;
+
+                if (id == len - 1 && currentValue != '') {
+                    var tr = $('<tr>').addClass(trigger.rowClass).addClass(defaultClass);
+                    for (var i = 0; i < $(row).find('td:visible').length; i++) {
+                        if (i == pos) {
+                            var td = $('<td>').text(numeral(total).format()).css('text-align', 'center');
+                            tr.append(td);
+                        } else if (i == 0) {
+                            var td = $('<td>').text(trigger.title).css('text-align', 'center');
+                            tr.append(td);
+                        } else {
+                            var td = $('<td>');
+                            tr.append(td);
+                        }
+                    }
+                    $(row).after(tr);
+                    total = 0;
+                }
+            });
+    });
+
+    headers.forEach(function(trigger, i) {
+        var previousValue = '';
+        $(tableSelector).find('tbody tr')
+            .not('.' + defaultClass)
+            .each(function(id, row) {
+
+                var currentValue = $(row).find(trigger.className).text();
+                if($(row).find(trigger.className).attr('data-header')) {
+                    currentValue = $(row).find(trigger.className).attr('data-header');
+                }
+
+                if (previousValue != currentValue) {
+                    var td = $('<td>').text(currentValue).attr("colspan", $(row).find('td').length);
+                    var tr = $('<tr>').addClass(trigger.rowClass).addClass(defaultClass).append(td);
+                    $(row).before(tr);
+                }
+                previousValue = currentValue;
+            });
     });
 };

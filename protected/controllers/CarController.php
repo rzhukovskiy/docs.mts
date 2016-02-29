@@ -16,6 +16,20 @@ class CarController extends Controller
         ));
     }
 
+    public function actionDirty()
+    {
+        $model = new Car('search');
+        $model->unsetAttributes();
+
+        if (isset($_GET['Car'])) {
+            $model->attributes = $_GET['Car'];
+        }
+
+        $this->render('dirty', array(
+            'model' => $model,
+        ));
+    }
+
     public function actionHistory($id)
     {
         $carModel = $this->loadModel((int)$id);

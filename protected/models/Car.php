@@ -9,6 +9,7 @@
  * @property int $mark_id
  * @property int $type_id
  * @property int $service_count
+ * @property int $client_id
  * @property string $from_date
  * @property string $to_date
  */
@@ -16,6 +17,7 @@ class Car extends CActiveRecord
 {
     public $from_date;
     public $to_date;
+    public $client_id;
     public $service_count;
     public $period;
     public $month;
@@ -41,7 +43,7 @@ class Car extends CActiveRecord
         return array(
             array('company_id, number, mark_id, type_id', 'required'),
             array('number', 'unique'),
-            array('from_date, to_date', 'safe'),
+            array('client_id, from_date, to_date', 'safe'),
             array('service_count, id, number, mark_id', 'safe', 'on' => 'search'),
         );
     }
@@ -52,7 +54,7 @@ class Car extends CActiveRecord
             'company' => array(self::BELONGS_TO, 'Company', 'company_id'),
             'mark' => array(self::BELONGS_TO, 'Mark', 'mark_id'),
             'type' => array(self::BELONGS_TO, 'Type', 'type_id'),
-            'act' => array(self::HAS_MANY, 'Act', '', 'on'=>'act.number = t.number', 'joinType' => 'INNER JOIN', 'alias' => 'act'),
+            'act' => array(self::HAS_MANY, 'Act', '', 'on'=>'act.number = t.number AND act.client_id = t.company_id', 'joinType' => 'JOIN', 'alias' => 'act'),
         );
     }
 
@@ -93,17 +95,21 @@ class Car extends CActiveRecord
 
         $criteria = new CDbCriteria;
 
-        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+        if (!$this->company_id && !Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
             $this->company_id = Yii::app()->user->model->company_id;
         }
 
-        $criteria->with = 'act';
+        $criteria->with = ['act', 'company'];
         $criteria->together = true;
         $criteria->select = '*, count(act.id) as service_count';
         $criteria->group = 't.id';
         $criteria->compare('t.id', $this->id);
         $criteria->compare('t.number', $this->number, true);
-        $criteria->compare('t.company_id', $this->company_id);
+        if ($this->client_id) {
+            $criteria->compare('clientParent.id', $this->client_id);
+        } else {
+            $criteria->compare('company_id', $this->company_id);
+        }
         $criteria->compare('t.mark_id', $this->mark_id);
         $criteria->compare('t.type_id', $this->type_id);
         if (isset($this->from_date)) {
@@ -114,11 +120,56 @@ class Car extends CActiveRecord
         $sort->defaultOrder = 't.company_id, service_count DESC';
         $sort->applyOrder($criteria);
 
-        return new CActiveDataProvider(get_class($this), array(
-            'criteria' => $criteria,
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        $provider = new CActiveDataProvider(get_class($this), array(
+            'criteria' => $this->getDbCriteria(),
             'sort' => $sort,
             'pagination' => false,
         ));
+
+        return $provider;
+    }
+
+    /**
+     * @return CActiveDataProvider
+     */
+    public function dirty()
+    {
+        $criteria = new CDbCriteria;
+
+        if (!$this->company_id && !Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+            $this->company_id = Yii::app()->user->model->company_id;
+        }
+
+        $criteria->with = ['company'];
+        if ($this->from_date) {
+            $criteria->addCondition('NOT EXISTS (SELECT * FROM mts_act WHERE mts_act.number = t.number AND mts_act.service_date BETWEEN "' . $this->from_date . '" AND "' . $this->to_date .'")');
+        } else {
+            $criteria->addCondition('NOT EXISTS (SELECT * FROM mts_act WHERE mts_act.number = t.number)');
+        }
+        $criteria->group = 't.id';
+        $criteria->compare('t.id', $this->id);
+        $criteria->compare('company.is_infected', 1);
+        if ($this->client_id) {
+            $criteria->compare('clientParent.id', $this->client_id);
+        } else {
+            $criteria->compare('company_id', $this->company_id);
+        }
+
+        $sort = new CSort();
+        $sort->defaultOrder = 't.company_id, t.number DESC';
+        $sort->applyOrder($criteria);
+
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        $provider = new CActiveDataProvider(get_class($this), array(
+            'criteria' => $this->getDbCriteria(),
+            'sort' => $sort,
+            'pagination' => false,
+        ));
+
+        return $provider;
     }
 
     public function attributeLabels()

@@ -23,6 +23,7 @@ class CompanyController extends Controller
             'model' => $model,
         ));
     }
+
     public function actionCreate()
     {
         $model = new Company();
@@ -45,6 +46,7 @@ class CompanyController extends Controller
 
         $priceList = new Price('search');
         $priceList->company_id = $model->id;
+        $priceList->extra = new ExtraPrice();
 
         if (isset($_POST['Company'])) {
             $model->attributes = $_POST['Company'];
@@ -105,6 +107,12 @@ class CompanyController extends Controller
             $model->attributes = $_POST['Price'];
             $this->performAjaxValidation($model);
             $model->save();
+        }
+        if (isset($_POST['ExtraPrice'])) {
+            $extraPrice = new ExtraPrice();
+            $extraPrice->attributes = $_POST['ExtraPrice'];
+            $extraPrice->price_id = $model->id;
+            $extraPrice->save();
         }
 
         $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : Yii::app()->createUrl($this->type . '/update', array('id' => $model->company_id)));

@@ -9,10 +9,12 @@
  * @property int $type_id
  * @property int $card_id
  * @property string $number
+ * @property string $extra_number
  * @property int $mark_id
  * @property string $create_date
  * @property string $service_date
  * @property int $is_closed
+ * @property int $is_fixed
  * @property int $partner_service
  * @property int $client_service
  * @property string $check
@@ -28,9 +30,13 @@
  * @property int $amount
  * @property string $from_date
  * @property string $to_date
+ * @property string $clientName
+ * @property string $service
  */
 class Act extends CActiveRecord
 {
+    public $clientName;
+
     public $from_date;
     public $to_date;
     public $screen;
@@ -52,6 +58,7 @@ class Act extends CActiveRecord
     public static $serviceList = array(
         3 => 'сервис',
         4 => 'шиномонатж',
+        5 => 'дезинфекция',
     );
     public static $fullList = array(
         'снаружи',
@@ -59,6 +66,7 @@ class Act extends CActiveRecord
         'снаружи+внутри',
         'сервис',
         'шиномонтаж',
+        'дезинфекция',
     );
     public static $shortList = array(
         'мойка снаружи',
@@ -66,11 +74,11 @@ class Act extends CActiveRecord
         'мойка снаружи+внутри',
         'сервис',
         'шиномонтаж',
+        'дезинфекция',
     );
 
     public $month;
     public $day;
-
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
@@ -91,7 +99,7 @@ class Act extends CActiveRecord
         return array(
             array('type_id, card_id, number, mark_id', 'required'),
             array('check', 'unique'),
-            array('from_date, to_date, period, month, day, check, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
+            array('service, extra_number, is_fixed, from_date, to_date, period, month, day, check, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
             array('company_id, id, number, mark_id, type_id, card_id, service_date', 'safe', 'on' => 'search'),
         );
     }
@@ -105,6 +113,8 @@ class Act extends CActiveRecord
             'type' => array(self::BELONGS_TO, 'Type', 'type_id'),
             'mark' => array(self::BELONGS_TO, 'Mark', 'mark_id'),
             'scope' => array(self::HAS_MANY, 'ActScope', 'act_id'),
+            'car' => array(self::BELONGS_TO, 'Car', array('number' => 'number')),
+            'truck' => array(self::BELONGS_TO, 'Car', array('extra_number' => 'number')),
         );
     }
 
@@ -136,11 +146,16 @@ class Act extends CActiveRecord
             $this->type_id = $car->type_id;
         }
 
-        if ($this->partner->type == Company::SERVICE_TYPE) {
-            $this->client_service = $this->partner_service = 3;
-        }
-        if ($this->partner->type == Company::TIRES_TYPE) {
-            $this->client_service = $this->partner_service = 4;
+        switch ($this->service) {
+            case Company::SERVICE_TYPE:
+                $this->client_service = $this->partner_service = 3;
+                break;
+            case Company::TIRES_TYPE:
+                $this->client_service = $this->partner_service = 4;
+                break;
+            case Company::DISINFECTION_TYPE:
+                $this->client_service = $this->partner_service = 5;
+                break;
         }
 
         if ($this->isNewRecord) {
@@ -150,7 +165,11 @@ class Act extends CActiveRecord
         $this->client_id = $this->card->company_id;
 
         if (($this->isNewRecord && !$this->income)
-            || (!$this->is_closed && $this->partner->type == Company::CARWASH_TYPE && $this->old_income == $this->income)
+            || (
+                !$this->is_closed
+                && ($this->service == Company::CARWASH_TYPE || $this->service == Company::DISINFECTION_TYPE)
+                && $this->old_income == $this->income
+            )
         ) {
             $washPrice = Price::model()->find('company_id = :company_id AND type_id = :type_id',
                 array(
@@ -162,9 +181,12 @@ class Act extends CActiveRecord
                 $this->income = 0;
             } else {
                 $servicePrice = array(
-                    $washPrice->outside,
-                    $washPrice->inside,
-                    $washPrice->outside + $washPrice->inside,
+                    $washPrice->fullOutside,
+                    $washPrice->fullInside,
+                    $washPrice->fullOutside + $washPrice->fullInside,
+                    0,
+                    0,
+                    $washPrice->disinfection,
                 );
 
                 $this->income = $servicePrice[$this->client_service];
@@ -172,7 +194,11 @@ class Act extends CActiveRecord
         }
 
         if (($this->isNewRecord && !$this->expense)
-            || (!$this->is_closed && $this->partner->type == Company::CARWASH_TYPE && $this->old_expense == $this->expense)
+            || (
+                !$this->is_closed
+                && ($this->service == Company::CARWASH_TYPE || $this->service == Company::DISINFECTION_TYPE)
+                && $this->old_expense == $this->expense
+            )
         ) {
             $washPrice = Price::model()->find('company_id = :company_id AND type_id = :type_id',
                 array(
@@ -184,9 +210,12 @@ class Act extends CActiveRecord
                 $this->expense = 0;
             } else {
                 $servicePrice = array(
-                    $washPrice->outside,
-                    $washPrice->inside,
-                    $washPrice->outside + $washPrice->inside,
+                    $washPrice->fullOutside,
+                    $washPrice->fullInside,
+                    $washPrice->fullOutside + $washPrice->fullInside,
+                    0,
+                    0,
+                    $washPrice->disinfection,
                 );
 
                 $this->expense = $servicePrice[$this->partner_service];
@@ -208,15 +237,17 @@ class Act extends CActiveRecord
 
         //клиентам всегда показываем только закрытые акты
         if (Yii::app()->user->model->role == User::CLIENT_ROLE) {
-            $this->is_closed = 1;
             $this->showCompany = 1;
         }
 
         //на всякий случай для партнеров и клиентов показываем только их акты
-        if (Yii::app()->user->model->role == User::PARTNER_ROLE) {
+        if (Yii::app()->user->model->role == User::PARTNER_ROLE && $this->partner_id != Yii::app()->user->model->company_id) {
             $this->partner_id = Yii::app()->user->model->company_id;
         }
-        if (Yii::app()->user->model->role == User::CLIENT_ROLE) {
+        if (Yii::app()->user->model->role == User::CLIENT_ROLE
+            && $this->client_id != Yii::app()->user->model->company_id
+            && !$this->hasChild($this->client_id)
+        ) {
             $this->client_id = Yii::app()->user->model->company_id;
         }
 
@@ -234,14 +265,19 @@ class Act extends CActiveRecord
             }
         }
 
-        $criteria->with = array('partner', 'client', 'card', 'type', 'mark');
-        $criteria->compare('partner.type', $this->companyType);
+        $criteria->with = ['partner', 'client', 'client.parent' => ['alias'=>'clientParent'], 'card', 'type', 'mark'];
         $criteria->compare('partner_id', $this->partner_id);
-        $criteria->compare('client_id', $this->client_id);
+
+        if ($this->client_id && count(Company::model()->findByPk($this->client_id)->children) > 0) {
+            $criteria->addCondition("clientParent.id = $this->client_id OR client_id = $this->client_id");
+        } else {
+            $criteria->compare('client_id', $this->client_id);
+        }
         $criteria->compare('t.type_id', $this->type_id);
         $criteria->compare('t.card_id', $this->card_id);
         $criteria->compare('t.number', $this->number, true);
         $criteria->compare('t.mark_id', $this->mark_id);
+        $criteria->compare('service', $this->companyType);
         if ($this->is_closed) {
             $criteria->compare('t.is_closed', $this->is_closed);
         }
@@ -266,8 +302,31 @@ class Act extends CActiveRecord
         ));
 
         $this->setDbCriteria(new CDbCriteria());
-
         return $provider;
+    }
+
+    public function withErrors()
+    {
+        $criteria = new CDbCriteria();
+
+        $criteria->with = ['car', 'truck'];
+        $criteria->order = 'service_date DESC';
+
+        $criteria->compare('income', 0);
+        $criteria->compare('expense', 0, false, 'OR');
+        $criteria->addCondition('`check` is NULL AND partner_service IN(0,1,2)', 'OR');
+        $criteria->addCondition('`check` = "" AND partner_service IN(0,1,2)', 'OR');
+        $criteria->addCondition('card.company_id != car.company_id', 'OR');
+        $criteria->addCondition('client.is_split = 1 AND truck.company_id is NULL', 'OR');
+        $criteria->addCondition('car.company_id is NULL', 'OR');
+
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        $criteria = new CDbCriteria();
+        $criteria->compare('is_fixed', 0);
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        return $this;
     }
 
     public function byDays()
@@ -363,6 +422,7 @@ class Act extends CActiveRecord
             'client_id' => 'Клиент',
             'card_id' => 'Карта',
             'number' => 'Госномер',
+            'extra_number' => 'Госномер п/прицепа',
             'mark_id' => 'Марка',
             'service_date' => 'Дата',
             'partner_service' => 'Услуга',
@@ -374,6 +434,33 @@ class Act extends CActiveRecord
             'expense' => 'Сумма',
             'day' => 'День',
         );
+    }
+
+    public function hasError($error)
+    {
+        $hasError = false;
+        switch ($error) {
+            case 'expense':
+                $hasError = !$this->expense;
+                break;
+            case 'income':
+                $hasError = !$this->income;
+                break;
+            case 'check':
+                $hasError = !$this->check && $this->partner->type == Company::CARWASH_TYPE;
+                break;
+            case 'card':
+                $hasError = isset($this->car->company_id) && $this->card->company_id != $this->car->company_id;
+                break;
+            case 'car':
+                $hasError = !isset($this->car->company_id);
+                break;
+            case 'truck':
+                $hasError = $this->client->is_split && $this->extra_number && !Car::model()->find('number = :number', [':number' => $this->extra_number]);
+                break;
+        }
+
+        return !$this->is_fixed && $hasError;
     }
 
     public function getFormattedField($field)
@@ -395,5 +482,16 @@ class Act extends CActiveRecord
         }
 
         return number_format($total, 0, ".", " ");
+    }
+
+    public function getClientName()
+    {
+        return $this->client->name;
+    }
+
+    public function hasChild($childId)
+    {
+        $child = Company::model()->findByPk($childId);
+        return $child && $child->parent_id == Yii::app()->user->model->company_id;
     }
 }

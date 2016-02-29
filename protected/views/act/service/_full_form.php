@@ -15,7 +15,7 @@ $form = $this->beginWidget('CActiveForm', array(
     ));
 ?>
     <div class="row">
-        <?=$form->labelEx($model, 'service_date'); ?>
+        <?=$form->label($model, 'service_date'); ?>
         <span class="field">
             <?=$form->textField($model, 'service_date', array('class' => 'span5')); ?>
             <?=$form->error($model, 'service_date'); ?>
@@ -24,7 +24,7 @@ $form = $this->beginWidget('CActiveForm', array(
 
     <?php if(Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
         <div class="row">
-            <?=$form->labelEx($model, 'partner_id'); ?>
+            <?=$form->label($model, 'partner_id'); ?>
             <span class="field">
                 <?=$form->dropDownList($model, 'partner_id', CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name')); ?>
                 <?=$form->error($model, 'partner_id'); ?>
@@ -33,7 +33,7 @@ $form = $this->beginWidget('CActiveForm', array(
     <?php } ?>
 
     <div class="row">
-        <?=$form->labelEx($model, 'card_id'); ?>
+        <?=$form->label($model, 'card_id'); ?>
         <span class="field">
             <?=$form->dropDownList($model, 'card_id', CHtml::listData(Card::model()->findAll(), 'id', 'number')); ?>
             <?=$form->error($model, 'card_id'); ?>
@@ -41,7 +41,7 @@ $form = $this->beginWidget('CActiveForm', array(
     </div>
 
     <div class="row">
-        <?=$form->labelEx($model, 'number'); ?>
+        <?=$form->label($model, 'number'); ?>
         <span class="field">
             <?=$form->textField($model, 'number'); ?>
             <?=$form->error($model, 'number'); ?>
@@ -49,7 +49,15 @@ $form = $this->beginWidget('CActiveForm', array(
     </div>
 
     <div class="row">
-        <?=$form->labelEx($model, 'mark_id'); ?>
+        <?=$form->label($model, 'extra_number'); ?>
+        <span class="field">
+                <?=$form->textField($model, 'extra_number'); ?>
+                <?=$form->error($model, 'extra_number'); ?>
+            </span>
+    </div>
+
+    <div class="row">
+        <?=$form->label($model, 'mark_id'); ?>
         <span class="field">
             <?=$form->dropDownList($model, 'mark_id', CHtml::listData(Mark::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
             <?=$form->error($model, 'mark_id'); ?>
@@ -57,7 +65,7 @@ $form = $this->beginWidget('CActiveForm', array(
     </div>
 
     <div class="row">
-        <?=$form->labelEx($model, 'type_id'); ?>
+        <?=$form->label($model, 'type_id'); ?>
         <span class="field">
             <?=$form->dropDownList($model, 'type_id', CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
             <?=$form->error($model, 'type_id'); ?>
@@ -66,7 +74,7 @@ $form = $this->beginWidget('CActiveForm', array(
 
     <?php if($model->partner->type == Company::CARWASH_TYPE) { ?>
         <div class="row">
-            <?=$form->labelEx($model, 'partner_service'); ?>
+            <?=$form->label($model, 'partner_service'); ?>
             <span class="field">
                     <?=$form->dropDownList($model, 'partner_service', Act::$carwashList); ?>
                     <?=$form->error($model, 'partner_service'); ?>
@@ -74,7 +82,7 @@ $form = $this->beginWidget('CActiveForm', array(
         </div>
 
         <div class="row">
-            <?=$form->labelEx($model, 'check'); ?>
+            <?=$form->label($model, 'check'); ?>
             <span class="field">
                 <?=$form->textField($model, 'check'); ?>
                 <?=$form->error($model, 'check'); ?>
@@ -82,7 +90,7 @@ $form = $this->beginWidget('CActiveForm', array(
         </div>
 
         <div class="row">
-            <?=$form->labelEx($model, 'screen'); ?>
+            <?=$form->label($model, 'screen'); ?>
             <span class="field">
                 <?=$form->fileField($model, 'screen'); ?>
                 <?=$form->error($model, 'screen'); ?>
@@ -90,9 +98,13 @@ $form = $this->beginWidget('CActiveForm', array(
         </div>
     <?php } ?>
 
-    <?php if(Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $model->partner->type == Company::CARWASH_TYPE) { ?>
+    <?php if(
+        Yii::app()->user->checkAccess(User::ADMIN_ROLE)
+        && $model->partner->type != Company::SERVICE_TYPE
+        && $model->partner->type != Company::TIRES_TYPE
+    ) { ?>
         <div class="row">
-            <?=$form->labelEx($model, 'expense'); ?>
+            <?=$form->label($model, 'expense'); ?>
             <span class="field">
                 <?=$form->textField($model, 'expense'); ?>
                 <?=$form->error($model, 'expense'); ?>
@@ -106,6 +118,7 @@ $form = $this->beginWidget('CActiveForm', array(
 
     <div class="row">
         <span class="field">
+            <?=CHtml::hiddenField('Act[service]', $model->companyType); ?>
             <?=CHtml::hiddenField('Act[old_expense]', $model->expense)?>
             <?=CHtml::hiddenField('Act[old_income]', $model->income)?>
             <?=CHtml::hiddenField('returnUrl', Yii::app()->request->urlReferrer)?>

@@ -6,10 +6,8 @@
  * @var $this CompanyController
  * @var $model Company
  */
-$type = $model->type;
 $attributes = array_values(array_filter($model->attributes));
-$model->unsetAttributes();
-$model->type = $type;
+$model->unsetAttributes(['address', 'name']);
 echo CHtml::hiddenField('query', CJSON::encode($attributes));
 $this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
     'selector' => '.my-grid',

@@ -68,7 +68,7 @@ $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
         data: [
             {
                 type: "column", //change it to line, area, bar, pie, etc
-                dataPoints: dataTable,
+                dataPoints: dataTable
             }
         ],
         axisX: {

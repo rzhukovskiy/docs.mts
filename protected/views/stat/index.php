@@ -3,20 +3,15 @@
  * @var $this StatController
  * @var $model Act
  */
-if (Yii::app()->user->role == User::PARTNER_ROLE) {
+if (Yii::app()->user->model->company && Yii::app()->user->model->company->type != Company::UNIVERSAL_TYPE) {
     $this->tabs = array(
         'index' => ['url' => Yii::app()->createUrl('stat/index', ['type' => Yii::app()->user->model->company->type]), 'name' => 'Доход'],
     );
 } else {
-    $this->tabs = [
-        Company::CARWASH_TYPE == $model->companyType ? 'index' : Company::CARWASH_TYPE =>
-            ['url' => Yii::app()->createUrl('stat/index', ['type' => Company::CARWASH_TYPE]), 'name' => 'Мойка'],
-        Company::SERVICE_TYPE == $model->companyType ? 'index' : Company::SERVICE_TYPE =>
-            ['url' => Yii::app()->createUrl('stat/index', ['type' => Company::SERVICE_TYPE]), 'name' => 'Сервис'],
-        Company::TIRES_TYPE == $model->companyType ? 'index' : Company::TIRES_TYPE =>
-            ['url' => Yii::app()->createUrl('stat/index', ['type' => Company::TIRES_TYPE]), 'name' => 'Шиномонтаж'],
-        $model->companyType? 'total' : 'index' => ['url' => Yii::app()->createUrl('stat/total'), 'name' => 'Общее'],
-    ];
+    foreach(Company::$listService as $service => $name) {
+        $this->tabs[$model->companyType != $service ? $service : 'index'] = ['url' => Yii::app()->createUrl('stat/index', ['type' => $service]), 'name' => $name];
+    }
+    $this->tabs[$model->companyType ? 'total' : 'index'] = ['url' => Yii::app()->createUrl('stat/total'), 'name' => 'Общее'];
 }
 ?>
     <div class="contenttitle radiusbottom0">

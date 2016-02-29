@@ -38,6 +38,9 @@ $form = $this->beginWidget('CActiveForm', array(
                 <?=$attributes['number']; ?>
             </th>
             <th>
+                <?=$attributes['extra_number']; ?>
+            </th>
+            <th>
                 <?=$attributes['mark_id']; ?>
             </th>
             <th>
@@ -53,14 +56,18 @@ $form = $this->beginWidget('CActiveForm', array(
                 <th>
                     <?=$attributes['screen']; ?>
                 </th>
+            <?php } ?>
+
+            <?php if ($model->companyType == Company::CARWASH_TYPE || $model->companyType == Company::DISINFECTION_TYPE) { ?>
                 <th>
-            </th>
+                </th>
             <?php } ?>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>
+                <?=CHtml::hiddenField('Act[service]', $model->companyType); ?>
                 <?=$form->textField($model, 'service_date', array('class' => 'date-select', 'style' => 'width:70px')); ?>
             </td>
             <?php if(Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
@@ -73,6 +80,9 @@ $form = $this->beginWidget('CActiveForm', array(
             </td>
             <td>
                 <?=$form->textField($model, 'number', array('class' => 'number_fill', 'style' => 'width:80px')); ?>
+            </td>
+            <td>
+                <?=$form->textField($model, 'extra_number', array('class' => 'number_fill', 'style' => 'width:80px')); ?>
             </td>
             <td>
                 <?=$form->dropDownList($model, 'mark_id', CHtml::listData(Mark::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
@@ -90,6 +100,9 @@ $form = $this->beginWidget('CActiveForm', array(
                 <td>
                     <?=$form->fileField($model, 'screen'); ?>
                 </td>
+            <?php } ?>
+
+            <?php if ($model->companyType == Company::CARWASH_TYPE || $model->companyType == Company::DISINFECTION_TYPE) { ?>
                 <td>
                     <?=CHtml::submitButton('+', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
                 </td>
@@ -97,7 +110,7 @@ $form = $this->beginWidget('CActiveForm', array(
         </tr>
     </tbody>
 </table>
-<?php if ($model->companyType != Company::CARWASH_TYPE) { ?>
+<?php if ($model->companyType == Company::SERVICE_TYPE || $model->companyType == Company::TIRES_TYPE) { ?>
 <table cellspacing="0" cellpadding="0" border="0" class="stdtable">
     <thead>
         <tr><th colspan="4">Состав работ</th></tr>
