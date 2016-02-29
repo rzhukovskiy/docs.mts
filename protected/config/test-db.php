@@ -1,9 +1,9 @@
 <?php
 return array(
-    'connectionString' => 'mysql:host=localhost;dbname=mts',
+    'connectionString' => 'mysql:host=localhost;dbname=mtransserv_docs',
     'emulatePrepare' => true,
     'username' => 'root',
-    'password' => '',
+    'password' => '000000',
     'charset' => 'utf8',
     'tablePrefix' => 'mts_',
     'enableProfiling' => false,
