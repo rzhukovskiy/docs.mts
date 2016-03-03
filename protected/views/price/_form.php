@@ -39,19 +39,19 @@ $form = $this->beginWidget('CActiveForm', array(
         </td>
         <td>
             <?=$form->textField($model, 'outside'); ?>
-            <? if (false /*model->company->is_split*/) {
+            <?php if (false /*model->company->is_split*/) {
                 echo $form->textField($model->extra, 'outside');
             } ?>
         </td>
         <td>
             <?=$form->textField($model, 'inside'); ?>
-            <? if (false /*model->company->is_split*/) {
+            <?php if (false /*model->company->is_split*/) {
                 echo $form->textField($model->extra, 'inside');
             } ?>
         </td>
         <td>
             <?=$form->textField($model, 'disinfection'); ?>
-            <? if (false /*model->company->is_split*/) {
+            <?php if (false /*model->company->is_split*/) {
                 echo $form->textField($model->extra, 'disinfection');
             } ?>
         </td>
