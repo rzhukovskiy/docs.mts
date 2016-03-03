@@ -147,6 +147,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '!empty($data->check_image) ? '
                 . 'CHtml::link("image", "/files/checks/" . $data->check_image,'
                 . 'array("class"=>"preview")) : "no image"',
+            'cssClassExpression' => '$data->hasError("check") ? "error" : ""',
             'htmlOptions' => array('style' => 'width: 40px;'),
             'visible' => $model->companyType == Company::CARWASH_TYPE,
             'filter' => false,

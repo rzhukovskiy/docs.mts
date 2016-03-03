@@ -93,7 +93,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => 'Клиент',
             'name' => 'client',
             'value' => '$data->client->name',
-            'htmlOptions' => array('class' => '"client"', 'data-header' => '"{$data->partner->name} - {$data->partner->address}"'),
+            'htmlOptions' => array('class' => '"client"', 'data-header' => '"{$data->client->name} - {$data->client->address}"'),
             'filter' => CHtml::dropDownList('Act[client_id]',
                 $model->client_id,
                 CHtml::listData(Company::model()->findAll('type = :type', array(':type' => Company::COMPANY_TYPE)), 'id', 'name'),
@@ -157,6 +157,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '!empty($data->check_image) ? '
                 . 'CHtml::link("image", "/files/checks/" . $data->check_image,'
                 . 'array("class"=>"preview")) : "no image"',
+            'cssClassExpression' => '$data->hasError("check") ? "error" : ""',
             'htmlOptions' => array('style' => 'width: 40px;'),
             'visible' => $model->companyType == Company::CARWASH_TYPE,
             'filter' => false,
