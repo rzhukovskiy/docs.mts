@@ -104,9 +104,11 @@ class Card extends CActiveRecord
                 $this->number = intval($numPointList[1]);
             } else {
                 $existed = Card::model()->find('number = :number', [':number' => $this->number]);
-                if ($existed && $existed->cardCompany->is_deleted) {
-                    $existed->company_id = $this->company_id;
-                    $existed->save();
+                if ($existed) {
+                    if ($existed->cardCompany->is_deleted) {
+                        $existed->company_id = $this->company_id;
+                        $existed->save();
+                    }
                     return false;
                 }
             }
