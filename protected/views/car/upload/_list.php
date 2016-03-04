@@ -1,15 +1,15 @@
 <?php
 /**
  * @var $this CarController
- * @var $model Car
+ * @var $firstId int
  */
+$model = new Car();
 $this->widget('zii.widgets.grid.CGridView', array(
-    'afterAjaxUpdate' => 'function(id, data){searchHighlight(id, data);}',
     'id' => 'car-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
     'pagerCssClass' => 'dataTables_paginate paging_full_numbers',
-    'dataProvider' => new CArrayDataProvider($model, ['pagination' => false]),
+    'dataProvider' => $model->after($firstId)->search(),
     'emptyText' => '',
     'cssFile' => false,
     'template' => "{items}",

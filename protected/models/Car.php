@@ -60,6 +60,15 @@ class Car extends CActiveRecord
         );
     }
 
+    public function after($id)
+    {
+        $criteria = new CDbCriteria;
+        $criteria->compare('t.id', ' >=' . $id);
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        return $this;
+    }
+
     /**
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
@@ -80,8 +89,10 @@ class Car extends CActiveRecord
         $criteria->compare('t.mark_id', $this->mark_id);
         $criteria->compare('t.type_id', $this->type_id);
 
+        $this->getDbCriteria()->mergeWith($criteria);
+
         return new CActiveDataProvider(get_class($this), array(
-            'criteria' => $criteria,
+            'criteria' => $this->getDbCriteria(),
             'pagination' => false,
         ));
     }
@@ -209,13 +220,13 @@ class Car extends CActiveRecord
             $objPHPExcel = PHPExcel_IOFactory::load($this->external->getTempName());
 
             foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
-                $highestRow         = $worksheet->getHighestRow(); // e.g. 10
+                $highestRow = $worksheet->getHighestRow(); // e.g. 10
 
                 for ($row = 1; $row <= $highestRow; ++ $row) {
                     $name   = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
                     $number = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
                     $type   = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
-                   
+
                     if (
                         PHPExcel_Cell_DefaultValueBinder::dataTypeForValue($name) == PHPExcel_Cell_DataType::TYPE_STRING
                         && PHPExcel_Cell_DefaultValueBinder::dataTypeForValue($number) == PHPExcel_Cell_DataType::TYPE_NULL

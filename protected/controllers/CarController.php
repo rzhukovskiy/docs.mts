@@ -11,11 +11,11 @@ class CarController extends Controller
 
             if (!empty($_FILES)) {
                 $model->external = CUploadedFile::getInstance($model, 'external');
-                $model = $model->saveFromExternal();
+                $listCar = $model->saveFromExternal();
             }
 
             $this->render('upload/list', array(
-                'model' => $model
+                'firstId' => isset($listCar[0]) ? $listCar[0]->id : 0,
             ));
         } else {
             $this->render('upload', array(

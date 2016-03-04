@@ -2,6 +2,7 @@
 /**
  * @var $this CarController
  * @var $model Car
+ * @var $form CActiveForm
  */
 
 $this->renderPartial('_tabs', array('model'=>$model));
@@ -13,6 +14,15 @@ $form = $this->beginWidget('CActiveForm', array(
     'htmlOptions' => array('enctype' => 'multipart/form-data', 'class'=>'stdform', 'novalidate'=>'novalidate'),
 ));
 ?>
+    <div class="row">
+        <span class="field">
+                Формат файла - xls. Любое количество листов.<br/>
+                Строка из терх объединенных столбцов - название компании.<br/>
+                Первый столбик - марка. Второй столбик - номер. Третий столбик - тип ТС.<br/>
+                Пoрядок и количество столбиков обязаны быть постоянными, даже если они пустые.<br/>
+                Если не указано имя компании и тип или марка ТС, то они берутся из настроек указанных в форме загрузки.
+        </span>
+    </div>
     <div class="row">
         <?=$form->label($model, 'company_id'); ?>
         <span class="field">
@@ -26,6 +36,14 @@ $form = $this->beginWidget('CActiveForm', array(
         <span class="field">
             <?=$form->dropDownList($model, 'type_id', CHtml::listData(Type::model()->findAll(), 'id', 'name')); ?>
             <?=$form->error($model, 'type_id'); ?>
+        </span>
+    </div>
+
+    <div class="row">
+        <?=$form->label($model, 'mark_id'); ?>
+        <span class="field">
+            <?=$form->dropDownList($model, 'mark_id', CHtml::listData(Mark::model()->findAll(), 'id', 'name')); ?>
+            <?=$form->error($model, 'mark_id'); ?>
         </span>
     </div>
 
