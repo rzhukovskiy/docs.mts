@@ -8,6 +8,7 @@
  * @property int $number
  * @property int $active
  * @property string $create_date
+ * @property Company $cardCompany
  */
 class Card extends CActiveRecord
 {
@@ -38,8 +39,7 @@ class Card extends CActiveRecord
     public function rules()
     {
         return array(
-            array('company_id', 'required'),
-            array('number', 'unique'),
+            array('company_id, number', 'required'),
             array('id, number, type, active, create_date', 'safe', 'on' => 'search'),
         );
     }
@@ -93,7 +93,7 @@ class Card extends CActiveRecord
         if ($this->isNewRecord && !$this->number) {
             $salt = self::randomSalt();
             $this->number = $salt . str_pad($this->company_id, 4, "0", STR_PAD_LEFT);
-        } else {
+        } elseif($this->IsNewRecord) {
             $numPointList = explode('-', $this->number);
             if(count($numPointList) > 1) {
                 for ($num = intval($numPointList[0]); $num < intval($numPointList[1]); $num++) {
@@ -102,6 +102,15 @@ class Card extends CActiveRecord
                     $card->save();
                 }
                 $this->number = intval($numPointList[1]);
+            } else {
+                $existed = Card::model()->find('number = :number', [':number' => $this->number]);
+                if ($existed) {
+                    if ($existed->cardCompany->is_deleted) {
+                        $existed->company_id = $this->company_id;
+                        $existed->save();
+                    }
+                    return false;
+                }
             }
         }
         return true;

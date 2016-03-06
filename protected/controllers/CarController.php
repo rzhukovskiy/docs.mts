@@ -2,6 +2,28 @@
 
 class CarController extends Controller
 {
+    public function actionUpload()
+    {
+        $model = new Car();
+
+        if (isset($_POST[get_class($model)])) {
+            $model->attributes = $_POST[get_class($model)];
+
+            if (!empty($_FILES)) {
+                $model->external = CUploadedFile::getInstance($model, 'external');
+                $listCar = $model->saveFromExternal();
+            }
+
+            $this->render('upload/list', array(
+                'firstId' => isset($listCar[0]) ? $listCar[0]->id : 0,
+            ));
+        } else {
+            $this->render('upload', array(
+                'model' => $model
+            ));
+        }
+    }
+
     public function actionList()
     {
         $model = new Car('search');

@@ -80,10 +80,10 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'class' => 'DataColumn',
             'evaluateHtmlOptions' => true,
             'header' => 'Партнер',
-            'name' => 'partner',
+            'name' => 'partner_id',
             'value' => '$data->partner->name',
-            'htmlOptions' => array('style' => '"width: 100px;"', 'class' => '"partner"', 'data-header' => '"{$data->partner->name} - {$data->partner->address}"'),
-            'filter' => CHtml::dropDownList('Act[parent_id]',
+            'htmlOptions' => array('class' => '"partner"', 'data-header' => '"{$data->partner->name} - {$data->partner->address}"'),
+            'filter' => CHtml::dropDownList('Act[partner_id]',
                 $model->client_id,
                 CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name'),
                 array('empty' => 'Все', 'style' => 'width: 80px;')),
@@ -147,6 +147,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '!empty($data->check_image) ? '
                 . 'CHtml::link("image", "/files/checks/" . $data->check_image,'
                 . 'array("class"=>"preview")) : "no image"',
+            'cssClassExpression' => '$data->hasError("check") ? "error" : ""',
             'htmlOptions' => array('style' => 'width: 40px;'),
             'visible' => $model->companyType == Company::CARWASH_TYPE,
             'filter' => false,

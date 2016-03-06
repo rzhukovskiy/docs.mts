@@ -12,6 +12,7 @@
  * @property int $client_id
  * @property string $from_date
  * @property string $to_date
+ * @property CUploadedFile $external
  */
 class Car extends CActiveRecord
 {
@@ -21,6 +22,7 @@ class Car extends CActiveRecord
     public $service_count;
     public $period;
     public $month;
+    public $external;
 
     public static $periodList = array('все время', 'месяц', 'квартал', 'полгода', 'год');
     /**
@@ -43,7 +45,7 @@ class Car extends CActiveRecord
         return array(
             array('company_id, number, mark_id, type_id', 'required'),
             array('number', 'unique'),
-            array('client_id, from_date, to_date', 'safe'),
+            array('external, client_id, from_date, to_date', 'safe'),
             array('service_count, id, number, mark_id', 'safe', 'on' => 'search'),
         );
     }
@@ -56,6 +58,15 @@ class Car extends CActiveRecord
             'type' => array(self::BELONGS_TO, 'Type', 'type_id'),
             'act' => array(self::HAS_MANY, 'Act', '', 'on'=>'act.number = t.number AND act.client_id = t.company_id', 'joinType' => 'JOIN', 'alias' => 'act'),
         );
+    }
+
+    public function after($id)
+    {
+        $criteria = new CDbCriteria;
+        $criteria->compare('t.id', ' >=' . $id);
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        return $this;
     }
 
     /**
@@ -78,8 +89,10 @@ class Car extends CActiveRecord
         $criteria->compare('t.mark_id', $this->mark_id);
         $criteria->compare('t.type_id', $this->type_id);
 
+        $this->getDbCriteria()->mergeWith($criteria);
+
         return new CActiveDataProvider(get_class($this), array(
-            'criteria' => $criteria,
+            'criteria' => $this->getDbCriteria(),
             'pagination' => false,
         ));
     }
@@ -181,17 +194,77 @@ class Car extends CActiveRecord
             'mark_id' => 'Марка ТС',
             'type_id' => 'Тип ТС',
             'service_count' => 'Обслуживаний',
+            'external' => 'Файл',
         );
     }
 
     public function beforeSave()
     {
-        $this->number = mb_strtoupper(preg_replace('/\s+/', '', $this->number), 'UTF-8');
+        $this->number = mb_strtoupper(str_replace(' ', '', $this->number), 'UTF-8');
         return true;
     }
 
     public function getActCount()
     {
         return count($this->act);
+    }
+
+    public function saveFromExternal()
+    {
+        if($this->external) {
+            $res = [];
+            spl_autoload_unregister(array('YiiBase','autoload'));
+            Yii::import("ext.PHPExcel.Classes.PHPExcel", true);
+            spl_autoload_register(array('YiiBase','autoload'));
+
+            $objPHPExcel = PHPExcel_IOFactory::load($this->external->getTempName());
+
+            foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+                $highestRow = $worksheet->getHighestRow(); // e.g. 10
+
+                for ($row = 1; $row <= $highestRow; ++ $row) {
+                    $name   = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
+                    $number = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
+                    $type   = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
+
+                    if (
+                        PHPExcel_Cell_DefaultValueBinder::dataTypeForValue($name) == PHPExcel_Cell_DataType::TYPE_STRING
+                        && PHPExcel_Cell_DefaultValueBinder::dataTypeForValue($number) == PHPExcel_Cell_DataType::TYPE_NULL
+                        && PHPExcel_Cell_DefaultValueBinder::dataTypeForValue($type) == PHPExcel_Cell_DataType::TYPE_NULL
+                    ) {
+                        if ($newCompany = Company::model()->find('name = :name', [':name' => $name])) {
+                            $this->company_id = $newCompany->id;
+                        }
+                        continue;
+                    }
+
+                    $car = new Car();
+                    $car->attributes = $this->attributes;
+
+                    if ($type = Type::model()->find('name = :name', [':name' => $type])) {
+                        $car->type_id = $type->id;
+                    }
+
+                    $name = explode('-', explode(' ', $name)[0])[0];
+                    if ($mark = Mark::model()->find('name = :name', [':name' => $name])) {
+                        $car->mark_id = $mark->id;
+                    }
+
+                    $number = mb_strtoupper(str_replace(' ', '', $number), 'UTF-8');
+                    if ($existed = Car::model()->find('number = :number', [':number' => $number])) {
+                        continue;
+                    }
+                    $car->number = $number;
+
+                    $car->save();
+
+                    $res[] = $car;
+                }
+            }
+
+            return $res;
+        }
+
+        return $this;
     }
 }

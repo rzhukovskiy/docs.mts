@@ -8,6 +8,7 @@
  * @property int $parent_id
  * @property int $is_split
  * @property int $is_infected
+ * @property int $is_deleted
  * @property string $name
  * @property string $address
  * @property string $phone
@@ -16,6 +17,12 @@
  * @property string $contract
  * @property string $act_header
  * @property string $month
+ * @property User[] $users
+ * @property Card[] $cards
+ * @property Car[] $cars
+ * @property Act[] $acts
+ * @property Company $parent
+ * @property Company[] $children
  */
 class Company extends CActiveRecord
 {
@@ -127,6 +134,7 @@ class Company extends CActiveRecord
         $criteria->compare('t.phone', $this->phone, true);
         $criteria->compare('t.contact', $this->contact, true);
         $criteria->compare('t.type', $this->type, true);
+        $criteria->compare('t.is_deleted', 0);
 
         $sort = new CSort;
         $sort->attributes = array('id', 'name', 'address', 'phone', 'contact');
@@ -173,5 +181,26 @@ class Company extends CActiveRecord
                 }
             }
         }
+    }
+
+    public function beforeDelete()
+    {
+        if (
+            count($this->acts) > 0
+            || count($this->cards) > 0
+            || count($this->cars) > 0
+            || count($this->users) > 0
+        ) {
+            foreach ($this->acts as $act) {
+                $act->is_fixed = 1;
+                $act->save();
+            }
+
+            $this->is_deleted = 1;
+            $this->save();
+
+            return false;
+        }
+        return true;
     }
 }
