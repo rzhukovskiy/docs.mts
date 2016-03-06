@@ -72,7 +72,10 @@ class Company extends CActiveRecord
             array('name','required'),
             array('name','unique'),
             array('is_infected, parent_id, is_split, address, phone, contact, contract, act_header, type, cardList','safe'),
-
+            array('carwash', 'safe'),
+            array('remont', 'safe'),
+            array('tires', 'safe'),
+            array('disinfection', 'safe'),
         );
     }
 
@@ -89,6 +92,10 @@ class Company extends CActiveRecord
             'contract' => 'Договор',
             'act_header' => 'Заголовок акта',
             'parent_id' => 'Родительская компания',
+            'carwash' => 'Мойка',
+            'remont' => 'Сервис',
+            'tires' => 'Шиномонтаж',
+            'disinfection' => 'Дезинфекция',
         );
     }
 

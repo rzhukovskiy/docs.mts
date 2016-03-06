@@ -8,15 +8,21 @@ if (
     || Yii::app()->user->model->company->type == Company::UNIVERSAL_TYPE
 ) {
     foreach(Company::$listService as $service => $name) {
-        $this->tabs[$model->companyType != $service || $model->showCompany ? $service : 'list'] = [
-            'url' => Yii::app()->createUrl("act/$service"),
-            'name' => $name
-        ];
-        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $this->tabs[$model->companyType != $service || !$model->showCompany ? $service . '_company' : 'list'] = [
-                'url' => Yii::app()->createUrl("act/$service", ['showCompany' => 1]),
-                'name' => 'Для компании'
+        if (Yii::app()->user->model->company->carwash == $service ||
+            Yii::app()->user->model->company->remont == $service ||
+            Yii::app()->user->model->company->tires == $service ||
+            Yii::app()->user->model->company->disinfection == $service){
+
+            $this->tabs[$model->companyType != $service || $model->showCompany ? $service : 'list'] = [
+                'url' => Yii::app()->createUrl("act/$service"),
+                'name' => $name
             ];
+            if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+                $this->tabs[$model->companyType != $service || !$model->showCompany ? $service . '_company' : 'list'] = [
+                    'url' => Yii::app()->createUrl("act/$service", ['showCompany' => 1]),
+                    'name' => 'Для компании'
+                ];
+            }
         }
     }
 } else {

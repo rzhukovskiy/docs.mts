@@ -57,6 +57,35 @@ $form = $this->beginWidget('CActiveForm', array(
     </span>
 </div>
 <div class="row">
+    <?php
+        echo $form->checkbox($model, 'carwash', array('value' => $model::CARWASH_TYPE));
+        echo $form->label($model, 'carwash');
+    ?>
+
+</div>
+<div class="row">
+    <?php
+    echo $form->checkbox($model, 'remont', array('value' => $model::SERVICE_TYPE));
+    echo $form->label($model, 'remont');
+    ?>
+
+</div>
+<div class="row">
+    <?php
+    echo $form->checkbox($model, 'tires', array('value' => $model::TIRES_TYPE));
+    echo $form->label($model, 'tires');
+    ?>
+
+</div>
+<div class="row">
+    <?php
+    echo $form->checkbox($model, 'disinfection', array('value' => $model::DISINFECTION_TYPE));
+    echo $form->label($model, 'disinfection');
+    ?>
+
+</div>
+
+<div class="row">
     <span class="field">
         <?= CHtml::submitButton($model->isNewRecord ? 'Создать компанию' : 'Сохранить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
     </span>

@@ -5,7 +5,7 @@
 <div class="mainleft">
     <div class="mainleftinner">
         <div class="leftmenu">
-            <?php $this->widget('WMenu'); ?> 
+            <?php $this->widget('WMenu'); ?>
         </div><!--leftmenu-->
     </div><!--mainleftinner-->
 </div><!--mainleft-->
