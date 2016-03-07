@@ -4,7 +4,7 @@
  * @var $form CActiveForm
  * @var $model Act
  */
-$this->renderPartial('_autoselect');
+//$this->renderPartial('_autoselect');
 $form = $this->beginWidget('CActiveForm', array(
         'id' => 'action-form',
         'action' => array($model->isNewRecord ? Yii::app()->createUrl("/act/create") : Yii::app()->createUrl("/act/update", array("id" => $model->id))),
@@ -35,7 +35,7 @@ $form = $this->beginWidget('CActiveForm', array(
     <div class="row">
         <?=$form->label($model, 'card_id'); ?>
         <span class="field">
-            <?=$form->dropDownList($model, 'card_id', CHtml::listData(Card::model()->findAll(), 'id', 'number')); ?>
+            <?=$form->textField($model, 'card_id'); ?>
             <?=$form->error($model, 'card_id'); ?>
         </span>
     </div>

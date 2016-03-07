@@ -63,7 +63,7 @@ class Card extends CActiveRecord
         $criteria = new CDbCriteria;
 
         $criteria->compare('id', $this->id);
-        $criteria->compare('number', $this->number, true);
+        $criteria->compare('number', $this->number);
         $criteria->compare('company_id', $this->company_id);
         $criteria->compare('active', $this->active);
 

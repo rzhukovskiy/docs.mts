@@ -4,7 +4,7 @@
  * @var $form CActiveForm
  * @var $model Act
  */
-$this->renderPartial('_autoselect');
+//$this->renderPartial('_autoselect');
 $attributes = $model->attributeLabels();
 $form = $this->beginWidget('CActiveForm', array(
         'id' => 'action-form',
@@ -36,7 +36,7 @@ $form = $this->beginWidget('CActiveForm', array(
 <div class="row">
     <?=$form->label($model, 'card_id'); ?>
     <span class="field">
-        <?=$form->dropDownList($model, 'card_id', CHtml::listData(Card::model()->findAll(), 'id', 'num')); ?>
+        <?=$form->telField($model, 'card_id'); ?>
         <?=$form->error($model, 'card_id'); ?>
     </span>
 </div>

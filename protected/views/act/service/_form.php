@@ -7,7 +7,7 @@
  * @var $form CActiveForm
  * @var $model Act
  */
-$this->renderPartial('_autoselect');
+//$this->renderPartial('_autoselect');
 $this->renderPartial('_autocomplete');
 $attributes = $model->attributeLabels();
 $form = $this->beginWidget('CActiveForm', array(
@@ -76,7 +76,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 </td>
             <?php } ?>
             <td>
-                <?=$form->dropDownList($model, 'card_id', CHtml::listData(Card::model()->findAll(), 'id', 'number')); ?>
+                <?=$form->textField($model, 'card_id'); ?>
             </td>
             <td>
                 <?=$form->textField($model, 'number', array('class' => 'number_fill', 'style' => 'width:80px')); ?>
