@@ -137,13 +137,21 @@ class Act extends CActiveRecord
         }
 
         //номер в верхний регистр
-        $this->number = mb_strtoupper(preg_replace('/\s+/', '', $this->number), 'UTF-8');
+        $this->number = mb_strtoupper(str_replace(' ', '', $this->number), 'UTF-8');
 
         //подставляем тип и марку из машины, если нашли по номеру
         $car = Car::model()->find('number = :number', array(':number' => $this->number));
         if ($car) {
             $this->mark_id = $car->mark_id;
             $this->type_id = $car->type_id;
+        }
+
+        //подставляем карту, теперь по номеру
+        $card = Card::model()->find('number = :number', array(':number' => $this->card_id));
+        if ($card) {
+            $this->card_id = $card->id;
+        } else {
+            return false;
         }
 
         switch ($this->service) {
