@@ -40,7 +40,7 @@ $this->widget('ext.groupgridview.GroupGridView', array(
         array(
             'name' => 'mark_id',
             'htmlOptions' => array(),
-            'value' => '$data->mark->name',
+            'value' => 'isset($data->mark) ? $data->mark->name : ""',
             'filter' => '',
         ),
         array(

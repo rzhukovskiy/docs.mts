@@ -28,7 +28,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'mark_id',
             'htmlOptions' => array('style' => 'width: 100px; text-align:center;'),
-            'value' => '$data->mark->name',
+            'value' => 'isset($data->mark) ? $data->mark->name : ""',
         ),
         array(
             'name' => 'number',

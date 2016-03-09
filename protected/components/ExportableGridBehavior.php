@@ -224,7 +224,7 @@ class ExportableGridBehavior extends CBehavior
                 $companyWorkSheet->mergeCells("D$row:E$row");
                 $companyWorkSheet->setCellValueByColumnAndRow(3, $row, $data->card->number);
                 $companyWorkSheet->mergeCells("F$row:G$row");
-                $companyWorkSheet->setCellValueByColumnAndRow(5, $row, $data->mark->name);
+                $companyWorkSheet->setCellValueByColumnAndRow(5, $row, isset($data->mark) ? $data->mark->name : "");
                 $companyWorkSheet->mergeCells("H$row:I$row");
                 $companyWorkSheet->setCellValueByColumnAndRow(7, $row, $data->number);
                 $companyWorkSheet->getStyle("B$row:I$row")
@@ -330,7 +330,7 @@ class ExportableGridBehavior extends CBehavior
                 $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $num);
                 $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $date->format('j'));
                 $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->card->number);
-                $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->mark->name);
+                $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, isset($data->mark) ? $data->mark->name : "");
                 $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->number);
                 if($company->is_split) {
                     $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->extra_number);

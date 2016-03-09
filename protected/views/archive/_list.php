@@ -78,7 +78,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => 'Марка',
             'name' => 'mark_id',
             'htmlOptions' => array(),
-            'value' => '$data->mark->name',
+            'value' => 'isset($data->mark) ? $data->mark->name : ""',
             'filter' => CHtml::listData(Mark::model()->findAll(array('order' => 'id')), 'id', 'name'),
         ),
         array(

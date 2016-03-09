@@ -43,9 +43,9 @@ class Car extends CActiveRecord
     public function rules()
     {
         return array(
-            array('company_id, number, mark_id, type_id', 'required'),
+            array('company_id, number, type_id', 'required'),
             array('number', 'unique'),
-            array('external, client_id, from_date, to_date', 'safe'),
+            array('external, mark_id, client_id, from_date, to_date', 'safe'),
             array('service_count, id, number, mark_id', 'safe', 'on' => 'search'),
         );
     }

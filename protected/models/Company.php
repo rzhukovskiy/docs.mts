@@ -110,7 +110,7 @@ class Company extends CActiveRecord
     {
         return array(
             'users' => array(self::HAS_MANY, 'User', 'company_id'),
-            'cards' => array(self::HAS_MANY, 'Card', 'company_id'),
+            'cards' => array(self::HAS_MANY, 'Card', 'company_id', 'order' => 'number ASC'),
             'cars' => array(self::HAS_MANY, 'Car', 'company_id'),
             'acts' => array(self::HAS_MANY, 'Act', 'client_id'),
             'parent' => array(self::BELONGS_TO, 'Company', 'parent_id'),
@@ -202,5 +202,40 @@ class Company extends CActiveRecord
             return false;
         }
         return true;
+    }
+
+    public function getTrailerCount()
+    {
+        return count(Car::model()->findAll('company_id = :company_id AND type_id = :type_id', [
+            ':company_id' => $this->id,
+            ':type_id' => 7
+        ]));
+    }
+
+    public function getCardRange()
+    {
+        $range = '';
+        $previous = -1;
+        $i = 0;
+        $cnt = count($this->cards);
+        foreach ($this->cards as $card) {
+            $i++;
+            if ($card->number - 1 == $previous) {
+                if (substr($range, -1) != '-') {
+                    $range .= '-';
+                }
+            } else {
+                if ($previous > 0) {
+                    $range .= $previous . ', ';
+                }
+                $range .= $card->number;
+            }
+            if ($i == $cnt) {
+                $range .= $card->number;
+            }
+            $previous = $card->number;
+        }
+
+        return $range;
     }
 }
