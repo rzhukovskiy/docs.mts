@@ -4,7 +4,7 @@
  * @var $form CActiveForm
  * @var $model Act
  */
-//$this->renderPartial('_autoselect');
+//$this->renderPartial('_autoselect', ['model'=>$model]);
 $form = $this->beginWidget('CActiveForm', array(
         'id' => 'action-form',
         'action' => array($model->isNewRecord ? Yii::app()->createUrl("/act/create") : Yii::app()->createUrl("/act/update", array("id" => $model->id))),
@@ -26,7 +26,7 @@ $form = $this->beginWidget('CActiveForm', array(
         <div class="row">
             <?=$form->label($model, 'partner_id'); ?>
             <span class="field">
-                <?=$form->dropDownList($model, 'partner_id', CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name')); ?>
+                <?=$form->dropDownList($model, 'partner_id', CHtml::listData(Company::model()->findAll('type = :type', [':type' => $model->companyType]), 'id', 'name')); ?>
                 <?=$form->error($model, 'partner_id'); ?>
             </span>
         </div>
@@ -35,7 +35,7 @@ $form = $this->beginWidget('CActiveForm', array(
     <div class="row">
         <?=$form->label($model, 'card_id'); ?>
         <span class="field">
-            <?=$form->textField($model, 'card_id'); ?>
+            <?=CHtml::textField('Act[cardNumber]', $card = Card::model()->findByPk($model->card_id) ? $card->number : $model->card_id); ?>
             <?=$form->error($model, 'card_id'); ?>
         </span>
     </div>

@@ -9,4 +9,4 @@ $this->tabs = array(
     'update' => array('url' => '#', 'name' => 'Редактирование акта'),
 );
 
-$this->renderPartial("service/_full_form", array('model'=>$model));
+$this->renderPartial("service/_full_form", ['model'=>$model]);

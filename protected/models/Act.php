@@ -32,6 +32,7 @@
  * @property string $to_date
  * @property string $clientName
  * @property string $service
+ * @property string $cardNumber
  */
 class Act extends CActiveRecord
 {
@@ -47,6 +48,7 @@ class Act extends CActiveRecord
     public $cardCompany;
     public $period;
     public $amount;
+    public $cardNumber;
     public $fixMode = false;
 
     public static $periodList = array('все время', 'месяц', 'квартал', 'полгода', 'год');
@@ -97,9 +99,9 @@ class Act extends CActiveRecord
     public function rules()
     {
         return array(
-            array('type_id, card_id, number, mark_id', 'required'),
+            array('type_id, number, mark_id', 'required'),
             array('check', 'unique'),
-            array('service, extra_number, is_fixed, from_date, to_date, period, month, day, check, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
+            array('service, card_id, cardNumber, extra_number, is_fixed, from_date, to_date, period, month, day, check, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
             array('company_id, id, number, mark_id, type_id, card_id, service_date', 'safe', 'on' => 'search'),
         );
     }
@@ -147,11 +149,13 @@ class Act extends CActiveRecord
         }
 
         //подставляем карту, теперь по номеру
-        $card = Card::model()->find('number = :number', array(':number' => $this->card_id));
-        if ($card) {
-            $this->card_id = $card->id;
-        } else {
-            return false;
+        if ($this->cardNumber) {
+            $card = Card::model()->find('number = :number', array(':number' => $this->cardNumber));
+            if ($card) {
+                $this->card_id = $card->id;
+            } else {
+                return false;
+            }
         }
 
         switch ($this->service) {
@@ -458,7 +462,7 @@ class Act extends CActiveRecord
                 $hasError = (!$this->check || !$this->check_image) && $this->partner->type == Company::CARWASH_TYPE;
                 break;
             case 'card':
-                $hasError = isset($this->car->company_id) && $this->card->company_id != $this->car->company_id;
+                $hasError = !isset($this->card) || (isset($this->car->company_id) && $this->card->company_id != $this->car->company_id);
                 break;
             case 'car':
                 $hasError = !isset($this->car->company_id);

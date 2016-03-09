@@ -4,7 +4,7 @@
  * @var $form CActiveForm
  * @var $model Act
  */
-//$this->renderPartial('_autoselect');
+//$this->renderPartial('_autoselect', ['model'=>$model]);
 $form = $this->beginWidget('CActiveForm', array(
         'id' => 'action-form',
         'action' => Yii::app()->createUrl("/archive/update", array("id" => $model->id)),
@@ -31,9 +31,17 @@ $form = $this->beginWidget('CActiveForm', array(
     </div>
 
     <div class="row">
+        <?=$form->label($model, 'client_id'); ?>
+        <span class="field">
+                <?=$form->dropDownList($model, 'client_id', CHtml::listData(Company::model()->findAll('type = :type', array(':type' => Company::COMPANY_TYPE)), 'id', 'name')); ?>
+                <?=$form->error($model, 'client_id'); ?>
+            </span>
+    </div>
+
+    <div class="row">
         <?=$form->label($model, 'card_id'); ?>
         <span class="field">
-            <?=$form->textField($model, 'card_id'); ?>
+            <?=CHtml::textField('Act[cardNumber]', ($card = Card::model()->findByPk($model->card_id)) ? $card->number : $model->card_id); ?>
             <?=$form->error($model, 'card_id'); ?>
         </span>
     </div>

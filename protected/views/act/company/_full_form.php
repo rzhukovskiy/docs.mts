@@ -36,7 +36,7 @@ $form = $this->beginWidget('CActiveForm', array(
 <div class="row">
     <?=$form->label($model, 'card_id'); ?>
     <span class="field">
-        <?=$form->telField($model, 'card_id'); ?>
+        <?=CHtml::textField('Act[cardNumber]', ($card = Card::model()->findByPk($model->card_id)) ? $card->number : $model->card_id); ?>
         <?=$form->error($model, 'card_id'); ?>
     </span>
 </div>

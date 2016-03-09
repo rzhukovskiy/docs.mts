@@ -76,7 +76,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 </td>
             <?php } ?>
             <td>
-                <?=$form->textField($model, 'card_id'); ?>
+                <?=$form->textField($model, 'cardNumber'); ?>
             </td>
             <td>
                 <?=$form->textField($model, 'number', array('class' => 'number_fill', 'style' => 'width:80px')); ?>
