@@ -59,7 +59,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => 'Карта',
             'name' => 'card_id',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->card->number',
+            'value' => 'isset($data->card) ? $data->card->number : "error"',
             'cssClassExpression' => '$data->hasError("card") ? "error" : ""',
         ),
         array(
