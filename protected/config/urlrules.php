@@ -12,6 +12,7 @@ return array(
     'act/create' => 'act/create',
     'act/update' => 'act/update',
     'act/delete' => 'act/delete',
+    'act/disinfectAll' => 'act/disinfectAll',
     'act/fix' => 'act/fix',
     'act/<type:\w+>' => 'act/list',
     'archive/error' => 'archive/error',

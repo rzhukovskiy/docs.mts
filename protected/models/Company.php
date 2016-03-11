@@ -9,6 +9,7 @@
  * @property int $is_split
  * @property int $is_infected
  * @property int $is_deleted
+ * @property int $is_main
  * @property string $name
  * @property string $address
  * @property string $phone

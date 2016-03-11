@@ -10,6 +10,38 @@ class ActController extends Controller
             ));
     }
 
+    public function actionDisinfectAll()
+    {
+        $model = new Car('search');
+        $model->unsetAttributes();
+        $error = false;
+
+        $infectedCarList = false;
+        if (isset($_POST['Car'])) {
+            $model->attributes = $_POST['Car'];
+            $infectedCarList = $model->infected();
+
+            foreach ($infectedCarList->getData() as $car) {
+                $existedAct = Act::model()->find('number = :number', [':number' => $car->number]);
+                $act = new Act();
+                if ($existedAct) {
+                    $act->card_id = $existedAct->card_id;
+                } else {
+                    $existedCard = Card::model()->find('company_id = :company_id', [':company_id' => $model->company_id]);
+                    if (!$existedCard) {
+                        $error = 'У компании нет карт';
+                    }
+                    $act->card_id = $existedCard->id;
+                }
+
+                $act->month = $model->month;
+                $act->disinfectCar($car);
+            }
+        }
+
+        $this->render('disinfectAll', ['model' => $model, 'infectedCarList' => $infectedCarList]);
+    }
+
     public function actionList($type)
     {
         if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {

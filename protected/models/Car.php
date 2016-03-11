@@ -45,7 +45,7 @@ class Car extends CActiveRecord
         return array(
             array('company_id, number, type_id', 'required'),
             array('number', 'unique'),
-            array('external, mark_id, client_id, from_date, to_date', 'safe'),
+            array('month, external, mark_id, client_id, from_date, to_date', 'safe'),
             array('service_count, id, number, mark_id', 'safe', 'on' => 'search'),
         );
     }
@@ -131,6 +131,34 @@ class Car extends CActiveRecord
 
         $sort = new CSort();
         $sort->defaultOrder = 't.company_id, service_count DESC';
+        $sort->applyOrder($criteria);
+
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        $provider = new CActiveDataProvider(get_class($this), array(
+            'criteria' => $this->getDbCriteria(),
+            'sort' => $sort,
+            'pagination' => false,
+        ));
+
+        return $provider;
+    }
+
+    /**
+     * @return CActiveDataProvider
+     */
+    public function infected()
+    {
+        $criteria = new CDbCriteria;
+
+        $criteria->addCondition('NOT EXISTS (SELECT * FROM mts_act WHERE mts_act.partner_service = 5
+            AND mts_act.number = t.number AND date_format(mts_act.service_date, "%Y-%m") = "' . $this->month . '")');
+        $criteria->compare('company_id', $this->company_id);
+        $criteria->addCondition('type_id != 7');
+        $criteria->group = 't.id';
+
+        $sort = new CSort();
+        $sort->defaultOrder = 't.number DESC';
         $sort->applyOrder($criteria);
 
         $this->getDbCriteria()->mergeWith($criteria);

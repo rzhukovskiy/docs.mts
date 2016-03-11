@@ -99,9 +99,9 @@ class Act extends CActiveRecord
     public function rules()
     {
         return array(
-            array('type_id, number, mark_id', 'required'),
+            array('number', 'required'),
             array('check', 'unique'),
-            array('service, card_id, cardNumber, extra_number, is_fixed, from_date, to_date, period, month, day, check, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
+            array('type_id, mark_id, service, card_id, cardNumber, extra_number, is_fixed, from_date, to_date, period, month, day, check, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
             array('company_id, id, number, mark_id, type_id, card_id, service_date', 'safe', 'on' => 'search'),
         );
     }
@@ -505,5 +505,17 @@ class Act extends CActiveRecord
     {
         $child = Company::model()->findByPk($childId);
         return $child && $child->parent_id == Yii::app()->user->model->company_id;
+    }
+
+    public function disinfectCar(Car $car)
+    {
+        $this->partner_id = Yii::app()->user->model->company->id;
+        $this->client_id = $car->company_id;
+        $this->number = $car->number;
+        $this->partner_service = 5;
+
+        $this->service_date = $this->month . '-01';
+
+        $this->save();
     }
 }
