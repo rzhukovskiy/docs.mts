@@ -27,7 +27,7 @@ if (
             }
         }
     }
-    if (Yii::app()->user->model->company->is_main) {
+    if (Yii::app()->user->model->company && Yii::app()->user->model->company->is_main) {
         $this->tabs['disinfectAll'] = [
             'url' => Yii::app()->createUrl("act/disinfectAll"),
             'name' => 'Дезинфекция по компаниям'
