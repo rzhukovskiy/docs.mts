@@ -30,7 +30,6 @@ $form = $this->beginWidget('CActiveForm', array(
                     )?>
                 <?php } ?>
             </th>
-            <th><?=CHtml::submitButton('Показать', array('class' => 'submit radius2 date-send', 'style' => 'opacity: 1;')); ?></th>
         </tr>
         <tr class="header">
             <td colspan="3">&nbsp;</td>

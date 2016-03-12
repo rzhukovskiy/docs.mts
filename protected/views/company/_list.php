@@ -54,11 +54,11 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'header' => 'Количество карт',
-            'value' => 'count($data->cards) . "(" . $data->cardRange .")"',
+            'value' => 'count($data->cards) . " (" . $data->cardRange .")"',
         ),
         array(
             'header' => 'Количество машин',
-            'value' => 'count($data->cars)',
+            'value' => '$data->carCount',
         ),
         array(
             'header' => 'Количество прицепов',

@@ -213,6 +213,14 @@ class Company extends CActiveRecord
         ]));
     }
 
+    public function getCarCount()
+    {
+        return count(Car::model()->findAll('company_id = :company_id AND type_id != :type_id', [
+            ':company_id' => $this->id,
+            ':type_id' => 7
+        ]));
+    }
+
     public function getCardRange()
     {
         $range = '';
