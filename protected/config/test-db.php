@@ -3,7 +3,7 @@ return array(
     'connectionString' => 'mysql:host=localhost;dbname=mts',
     'emulatePrepare' => true,
     'username' => 'root',
-    'password' => '',
+    'password' => 'mysql',
     'charset' => 'utf8',
     'tablePrefix' => 'mts_',
     'enableProfiling' => true,
