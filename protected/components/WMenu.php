@@ -37,7 +37,7 @@ class WMenu extends CWidget
                     'title'  => 'Карты',
                     'class'  => 'empty',
                     'action' => 'list',
-                    'role'   => User::ADMIN_ROLE
+                    'role'   => User::CLIENT_ROLE
                 ),
                 'type' => array(
                     'title'  => 'Виды и марки ТС',

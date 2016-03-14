@@ -1,6 +1,23 @@
 <div class="contenttitle radiusbottom0">
     <h2 class="table"><span>Карты</span></h2>
 </div>
+<script type="text/javascript">
+    function createHeaders() {
+        addHeaders({
+            tableSelector: "#card-grid",
+            headers: [
+                {
+                    className: '.client',
+                    rowClass: 'header'
+                }
+            ]
+        });
+    }
+
+    $(document).bind('ready', function() {
+        createHeaders();
+    });
+</script>
 <?php
 /**
  * @var $this CardController
@@ -8,7 +25,7 @@
  */
 
 $this->widget('zii.widgets.grid.CGridView', array(
-    'id' => 'car-grid',
+    'id' => 'card-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
     'pagerCssClass' => 'dataTables_paginate paging_full_numbers',
@@ -30,9 +47,9 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'name' => 'company_id',
-            'htmlOptions' => array('style' => 'text-align:center;'),
+            'htmlOptions' => ['style' => 'text-align:center;', 'class' => 'client'],
             'value' => 'isset($data->cardCompany) ? $data->cardCompany->name : "error"',
-            'filter' => CHtml::listData(Company::model()->findAll('type = :type', array(':type' => Company::COMPANY_TYPE)), 'id', 'name'),
+            'filter' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? CHtml::listData(Company::model()->findAll('type = :type', array(':type' => Company::COMPANY_TYPE)), 'id', 'name') : '',
         ),
     ),
 ));

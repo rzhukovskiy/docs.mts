@@ -71,6 +71,7 @@ $this->widget('ext.groupgridview.GroupGridView', array(
                     'options' => array('class' => 'calendar')
                 ),
             ),
+            'cssClassExpression' => '$data->service_count ? "" : "hidden"'
         )
     ),
 ));

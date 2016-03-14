@@ -62,6 +62,11 @@ class Card extends CActiveRecord
 
         $criteria = new CDbCriteria;
 
+        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+            $criteria->with = ['cardCompany'];
+            $criteria->compare('company_id', Yii::app()->user->model->company_id);
+            $criteria->compare('cardCompany.parent_id', Yii::app()->user->model->company_id, false, 'OR');
+        }
         $criteria->compare('id', $this->id);
         $criteria->compare('number', $this->number);
         $criteria->compare('company_id', $this->company_id);

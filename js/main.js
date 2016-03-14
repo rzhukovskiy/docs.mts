@@ -275,7 +275,7 @@ this.addHeaders = function(options) {
     var defaultClass = 'extra-row';
 
 
-    footers.forEach(function(trigger, i) {
+    if (footers) footers.forEach(function(trigger, i) {
         var previousValue = 'empty';
         var total = 0;
         var len = $(tableSelector).find('tbody tr')
@@ -332,7 +332,7 @@ this.addHeaders = function(options) {
             });
     });
 
-    headers.forEach(function(trigger, i) {
+    if (headers) headers.forEach(function(trigger, i) {
         var previousValue = '';
         $(tableSelector).find('tbody tr')
             .not('.' + defaultClass)

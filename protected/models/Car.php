@@ -56,7 +56,7 @@ class Car extends CActiveRecord
             'company' => array(self::BELONGS_TO, 'Company', 'company_id'),
             'mark' => array(self::BELONGS_TO, 'Mark', 'mark_id'),
             'type' => array(self::BELONGS_TO, 'Type', 'type_id'),
-            'act' => array(self::HAS_MANY, 'Act', '', 'on'=>'act.number = t.number AND act.client_id = t.company_id', 'joinType' => 'JOIN', 'alias' => 'act'),
+            'act' => array(self::HAS_MANY, 'Act', '', 'on'=>'act.number = t.number AND act.client_id = t.company_id', 'joinType' => 'LEFT JOIN', 'alias' => 'act'),
         );
     }
 
@@ -111,18 +111,17 @@ class Car extends CActiveRecord
         if (!$this->company_id && !Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
             $this->company_id = Yii::app()->user->model->company_id;
         }
+        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+            $criteria->with = ['cardCompany'];
+            $criteria->compare('company_id', Yii::app()->user->model->company_id);
+            $criteria->compare('company.parent_id', Yii::app()->user->model->company_id, false, 'OR');
+        }
 
         $criteria->with = ['act', 'company'];
-        $criteria->together = true;
         $criteria->select = '*, count(act.id) as service_count';
         $criteria->group = 't.id';
         $criteria->compare('t.id', $this->id);
         $criteria->compare('t.number', $this->number, true);
-        if ($this->client_id) {
-            $criteria->compare('clientParent.id', $this->client_id);
-        } else {
-            $criteria->compare('company_id', $this->company_id);
-        }
         $criteria->compare('t.mark_id', $this->mark_id);
         $criteria->compare('t.type_id', $this->type_id);
         if (isset($this->from_date)) {
