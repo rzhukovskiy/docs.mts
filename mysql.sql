@@ -5,7 +5,7 @@ ALTER TABLE `mts_company` ADD `disinfection` VARCHAR( 255 ) CHARACTER SET utf8 C
 
 ALTER TABLE `mts_company` ADD `is_deleted` TINYINT( 1 ) DEFAULT 0 NOT NULL;
 
-ALTER TABLE `mts`.`mts_company`
+ALTER TABLE `mts_company`
 DROP COLUMN `disinfection`,
 DROP COLUMN `tires`,
 DROP COLUMN `remont`,
