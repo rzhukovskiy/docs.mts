@@ -8,8 +8,6 @@
  */
 class CompanyService extends CActiveRecord
 {
-
-
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
@@ -30,9 +28,6 @@ class CompanyService extends CActiveRecord
     {
         return array(
             array('company_id, service','required'),
-            array('company_id','integer'),
-            array('service', 'string'),
-            array('service', 'unique'),
             array('service', 'in', 'range' => array_keys(Company::$listService)),
         );
     }

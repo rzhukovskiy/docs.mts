@@ -56,14 +56,14 @@ $form = $this->beginWidget('CActiveForm', array(
         <?= $form->error($model, 'act_header'); ?>
     </span>
 </div>
+<?php foreach (Company::$listService as $key => $value) { ?>
 <div class="row">
-<?php
-    foreach (Company::$listService as $key => $value) {
-        echo CHtml::checkBox("service[$key]", CompanyService::model()->find('company_id = :company_id AND service = :service', [':company_id' => $model->id , ':service' => $key]) ? 1 : 0);
-        echo CHtml::label($value);
-    }
-?>
+        <?=CHtml::label($value, "service_$key")?>
+        <span class="field">
+            <?=CHtml::checkBox("service[$key]", CompanyService::model()->find('company_id = :company_id AND service = :service', [':company_id' => $model->id , ':service' => $key]) ? 1 : 0)?>
+        </span>
 </div>
+<?php } ?>
 
 <div class="row">
     <span class="field">

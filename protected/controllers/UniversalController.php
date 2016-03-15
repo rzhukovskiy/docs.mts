@@ -34,12 +34,10 @@ class UniversalController extends Controller
 
             if ($model->save() && isset($_POST['service'])) {
                 foreach ($_POST['service'] as $key => $value) {
-                    if ($value) {
-                        $modelService = new CompanyService();
-                        $modelService->company_id = $model->id;
-                        $modelService->service = $key;
-                        $modelService->save();
-                    }
+                    $modelService = new CompanyService();
+                    $modelService->company_id = $model->id;
+                    $modelService->service = $key;
+                    $modelService->save();
                 }
             }
         }
@@ -59,13 +57,14 @@ class UniversalController extends Controller
             $model->attributes = $_POST['Company'];
             $this->performAjaxValidation($model);
             if ($model->save() && isset($_POST['service'])) {
-                foreach ($_POST['service'] as $key => $value) {
+                foreach (Company::$listService as $key => $value) {
+
                     $existedService = CompanyService::model()->find('company_id = :company_id AND service = :service', [':company_id' => $model->id , ':service' => $key]);
-                    if ($existedService && !$value) {
+                    if ($existedService && !isset($_POST['service'][$key])) {
                         $existedService->delete();
-                    } elseif ($existedService && $value) {
+                    } elseif ($existedService && isset($_POST['service'][$key])) {
                         continue;
-                    } elseif ($value) {
+                    } else {
                         $modelService = new CompanyService();
                         $modelService->company_id = $model->id;
                         $modelService->service = $key;
