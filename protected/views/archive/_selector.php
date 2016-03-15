@@ -29,7 +29,7 @@ $form = $this->beginWidget('CActiveForm', array(
                         ['class' => 'autoinput', 'empty' => 'все']
                     )?>
                 <?php } ?>
-                <?=CHtml::submitButton('Показать',['class' => 'submit radius2 date-send', 'style' => 'opacity: 0;']); ?></th>
+                <?=CHtml::submitButton('Показать',['class' => 'submit radius2 date-send', 'style' => 'opacity: ' . (count(Yii::app()->user->model->company->children) ? '1' : '0')]); ?></th>
         </tr>
         <tr class="header">
             <td colspan="3">&nbsp;</td>

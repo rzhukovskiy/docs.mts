@@ -30,7 +30,10 @@ $this->widget('ext.groupgridview.GroupGridView', array(
         ),
         array(
             'name' => 'company_id',
-            'htmlOptions' => array('style' => 'width: 60px; text-align:center;'),
+            'htmlOptions' => array('style' => 'width: 60px; text-align:center; display:none'),
+            'headerHtmlOptions' => array('style' => 'display:none'),
+            'footerHtmlOptions' => array('style' => 'display:none'),
+            'filterHtmlOptions' => array('style' => 'display:none'),
             'value' => '$data->company->name',
             'filter' => isset($model->company->children)
                 ? CHtml::listData(Company::model()->findAll('parent_id = :parent_id', [':parent_id' => $model->company_id]), 'id', 'name')

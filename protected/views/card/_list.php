@@ -47,7 +47,10 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'name' => 'company_id',
-            'htmlOptions' => ['style' => 'text-align:center;', 'class' => 'client'],
+            'htmlOptions' => ['style' => 'text-align:center; display:none', 'class' => 'client'],
+            'headerHtmlOptions' => array('style' => 'display:none'),
+            'footerHtmlOptions' => array('style' => 'display:none'),
+            'filterHtmlOptions' => array('style' => 'display:none'),
             'value' => 'isset($data->cardCompany) ? $data->cardCompany->name : "error"',
             'filter' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? CHtml::listData(Company::model()->findAll('type = :type', array(':type' => Company::COMPANY_TYPE)), 'id', 'name') : '',
         ),
