@@ -116,6 +116,7 @@ class Company extends CActiveRecord
             'acts' => array(self::HAS_MANY, 'Act', 'client_id'),
             'parent' => array(self::BELONGS_TO, 'Company', 'parent_id'),
             'children' => array(self::HAS_MANY, 'Company', 'parent_id'),
+            'services' => array(self::HAS_MANY, 'CompanyService', 'company_id'),
         );
     }
 
@@ -246,5 +247,16 @@ class Company extends CActiveRecord
         }
 
         return $range;
+    }
+
+    public function hasService($service)
+    {
+        foreach ($this->services as $modelService) {
+            if ($modelService->service == $service) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

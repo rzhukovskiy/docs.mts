@@ -9,7 +9,9 @@ if (Yii::app()->user->model->company && Yii::app()->user->model->company->type !
     );
 } else {
     foreach(Company::$listService as $service => $name) {
-        $this->tabs[$model->companyType != $service ? $service : 'index'] = ['url' => Yii::app()->createUrl('stat/index', ['type' => $service]), 'name' => $name];
+        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) || Yii::app()->user->model->company->hasService($service)) {
+            $this->tabs[$model->companyType != $service ? $service : 'index'] = ['url' => Yii::app()->createUrl('stat/index', ['type' => $service]), 'name' => $name];
+        }
     }
     $this->tabs[$model->companyType ? 'total' : 'index'] = ['url' => Yii::app()->createUrl('stat/total'), 'name' => 'Общее'];
 }

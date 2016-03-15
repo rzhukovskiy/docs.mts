@@ -31,7 +31,17 @@ class UniversalController extends Controller
             $model->attributes = $_POST['Company'];
             $model->type = $this->type;
             $this->performAjaxValidation($model);
-            $model->save();
+
+            if ($model->save() && isset($_POST['service'])) {
+                foreach ($_POST['service'] as $key => $value) {
+                    if ($value) {
+                        $modelService = new CompanyService();
+                        $modelService->company_id = $model->id;
+                        $modelService->service = $key;
+                        $modelService->save();
+                    }
+                }
+            }
         }
 
         $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array($this->type . '/list'));
@@ -48,7 +58,20 @@ class UniversalController extends Controller
         if (isset($_POST['Company'])) {
             $model->attributes = $_POST['Company'];
             $this->performAjaxValidation($model);
-            if ($model->save()) {
+            if ($model->save() && isset($_POST['service'])) {
+                foreach ($_POST['service'] as $key => $value) {
+                    $existedService = CompanyService::model()->find('company_id = :company_id AND service = :service', [':company_id' => $model->id , ':service' => $key]);
+                    if ($existedService && !$value) {
+                        $existedService->delete();
+                    } elseif ($existedService && $value) {
+                        continue;
+                    } elseif ($value) {
+                        $modelService = new CompanyService();
+                        $modelService->company_id = $model->id;
+                        $modelService->service = $key;
+                        $modelService->save();
+                    }
+                }
                 $this->redirect(Yii::app()->createUrl($this->type . '/list'));
             }
         }

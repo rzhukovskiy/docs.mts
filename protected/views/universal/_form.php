@@ -57,32 +57,12 @@ $form = $this->beginWidget('CActiveForm', array(
     </span>
 </div>
 <div class="row">
-    <?php
-        echo $form->checkbox($model, 'carwash', array('value' => $model::CARWASH_TYPE));
-        echo $form->label($model, 'carwash');
-    ?>
-
-</div>
-<div class="row">
-    <?php
-    echo $form->checkbox($model, 'remont', array('value' => $model::SERVICE_TYPE));
-    echo $form->label($model, 'remont');
-    ?>
-
-</div>
-<div class="row">
-    <?php
-    echo $form->checkbox($model, 'tires', array('value' => $model::TIRES_TYPE));
-    echo $form->label($model, 'tires');
-    ?>
-
-</div>
-<div class="row">
-    <?php
-    echo $form->checkbox($model, 'disinfection', array('value' => $model::DISINFECTION_TYPE));
-    echo $form->label($model, 'disinfection');
-    ?>
-
+<?php
+    foreach (Company::$listService as $key => $value) {
+        echo CHtml::checkBox("service[$key]", CompanyService::model()->find('company_id = :company_id AND service = :service', [':company_id' => $model->id , ':service' => $key]) ? 1 : 0);
+        echo CHtml::label($value);
+    }
+?>
 </div>
 
 <div class="row">
