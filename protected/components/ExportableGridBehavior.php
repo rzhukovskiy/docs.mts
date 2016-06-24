@@ -34,14 +34,14 @@ class ExportableGridBehavior extends CBehavior
             }
 
             if ($this->showCompany) {
-                foreach($actModel->getClientsByType($this->companyType) as $actPartner) {
-                    $actModel->client_id = $actPartner->client_id;
-                    $this->fillAct($actModel, $actPartner->client, $zip);
+                foreach($actModel->getClientsByType($this->companyType) as $actClient) {
+                    $actModel->client_id = $actClient->client_id;
+                    $this->fillAct($actModel, $actClient->client, $zip);
                 }
             } else {
-                foreach($actModel->getPartnersByType($this->companyType) as $actClient) {
-                    $actModel->partner_id = $actClient->partner_id;
-                    $this->fillAct($actModel, $actClient->partner, $zip);
+                foreach($actModel->getPartnersByType($this->companyType) as $actPartner) {
+                    $actModel->partner_id = $actPartner->partner_id;
+                    $this->fillAct($actModel, $actPartner->partner, $zip);
                 }
             }
 

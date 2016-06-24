@@ -63,7 +63,7 @@ class LoginForm extends CFormModel
             $this->_identity->authenticate();
         }
 
-        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) || Yii::app()->request->cookies['was_admin']->value) {
             Yii::app()->user->login($this->_identity);
             return true;
         }

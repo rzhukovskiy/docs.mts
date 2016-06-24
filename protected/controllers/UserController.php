@@ -53,6 +53,10 @@ class UserController extends Controller
     {
         $user = User::model()->findByPk((int)$id);
 
+        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+            Yii::app()->request->cookies['was_admin'] = new CHttpCookie('was_admin', 1);
+        }
+
         $model = new LoginForm();
         $model->username = $user->email;
         $model->password = '123';

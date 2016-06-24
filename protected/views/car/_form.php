@@ -54,6 +54,15 @@ $form = $this->beginWidget('CActiveForm', array(
         </td>
     </tr>
     <tr>
+        <td>
+            <?=$form->label($model, 'is_infected'); ?>
+        </td>
+        <td>
+            <?=$form->checkBox($model, 'is_infected'); ?>
+            <?=$form->error($model, 'is_infected');?>
+        </td>
+    </tr>
+    <tr>
         <td></td>
         <td>
             <?=CHtml::hiddenField('returnUrl', Yii::app()->createUrl("/company/update", array('id' => $model->company_id))) ?>

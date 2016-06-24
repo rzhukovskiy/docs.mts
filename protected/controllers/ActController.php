@@ -14,7 +14,6 @@ class ActController extends Controller
     {
         $model = new Car('search');
         $model->unsetAttributes();
-        $error = false;
 
         $infectedCarList = false;
         if (isset($_POST['Car'])) {

@@ -41,8 +41,14 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'name' => 'type_id',
-            'htmlOptions' => array('style' => 'width: 100px; text-align:center;'),
             'value' => 'isset($data->type) ? $data->type->name : ""',
+            'htmlOptions' => array('style' => 'text-align:center;'),
+        ),
+        array(
+            'name' => 'is_infected',
+            'value' => '$data->is_infected ? "Да" : "Нет"',
+            'htmlOptions' => array('style' => 'width: 100px; text-align:center;'),
+
         ),
         array(
             'class' => 'CButtonColumn',

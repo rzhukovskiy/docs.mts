@@ -10,7 +10,7 @@ class UserIdentity extends CUserIdentity
     {
         $user = User::model()->find('LOWER(email)=?', array(strtolower($this->username)));
 
-        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) || Yii::app()->request->cookies['was_admin']->value) {
             $this->_id = $user->id;
             return $this->errorCode == self::ERROR_NONE;
         }
