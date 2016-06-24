@@ -518,4 +518,42 @@ class Act extends CActiveRecord
 
         $this->save();
     }
+
+    /**
+     * @param string $type
+     * @return Act
+     */
+    public function getPartnersByType($type) {
+        return Act::model()->findAll([
+            'condition' => 'service = :service AND date_format(t.service_date, "%Y-%m") = :month',
+            'params'    => [
+                ':service' => $type,
+                ':month'   => $this->month,
+            ],
+            'order'     => 'type DESC',
+            'group'     => 'partner_id',
+            'with'      => [
+                'partner'
+            ]
+        ]);
+    }
+
+    /**
+     * @param string $type
+     * @return Act
+     */
+    public function getClientsByType($type) {
+        return Act::model()->findAll([
+            'condition' => 'service = :service AND date_format(t.service_date, "%Y-%m") = :month',
+            'params'    => [
+                ':service' => $type,
+                ':month'   => $this->month,
+            ],
+            'order'     => 'type DESC',
+            'group'     => 'client_id',
+            'with'      => [
+                'client'
+            ]
+        ]);
+    }
 }

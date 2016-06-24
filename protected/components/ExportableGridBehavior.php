@@ -33,19 +33,18 @@ class ExportableGridBehavior extends CBehavior
                 $zip = null;
             }
 
-            /** @var Company $company */
-            foreach(Company::model()->findAll(array(
-                'condition' => 'type = :type',
-                'params' => array(':type' => $this->showCompany ? Company::COMPANY_TYPE : $actModel->companyType),
-                'order' => 'type DESC'
-            )) as $company) {
-                if ($this->showCompany) {
-                    $actModel->client_id = $company->id;
-                } else {
-                    $actModel->partner_id = $company->id;
+            if ($this->showCompany) {
+                foreach($actModel->getClientsByType($this->companyType) as $actPartner) {
+                    $actModel->client_id = $actPartner->client_id;
+                    $this->fillAct($actModel, $actPartner->client, $zip);
                 }
-                $this->fillAct($actModel, $company, $zip);
+            } else {
+                foreach($actModel->getPartnersByType($this->companyType) as $actClient) {
+                    $actModel->partner_id = $actClient->partner_id;
+                    $this->fillAct($actModel, $actClient->partner, $zip);
+                }
             }
+
             if ($zip) $zip->close();
         }
     }
