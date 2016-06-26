@@ -48,6 +48,9 @@ class CompanyController extends Controller
         $priceList->company_id = $model->id;
         $priceList->extra = new ExtraPrice();
 
+        $tiresServiceList = new CompanyTiresService();
+        $tiresServiceList->company_id = $id;
+
         if (isset($_POST['Company'])) {
             $model->attributes = $_POST['Company'];
             $this->performAjaxValidation($model);
@@ -61,9 +64,10 @@ class CompanyController extends Controller
         }
 
         $this->render('update', array(
-            'model' => $model,
-            'carModel' => $carModel,
-            'priceList' => $priceList
+            'model'            => $model,
+            'carModel'         => $carModel,
+            'priceList'        => $priceList,
+            'tiresServiceList' => $tiresServiceList,
         ));
     }
 

@@ -11,5 +11,5 @@ $this->tabs = array(
 );
 
 $this->renderPartial('_form', array('model' => $model));
-$this->renderPartial('price/_list', array('model' => $model, 'priceList' => $priceList));
-$this->renderPartial('price/_form', array('model' => $model, 'priceList' => $priceList));
+$this->renderPartial('/price/_short_list', array('model' => $model, 'priceList' => $priceList));
+$this->renderPartial('/price/_short_form', array('model' => $priceList));

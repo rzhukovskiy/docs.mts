@@ -1,11 +1,12 @@
 <div class="contenttitle radiusbottom0">
-    <h2 class="table"><span>Редактировать прайс</span></h2>
+    <h2 class="table"><span>Редактировать прайс шиномонтажа</span></h2>
 </div>
+
 <?php
 /**
- * @var $this CompanyController
+ * @var $this TiresController
  * @var $model Company
- * @var $priceList Price
+ * @var $priceList CompanyTiresService
  */
 $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'company-grid',
@@ -14,7 +15,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
     'dataProvider' => $priceList->search(),
     'emptyText' => '',
     'cssFile' => false,
-    'template' => "{items}\n{pager}",
+    'template' => "{items}",
     'loadingCssClass' => false,
     'columns' => array(
         array(
@@ -23,29 +24,20 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array(),
         ),
         array(
-            'name' => 'outside',
-            'htmlOptions' => array(),
-            'value' => '$data->outside . (isset($data->extra) ? " + " . $data->extra->outside : "")',
-        ),
-        array(
-            'name' => 'inside',
-            'htmlOptions' => array(),
-            'value' => '$data->inside . (isset($data->extra) ? " + " . $data->extra->inside : "")',
-        ),
-        array(
-            'name' => 'engine',
+            'name' => 'tires_service_id',
+            'value' => '$data->tiresService->description',
             'htmlOptions' => array(),
         ),
         array(
-            'name' => 'disinfection',
+            'name' => 'price',
             'htmlOptions' => array(),
         ),
         array(
             'class' => 'CButtonColumn',
             'template' => '{update}{delete}',
             'header' => '',
-            'updateButtonUrl' => 'Yii::app()->createUrl("/price/update", array("id" => $data->id))',
-            'deleteButtonUrl' => 'Yii::app()->createUrl("/company/deletePrice", array("id" => $data->id))',
+            'updateButtonUrl' => 'Yii::app()->createUrl("/tires/updatePrice", array("id" => $data->id))',
+            'deleteButtonUrl' => 'Yii::app()->createUrl("/tires/deletePrice", array("id" => $data->id))',
             'buttons' => array(
                 'update' => array(
                     'label' => '',

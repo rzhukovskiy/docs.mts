@@ -1,20 +1,19 @@
 <?php
 
 /**
- * This is the model class for table "{{type}}".
+ * This is the model class for table "{{tires_service}}".
  *
- * The followings are the available columns in table '{{type}}':
+ * The followings are the available columns in table '{{tires_service}}':
  * @property int $id
- * @property string $name
- * @property string $image
+ * @property string $description
+ * @property string $is_fixed
  */
-class Type extends CActiveRecord
+class TiresService extends CActiveRecord
 {
-    public $screen;
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
-     * @return Type the static model class
+     * @return TiresService the static model class
      */
     public static function model($className = __CLASS__)
     {
@@ -26,7 +25,7 @@ class Type extends CActiveRecord
      */
     public function tableName()
     {
-        return '{{type}}';
+        return '{{tires_service}}';
     }
 
     /**
@@ -35,7 +34,8 @@ class Type extends CActiveRecord
     public function rules()
     {
         return array(
-            array('name','required'),
+            array('description','required'),
+            array('is_fixed','safe'),
 
         );
     }
@@ -43,9 +43,9 @@ class Type extends CActiveRecord
     public function attributeLabels()
     {
         return array(
-            'id' => 'ID',
-            'name' => 'Тип ТС',
-            'screen' => 'Загрузка изображения',
+            'id'          => 'ID',
+            'description' => 'Описание',
+            'is_fixed'    => 'Фиксировано',
         );
     }
 
@@ -60,13 +60,11 @@ class Type extends CActiveRecord
         $criteria = new CDbCriteria;
 
         $criteria->compare('id', $this->id);
-        $criteria->compare('name', $this->name, true);
+        $criteria->compare('description', $this->description, true);
 
         $sort = new CSort;
-        $sort->attributes = array('id', 'name');
         $sort->defaultOrder = 'id ASC';
         $sort->applyOrder($criteria);
-
 
         return new CActiveDataProvider(get_class($this), array(
             'criteria' => $criteria,

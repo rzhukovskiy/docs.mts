@@ -1,69 +1,71 @@
-<div class="contenttitle radiusbottom0">
-    <h2 class="table"><span>Редактировать цену</span></h2>
-</div>
 <?php
 /**
- * @var $this PriceController
+ * @var $this CompanyController
  * @var $form CActiveForm
  * @var $model Price
  */
+if (!$model->isNewRecord) {
+?>
+    <div class="contenttitle radiusbottom0">
+        <h2 class="table"><span>Редактировать цену</span></h2>
+    </div>
+<?php
+}
 $form = $this->beginWidget('CActiveForm', array(
         'id' => 'action-form',
-        'action' => array(Yii::app()->createUrl("/price/update", array("id" => $model->id))),
+        'action' => array(Yii::app()->createUrl("/company/addPrice")),
         'errorMessageCssClass' => 'help-inline',
         'htmlOptions' => array('class' => 'stdform'),
         'enableAjaxValidation' => true,
         'clientOptions' => array('validateOnSubmit' => true),
     ));
+
 ?>
 <table class="stdtable grid">
     <tr>
-        <td>
+        <td rowspan="2">
             <?=$form->label($model, 'type_id'); ?>
+        </td>
+        <td rowspan="2">
+            <?=$form->dropDownList($model, 'type_id', CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
         </td>
         <td>
             <?=$form->label($model, 'outside'); ?>
         </td>
         <td>
-            <?=$form->label($model, 'inside'); ?>
-        </td>
-        <td>
-            <?=$form->label($model, 'engine'); ?>
-        </td>
-        <td>
-            <?=$form->label($model, 'disinfection'); ?>
-        </td>
-        <td>
-        </td>
-    <tr>
-    <tr>
-        <td>
-            <?=$form->dropDownList($model, 'type_id', CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
-        </td>
-        <td>
             <?=$form->textField($model, 'outside'); ?>
-            <?php if (false /*model->company->is_split*/) {
+            <?php if (false /*$model->is_split*/) {
                 echo $form->textField($model->extra, 'outside');
             } ?>
         </td>
         <td>
+            <?=$form->label($model, 'inside'); ?>
+        </td>
+        <td>
             <?=$form->textField($model, 'inside'); ?>
-            <?php if (false /*model->company->is_split*/) {
+            <?php if (false /*$model->is_split*/) {
                 echo $form->textField($model->extra, 'inside');
             } ?>
+        </td>
+        <td rowspan="2">
+            <?=$form->hiddenField($model, 'company_id'); ?>
+            <?=CHtml::submitButton($model->isNewRecord ? 'Добавить' : 'Сохранить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?=$form->label($model, 'engine'); ?>
         </td>
         <td>
             <?=$form->textField($model, 'engine'); ?>
         </td>
         <td>
-            <?=$form->textField($model, 'disinfection'); ?>
+            <?=$model->company->type !='carwash' ? $form->label($model, 'disinfection') : ''; ?>
         </td>
         <td>
-            <?=$form->hiddenField($model, 'company_id'); ?>
-            <?=CHtml::hiddenField('returnUrl', $model->company->type == Company::CARWASH_TYPE ? Yii::app()->createUrl("/carwash/update", array('id' => $model->company_id)) : Yii::app()->createUrl("/company/update", array('id' => $model->company_id))) ?>
-            <?=CHtml::submitButton('Сохранить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
+            <?=$model->company->type !='carwash' ? $form->textField($model, 'disinfection') : ''; ?>
         </td>
-    <tr>
+    </tr>
 </table>
 <?php $this->endWidget(); ?>
 <!-- form -->

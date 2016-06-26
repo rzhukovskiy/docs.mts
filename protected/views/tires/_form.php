@@ -32,6 +32,32 @@ $form = $this->beginWidget('CActiveForm', array(
 </div>
 <div class="row">
     <span class="field">
+        Для актов
+    </span>
+</div>
+<div class="row">
+    <?=$form->label($model, 'contact'); ?>
+    <span class="field">
+        <?=$form->textField($model, 'contact', array('class' => 'span5')); ?>
+        <?=$form->error($model, 'contact'); ?>
+    </span>
+</div>
+<div class="row">
+    <?=$form->label($model, 'contract'); ?>
+    <span class="field">
+        <?=$form->textField($model, 'contract', array('class' => 'span5')); ?>
+        <?=$form->error($model, 'contract'); ?>
+    </span>
+</div>
+<div class="row">
+    <?=$form->label($model, 'act_header'); ?>
+    <span class="field">
+        <?=$form->textArea($model, 'act_header', array('class' => 'span5')); ?>
+        <?=$form->error($model, 'act_header'); ?>
+    </span>
+</div>
+<div class="row">
+    <span class="field">
         <?=CHtml::submitButton($model->isNewRecord ? 'Создать сервис' : 'Сохранить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
     </span>
 </div>

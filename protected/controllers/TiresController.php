@@ -49,8 +49,11 @@ class TiresController extends Controller
             }
         }
 
+        $priceList = new CompanyTiresService();
+        $priceList->company_id = $id;
         $this->render('update', array(
             'model' => $model,
+            'priceList' => $priceList,
         ));
     }
 
@@ -64,7 +67,7 @@ class TiresController extends Controller
 
     public function actionDeletePrice($id)
     {
-        Price::model()->findByPk($id)->delete();
+        CompanyTiresService::model()->findByPk($id)->delete();
 
         if (!isset($_GET['ajax']))
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('/'));
@@ -72,14 +75,23 @@ class TiresController extends Controller
 
     public function actionAddPrice()
     {
-        $model = new Price();
-        if (isset($_POST['Price'])) {
-            $model->attributes = $_POST['Price'];
-            $this->performAjaxValidation($model);
-            $model->save();
+        $company_id = Yii::app()->request->getParam('company_id', false);
+        if ($company_id && isset($_POST['Type'])) {
+            foreach ($_POST['Type'] as $type_id) {
+                foreach ($_POST['Service'] as $service_id => $price) {
+                    if ($price) {
+                        $CompanyTiresService = new CompanyTiresService();
+                        $CompanyTiresService->company_id = $company_id;
+                        $CompanyTiresService->tires_service_id = $service_id;
+                        $CompanyTiresService->type_id = $type_id;
+                        $CompanyTiresService->price = $price;
+                        $CompanyTiresService->save();
+                    }
+                }
+            }
         }
 
-        $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : Yii::app()->createUrl($this->type . '/update', array('id' => $model->company_id)));
+        $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : Yii::app()->createUrl('/tires/list'));
     }
 
     public function loadModel($id)

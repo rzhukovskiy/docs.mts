@@ -2,8 +2,7 @@
 /**
  * @var $this CompanyController
  * @var $form CActiveForm
- * @var $model Company
- * @var $priceList Price
+ * @var $model Price
  */
 $form = $this->beginWidget('CActiveForm', array(
         'id' => 'action-form',
@@ -18,46 +17,44 @@ $form = $this->beginWidget('CActiveForm', array(
 <table class="stdtable grid">
     <tr>
         <td rowspan="2">
-            <?=$form->label($priceList, 'type_id'); ?>
+            <?=$form->label($model, 'type_id'); ?>
         </td>
         <td rowspan="2">
-            <?=$form->dropDownList($priceList, 'type_id', CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
+            <?=$form->dropDownList($model, 'type_id', CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
         </td>
         <td>
-            <?=$form->label($priceList, 'outside'); ?>
+            <?=$form->label($model, 'outside'); ?>
         </td>
         <td>
-            <?=$form->textField($priceList, 'outside'); ?>
+            <?=$form->textField($model, 'outside'); ?>
             <?php if (false /*$model->is_split*/) {
-                echo $form->textField($priceList->extra, 'outside');
+                echo $form->textField($model->extra, 'outside');
             } ?>
         </td>
         <td>
-            <?=$form->label($priceList, 'inside'); ?>
+            <?=$form->label($model, 'inside'); ?>
         </td>
         <td>
-            <?=$form->textField($priceList, 'inside'); ?>
+            <?=$form->textField($model, 'inside'); ?>
             <?php if (false /*$model->is_split*/) {
-                echo $form->textField($priceList->extra, 'inside');
+                echo $form->textField($model->extra, 'inside');
             } ?>
         </td>
         <td rowspan="2">
-            <?=$form->hiddenField($priceList, 'company_id'); ?>
+            <?=$form->hiddenField($model, 'company_id'); ?>
             <?=CHtml::submitButton('Добавить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
         </td>
     </tr>
     <tr>
         <td>
-            <?=$form->label($priceList, 'engine'); ?>
+            <?=$form->label($model, 'engine'); ?>
         </td>
         <td>
-            <?=$form->textField($priceList, 'engine'); ?>
+            <?=$form->textField($model, 'engine'); ?>
         </td>
         <td>
-            <?=$form->label($priceList, 'disinfection'); ?>
         </td>
         <td>
-            <?=$form->textField($priceList, 'disinfection'); ?>
         </td>
     </tr>
 </table>

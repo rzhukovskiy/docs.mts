@@ -11,7 +11,6 @@ $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'company-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
-    'filter' => $priceList,
     'dataProvider' => $priceList->search(),
     'emptyText' => '',
     'cssFile' => false,
@@ -26,10 +25,12 @@ $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'outside',
             'htmlOptions' => array(),
+            'value' => '$data->outside . (isset($data->extra) ? " + " . $data->extra->outside : "")',
         ),
         array(
             'name' => 'inside',
             'htmlOptions' => array(),
+            'value' => '$data->inside . (isset($data->extra) ? " + " . $data->extra->inside : "")',
         ),
         array(
             'name' => 'engine',
