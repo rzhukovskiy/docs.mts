@@ -48,13 +48,17 @@ $form = $this->beginWidget('CActiveForm', array(
     </tr>
     <tr>
         <td>
+            <?=$form->label($priceList, 'engine'); ?>
+        </td>
+        <td>
+            <?=$form->textField($priceList, 'engine'); ?>
+        </td>
+        <td>
             <?=$form->label($priceList, 'disinfection'); ?>
         </td>
         <td>
             <?=$form->textField($priceList, 'disinfection'); ?>
         </td>
-        <td></td>
-        <td></td>
     </tr>
 </table>
 <?php $this->endWidget(); ?>

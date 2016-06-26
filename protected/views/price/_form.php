@@ -28,6 +28,9 @@ $form = $this->beginWidget('CActiveForm', array(
             <?=$form->label($model, 'inside'); ?>
         </td>
         <td>
+            <?=$form->label($model, 'engine'); ?>
+        </td>
+        <td>
             <?=$form->label($model, 'disinfection'); ?>
         </td>
         <td>
@@ -50,10 +53,10 @@ $form = $this->beginWidget('CActiveForm', array(
             } ?>
         </td>
         <td>
+            <?=$form->textField($model, 'engine'); ?>
+        </td>
+        <td>
             <?=$form->textField($model, 'disinfection'); ?>
-            <?php if (false /*model->company->is_split*/) {
-                echo $form->textField($model->extra, 'disinfection');
-            } ?>
         </td>
         <td>
             <?=$form->hiddenField($model, 'company_id'); ?>

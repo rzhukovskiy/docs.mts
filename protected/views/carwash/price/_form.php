@@ -20,19 +20,25 @@ $form = $this->beginWidget('CActiveForm', array(
             <?=$form->label($priceList, 'type_id'); ?>
         </td>
         <td>
-            <?=$form->dropDownList($priceList, 'type_id', CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
+            <?=$form->dropDownList($priceList, 'type_id', CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name'), ['style' => 'width: 195px']); ?>
         </td>
         <td>
             <?=$form->label($priceList, 'outside'); ?>
         </td>
         <td>
-            <?=$form->textField($priceList, 'outside'); ?>
+            <?=$form->textField($priceList, 'outside', ['style' => 'width: 50px']); ?>
         </td>
         <td>
             <?=$form->label($priceList, 'inside'); ?>
         </td>
         <td>
-            <?=$form->textField($priceList, 'inside'); ?>
+            <?=$form->textField($priceList, 'inside', ['style' => 'width: 50px']); ?>
+        </td>
+        <td>
+            <?=$form->label($priceList, 'engine'); ?>
+        </td>
+        <td>
+            <?=$form->textField($priceList, 'engine', ['style' => 'width: 50px']); ?>
         </td>
         <td>
             <?=$form->hiddenField($priceList, 'company_id'); ?>

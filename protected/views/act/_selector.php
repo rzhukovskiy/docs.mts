@@ -19,7 +19,7 @@
                 ));
                 ?>
                     Выбор периода
-                    <?=$form->textField($model, 'month', array('style' => ' margin-left: 20px;'))?>
+                    <?=CHtml::textField('Act[month]', $model->monthAsString, array('style' => ' margin-left: 20px;'))?>
                     <?=CHtml::submitButton('Показать', array('class' => 'submit radius2 date-send', 'style' => 'display: none; opacity: 1;')); ?>
                 <?php
                 $this->endWidget();

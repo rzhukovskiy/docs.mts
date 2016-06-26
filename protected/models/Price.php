@@ -9,6 +9,7 @@
  * @property int $company_id
  * @property int $inside
  * @property int $outside
+ * @property int $engine
  * @property int $disinfection
  */
 class Price extends CActiveRecord
@@ -38,7 +39,7 @@ class Price extends CActiveRecord
     {
         return array(
             ['type_id, company_id','required'],
-            ['inside, outside, disinfection','safe'],
+            ['inside, outside, engine, disinfection','safe'],
         );
     }
 
@@ -50,6 +51,7 @@ class Price extends CActiveRecord
             'company_id' => 'Компания',
             'inside' => 'Стоимость(внутр.)',
             'outside' => 'Стоимость(снар.)',
+            'engine' => 'Стоимость(двиг.)',
             'disinfection' => 'Дезинфекция',
         );
     }

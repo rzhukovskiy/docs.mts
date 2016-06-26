@@ -6,7 +6,7 @@
 $this->tabs['index'] = ['url' => Yii::app()->createUrl('statCompany/index', ['type' => $model->companyType]), 'name' => 'Статистика'];
 if (Yii::app()->user->checkAccess(User::ADMIN_ROLE))
     $this->tabs['months'] = ['url' => Yii::app()->createUrl('statCompany/months', ['type' => $model->companyType, 'Act[client_id]' => $model->client_id]), 'name' => 'По месяцам'];
-$this->tabs['days'] = ['url' => Yii::app()->createUrl('statCompany/days', ['type' => $model->companyType, 'Act[client_id]' => $model->client_id, 'Act[month]' => date("Y-m", strtotime("$model->day 00:00:00"))]), 'name' => 'По дням'];
+$this->tabs['days'] = ['url' => Yii::app()->createUrl('statCompany/days', ['type' => $model->companyType, 'Act[client_id]' => $model->client_id, 'Act[month]' => date("m-Y", strtotime("$model->day 00:00:00"))]), 'name' => 'По дням'];
 $this->tabs['details'] = ['url' => '#', 'name' => 'Детализация'];
 ?>
     <div class="contenttitle radiusbottom0">

@@ -2,7 +2,7 @@
     <div class="headerinner">
         <div class="headright">
             <div class="headercolumn" id="userPanel">
-                <?php if(!Yii::app()->user->checkAccess(User::ADMIN_ROLE) && isset(Yii::app()->request->cookies['was_admin']->value)) { ?>
+                <?php if(!Yii::app()->user->checkAccess(User::ADMIN_ROLE) && isset(Yii::app()->request->cookies['is_admin']->value)) { ?>
                     <a class="btn btn-danger" href="/user/login?id=1">Стать админом</a>
                 <? } ?>
                 <a class="userinfo radius2" href="#">

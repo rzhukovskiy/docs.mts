@@ -33,6 +33,10 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'value' => '$data->inside . (isset($data->extra) ? " + " . $data->extra->inside : "")',
         ),
         array(
+            'name' => 'engine',
+            'htmlOptions' => array(),
+        ),
+        array(
             'name' => 'disinfection',
             'htmlOptions' => array(),
         ),

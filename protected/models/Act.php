@@ -24,8 +24,8 @@
  * @property int $profit
  * @property int $old_expense
  * @property int $old_income
- * @property string $day
  * @property string $month
+ * @property string $day
  * @property int $period
  * @property int $amount
  * @property string $from_date
@@ -53,9 +53,12 @@ class Act extends CActiveRecord
 
     public static $periodList = array('все время', 'месяц', 'квартал', 'полгода', 'год');
     public static $carwashList = array(
-        'снаружи',
-        'внутри',
-        'снаружи+внутри',
+        0 => 'снаружи',
+        1 => 'внутри',
+        2 => 'снаружи+внутри',
+        6 => 'снаружи+двигатель',
+        7 => 'внутри+двигатель',
+        8 => 'снаружи+внутри+двигатель',
     );
     public static $serviceList = array(
         3 => 'сервис',
@@ -69,6 +72,10 @@ class Act extends CActiveRecord
         'сервис',
         'шиномонтаж',
         'дезинфекция',
+        'снаружи+внутри',
+        'снаружи+двигатель',
+        'внутри+двигатель',
+        'снаружи+внутри+двигатель',
     );
     public static $shortList = array(
         'мойка снаружи',
@@ -77,6 +84,10 @@ class Act extends CActiveRecord
         'сервис',
         'шиномонтаж',
         'дезинфекция',
+        'снаружи+внутри',
+        'снаружи+двигатель',
+        'внутри+двигатель',
+        'снаружи+внутри+двигатель',
     );
 
     public $month;
@@ -89,6 +100,20 @@ class Act extends CActiveRecord
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
+    }
+
+    function __set($name, $value)
+    {
+        if ($name == 'month') {
+            list($month, $year) = explode('-', $value);
+            if(strlen($month) == 2) {
+                $this->month = $year . '-' . $month;
+            } else {
+                $this->month = $value;
+            }
+        } else {
+            parent::__set($name, $value);
+        }
     }
 
     public function tableName()
@@ -199,6 +224,9 @@ class Act extends CActiveRecord
                     0,
                     0,
                     $washPrice->disinfection,
+                    $washPrice->fullOutside + $washPrice->engine,
+                    $washPrice->fullInside + $washPrice->engine,
+                    $washPrice->fullOutside + $washPrice->fullInside + $washPrice->engine,
                 );
 
                 $this->income = $servicePrice[$this->client_service];
@@ -228,6 +256,9 @@ class Act extends CActiveRecord
                     0,
                     0,
                     $washPrice->disinfection,
+                    $washPrice->fullOutside + $washPrice->engine,
+                    $washPrice->fullInside + $washPrice->engine,
+                    $washPrice->fullOutside + $washPrice->fullInside + $washPrice->engine,
                 );
 
                 $this->expense = $servicePrice[$this->partner_service];
@@ -555,5 +586,11 @@ class Act extends CActiveRecord
                 'client'
             ]
         ]);
+    }
+
+    public function getMonthAsString()
+    {
+        list($year, $month) = explode('-', $this->month);
+        return $month . '-' . $year;
     }
 }
