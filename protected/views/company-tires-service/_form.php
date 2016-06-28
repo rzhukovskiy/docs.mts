@@ -31,6 +31,7 @@ $form = $this->beginWidget('CActiveForm', array(
         </td>
         <td>
             <?=CHtml::hiddenField('company_id', $model->id); ?>
+            <?=CHtml::hiddenField('returnUrl', Yii::app()->request->urlReferrer)?>
             <?=CHtml::submitButton('Добавить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
         </td>
     <tr>
