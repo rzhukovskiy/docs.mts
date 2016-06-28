@@ -21,7 +21,7 @@ $form = $this->beginWidget('CActiveForm', array(
         </td>
         <td>
             <?php
-                foreach(TiresService::model()->findAll('is_fixed = 0') as $service) {
+                foreach(TiresService::model()->findAll('is_fixed = 1') as $service) {
                     echo '<div class="clearfix">';
                     echo CHtml::label($service->description, '');
                     echo CHtml::textField("Service[$service->id]", '', ['style' => 'width: 50px; float: right;']);

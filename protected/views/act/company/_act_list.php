@@ -14,7 +14,7 @@ foreach($model->getClientsByType($model->companyType) as $actClient) {
     if($model->companyType == Company::SERVICE_TYPE) {
         $model->client_id = $actClient->client_id;
         foreach ($model->search()->getData() as $data) {
-            $filename = "Акт $actClient->name от " . date('d-m-Y', strtotime($data->service_date)) . ".xls";
+            $filename = "Акт {$actClient->client->name} от " . date('d-m-Y', strtotime($data->service_date)) . ".xls";
             $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
             if(file_exists($fullFilename)) {
                 echo CHtml::link($filename, '/' . $fullFilename) . '<br /><br />';
