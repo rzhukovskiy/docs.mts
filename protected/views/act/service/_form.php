@@ -24,6 +24,7 @@ if ($model->companyType == Company::TIRES_TYPE) {
     <script>
         $(document).ready(function () {
             var serviceList = <?=json_encode( CHtml::listData(TiresService::model()->findAll(), 'id', 'is_fixed'))?>;
+            $('.tires-expense').hide();
             $(document).on('change', '.tires-select', function () {
                 var fixed = serviceList[$(this).val()];
                 if (fixed > 0) {
