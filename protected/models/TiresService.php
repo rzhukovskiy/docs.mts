@@ -5,6 +5,7 @@
  *
  * The followings are the available columns in table '{{tires_service}}':
  * @property int $id
+ * @property int $pos
  * @property string $description
  * @property string $is_fixed
  */
@@ -49,6 +50,14 @@ class TiresService extends CActiveRecord
         );
     }
 
+    public function beforeSave()
+    {
+        if ($this->isNewRecord) {
+            $this->pos = $this->id;
+        }
+        return true;
+    }
+
     /**
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
@@ -63,7 +72,7 @@ class TiresService extends CActiveRecord
         $criteria->compare('description', $this->description, true);
 
         $sort = new CSort;
-        $sort->defaultOrder = 'id ASC';
+        $sort->defaultOrder = 'pos ASC';
         $sort->applyOrder($criteria);
 
         return new CActiveDataProvider(get_class($this), array(

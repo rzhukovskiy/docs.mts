@@ -144,7 +144,7 @@ if ($model->companyType == Company::TIRES_TYPE) {
         <tbody>
         <tr class="scope example">
             <?php if ($model->companyType == Company::TIRES_TYPE) { ?>
-                <td><?= CHtml::dropDownList('Scope[description][]', 0, CHtml::listData(TiresService::model()->findAll(), 'id', 'description'), ['class' => 'tires-select']) ?></td>
+                <td><?= CHtml::dropDownList('Scope[description][]', 0, CHtml::listData(TiresService::model()->findAll(['order' => 'pos']), 'id', 'description'), ['class' => 'tires-select']) ?></td>
             <?php } else { ?>
                 <td><?= CHtml::textField('Scope[description][]') ?></td>
             <?php } ?>
@@ -157,7 +157,7 @@ if ($model->companyType == Company::TIRES_TYPE) {
         </tr>
         <tr class="scope">
             <?php if ($model->companyType == Company::TIRES_TYPE) { ?>
-                <td><?= CHtml::dropDownList('Scope[description][]', 0, CHtml::listData(TiresService::model()->findAll(), 'id', 'description'), ['class' => 'tires-select']) ?></td>
+                <td><?= CHtml::dropDownList('Scope[description][]', 0, CHtml::listData(TiresService::model()->findAll(['order' => 'pos']), 'id', 'description'), ['class' => 'tires-select']) ?></td>
             <?php } else { ?>
                 <td><?= CHtml::textField('Scope[description][]') ?></td>
             <?php } ?>

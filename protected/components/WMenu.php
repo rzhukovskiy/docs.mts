@@ -63,7 +63,7 @@ class WMenu extends CWidget
                     'title'  => Yii::app()->user->role == User::ADMIN_ROLE ? 'Статистика партнеров' : 'Доходы',
                     'class'  => 'empty',
                     'action' => 'index',
-                    'params' => ['type' => 'carwash'],
+                    'params' => ['type' => Yii::app()->user->checkAccess(User::CLIENT_ROLE) || Yii::app()->user->model->company->type == Company::UNIVERSAL_TYPE ? Company::CARWASH_TYPE : Yii::app()->user->model->company->type],
                     'role'   => User::PARTNER_ROLE,
                 ),
                 'statCompany' => array(
