@@ -262,6 +262,8 @@ class ExportableGridBehavior extends CBehavior
                 );
 
                 /** @var ActScope $scope */
+                $subtotal = 0;
+                $subcount = 0;
                 foreach ($data->scope as $scope) {
                     $row++;
                     $num++;
@@ -276,12 +278,27 @@ class ExportableGridBehavior extends CBehavior
                         $companyWorkSheet->setCellValue("H$row", $scope->income);
                         $companyWorkSheet->setCellValue("I$row", $scope->income * $scope->amount);
                         $total += $scope->amount * $scope->income;
+                        $subtotal += $scope->amount * $scope->income;
                     } else {
                         $companyWorkSheet->setCellValue("H$row", $scope->expense);
                         $companyWorkSheet->setCellValue("I$row", $scope->expense * $scope->amount);
                         $total += $scope->amount * $scope->expense;
+                        $subtotal += $scope->amount * $scope->expense;
                     }
+                    $subcount += $scope->amount;
                 }
+                $row++;
+                $companyWorkSheet->mergeCells("B$row:F$row");
+                $companyWorkSheet->setCellValue("B$row", "Итого:");
+                $companyWorkSheet->setCellValue("G$row", $subcount);
+                $companyWorkSheet->setCellValue("H$row", $subtotal);
+                $companyWorkSheet->setCellValue("I$row", $subtotal);
+                $companyWorkSheet->getStyle("B$row:I$row")->applyFromArray(array(
+                        'font' => array(
+                            'bold' => true,
+                        ),
+                    )
+                );
 
                 $companyWorkSheet->getStyle("B13:I$row")
                     ->applyFromArray(array(
