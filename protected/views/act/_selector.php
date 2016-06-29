@@ -45,7 +45,7 @@
             </th>
             <th>
                 <?php
-                if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) && ($model->companyType == Company::CARWASH_TYPE || $model->showCompany)) {
+                if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) && ($model->companyType != Company::SERVICE_TYPE || $model->showCompany)) {
                     $this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
                         'selector' => '#act-grid',
                     ));

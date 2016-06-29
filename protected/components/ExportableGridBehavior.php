@@ -176,14 +176,14 @@ class ExportableGridBehavior extends CBehavior
                     'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
                 )
             ));
-            $companyWorkSheet->getColumnDimension('B')->setWidth(10);
-            $companyWorkSheet->getColumnDimension('C')->setWidth(10);
-            $companyWorkSheet->getColumnDimension('D')->setWidth(10);
-            $companyWorkSheet->getColumnDimension('E')->setWidth(10);
-            $companyWorkSheet->getColumnDimension('F')->setWidth(10);
-            $companyWorkSheet->getColumnDimension('G')->setWidth(10);
-            $companyWorkSheet->getColumnDimension('H')->setWidth(10);
-            $companyWorkSheet->getColumnDimension('I')->setWidth(10);
+            $companyWorkSheet->getColumnDimension('B')->setWidth(11);
+            $companyWorkSheet->getColumnDimension('C')->setWidth(11);
+            $companyWorkSheet->getColumnDimension('D')->setWidth(11);
+            $companyWorkSheet->getColumnDimension('E')->setWidth(11);
+            $companyWorkSheet->getColumnDimension('F')->setWidth(11);
+            $companyWorkSheet->getColumnDimension('G')->setWidth(11);
+            $companyWorkSheet->getColumnDimension('H')->setWidth(11);
+            $companyWorkSheet->getColumnDimension('I')->setWidth(11);
 
             /** @var Act $data */
             foreach ($dataList as $data) {
@@ -194,10 +194,15 @@ class ExportableGridBehavior extends CBehavior
                 $companyWorkSheet->setCellValue("B$row", "Число");
                 $companyWorkSheet->mergeCells("D$row:E$row");
                 $companyWorkSheet->setCellValue("D$row", "№ Карты");
-                $companyWorkSheet->mergeCells("F$row:G$row");
                 $companyWorkSheet->setCellValue("F$row", "Марка ТС");
-                $companyWorkSheet->mergeCells("H$row:I$row");
-                $companyWorkSheet->setCellValue("H$row", "Госномер");
+                if ($this->showCompany) {
+                    $companyWorkSheet->mergeCells("G$row:H$row");
+                    $companyWorkSheet->setCellValue("G$row", "Госномер");
+                    $companyWorkSheet->setCellValue("I$row", "Город");
+                } else {
+                    $companyWorkSheet->mergeCells("G$row:I$row");
+                    $companyWorkSheet->setCellValue("G$row", "Госномер");
+                }
                 $companyWorkSheet->getStyle("B$row:I$row")->applyFromArray(array(
                         'font' => array(
                             'bold' => true,
@@ -222,10 +227,15 @@ class ExportableGridBehavior extends CBehavior
                 $companyWorkSheet->setCellValueByColumnAndRow(1, $row, $date->format('j'));
                 $companyWorkSheet->mergeCells("D$row:E$row");
                 $companyWorkSheet->setCellValueByColumnAndRow(3, $row, $data->card->number);
-                $companyWorkSheet->mergeCells("F$row:G$row");
                 $companyWorkSheet->setCellValueByColumnAndRow(5, $row, isset($data->mark) ? $data->mark->name : "");
-                $companyWorkSheet->mergeCells("H$row:I$row");
-                $companyWorkSheet->setCellValueByColumnAndRow(7, $row, $data->number);
+                if ($this->showCompany) {
+                    $companyWorkSheet->mergeCells("G$row:H$row");
+                    $companyWorkSheet->setCellValueByColumnAndRow(6, $row, $data->number);
+                    $companyWorkSheet->setCellValueByColumnAndRow(8, $row, $data->partner->address);
+                } else {
+                    $companyWorkSheet->mergeCells("G$row:I$row");
+                    $companyWorkSheet->setCellValueByColumnAndRow(6, $row, $data->number);
+                }
                 $companyWorkSheet->getStyle("B$row:I$row")
                     ->applyFromArray(array(
                             'borders' => array(
@@ -238,10 +248,11 @@ class ExportableGridBehavior extends CBehavior
                     );
 
                 $row++;
-                $companyWorkSheet->mergeCells("B$row:G$row");
+                $companyWorkSheet->mergeCells("B$row:F$row");
                 $companyWorkSheet->setCellValue("B$row", "Вид услуг");
-                $companyWorkSheet->setCellValue("H$row", "Кол-во");
-                $companyWorkSheet->setCellValue("I$row", "Стоимость");
+                $companyWorkSheet->setCellValue("G$row", "Кол-во");
+                $companyWorkSheet->setCellValue("H$row", "Стоимость");
+                $companyWorkSheet->setCellValue("I$row", "Сумма");
                 $companyWorkSheet->getStyle("B$row:I$row")->applyFromArray(array(
                         'font' => array(
                             'bold' => true,
@@ -254,18 +265,20 @@ class ExportableGridBehavior extends CBehavior
                 foreach ($data->scope as $scope) {
                     $row++;
                     $num++;
-                    $companyWorkSheet->mergeCells("B$row:G$row");
+                    $companyWorkSheet->mergeCells("B$row:F$row");
                     $companyWorkSheet->setCellValue("B$row", "$num. $scope->description");
-                    $companyWorkSheet->getStyle("B$row:G$row")->getAlignment()->setWrapText(true);
+                    $companyWorkSheet->getStyle("B$row:F$row")->getAlignment()->setWrapText(true);
                     if (mb_strlen($scope->description) > 55) {
                         $companyWorkSheet->getRowDimension($row)->setRowHeight(40);
                     }
-                    $companyWorkSheet->setCellValue("H$row", $scope->amount);
+                    $companyWorkSheet->setCellValue("G$row", $scope->amount);
                     if ($this->showCompany) {
-                        $companyWorkSheet->setCellValue("I$row", $scope->income);
+                        $companyWorkSheet->setCellValue("H$row", $scope->income);
+                        $companyWorkSheet->setCellValue("I$row", $scope->income * $scope->amount);
                         $total += $scope->amount * $scope->income;
                     } else {
-                        $companyWorkSheet->setCellValue("I$row", $scope->expense);
+                        $companyWorkSheet->setCellValue("H$row", $scope->expense);
+                        $companyWorkSheet->setCellValue("I$row", $scope->expense * $scope->amount);
                         $total += $scope->amount * $scope->expense;
                     }
                 }
