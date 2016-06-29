@@ -68,6 +68,8 @@ class CompanyController extends Controller
             'carModel'         => $carModel,
             'priceList'        => $priceList,
             'tiresServiceList' => $tiresServiceList,
+            'typeList' => Type::model()->findAll(),
+            'serviceList' => TiresService::model()->findAll(['condition' => 'is_fixed = 1', 'order' => 'pos']),
         ));
     }
 

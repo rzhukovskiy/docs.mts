@@ -3,6 +3,8 @@
  * @var $this CompanyController
  * @var $model Company
  * @var $priceList Price
+ * @var $typeList Type
+ * @var $serviceList TiresService[]
  */
 
 $this->tabs = array(
@@ -17,4 +19,8 @@ $this->renderPartial('_form', array('model' => $model));
 <?php
 
 $this->renderPartial('/company-tires-service/_list', array('model' => $model, 'priceList' => $priceList));
-$this->renderPartial('/company-tires-service/_form', array('model' => $model));
+$this->renderPartial('/company-tires-service/_form', array(
+    'company' => $model,
+    'typeList' => $typeList,
+    'serviceList' => $serviceList,
+    ));

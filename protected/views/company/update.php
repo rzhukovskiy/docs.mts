@@ -19,7 +19,11 @@ $this->renderPartial('/price/_form', array('model' => $priceList));
 echo "<br />";
 
 $this->renderPartial('/company-tires-service/_list', array('model' => $model, 'priceList' => $tiresServiceList));
-$this->renderPartial('/company-tires-service/_form', array('model' => $model));
+$this->renderPartial('/company-tires-service/_form', array(
+    'company' => $model,
+    'typeList' => $typeList,
+    'serviceList' => $serviceList,
+));
 echo "<br />";
 
 $this->renderPartial('car/_form', array('model' => $carModel));

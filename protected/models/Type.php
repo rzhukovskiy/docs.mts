@@ -40,6 +40,13 @@ class Type extends CActiveRecord
         );
     }
 
+    public function relations()
+    {
+        return array(
+            'companyTiresService' => array(self::HAS_MANY, 'CompanyTiresService', 'type_id'),
+        );
+    }
+
     public function attributeLabels()
     {
         return array(

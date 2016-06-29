@@ -1,13 +1,15 @@
 <?php
 /**
- * @var $this CompanyController
+ * @var $this TiresController
  * @var $form CActiveForm
- * @var $model Company
- * @var $priceList Price
+ * @var $typeList Type
+ * @var $company Company
+ * @var $model CompanyTiresService
+ * @var $serviceList []
  */
 $form = $this->beginWidget('CActiveForm', array(
         'id' => 'action-form',
-        'action' => array(Yii::app()->createUrl("/tires/addPrice")),
+        'action' => isset($model) ? [Yii::app()->createUrl("/tires/updatePrice", ['id' => $model->id])] : [Yii::app()->createUrl("/tires/addPrice")],
         'errorMessageCssClass' => 'help-inline',
         'htmlOptions' => array('class' => 'stdform'),
         'enableAjaxValidation' => true,
@@ -17,22 +19,22 @@ $form = $this->beginWidget('CActiveForm', array(
 <table class="stdtable grid">
     <tr>
         <td>
-            <?=CHtml::checkBoxList('Type', [], CHtml::listData(Type::model()->findAll(), 'id', 'name')); ?>
+            <?=CHtml::checkBoxList('Type', isset($model) ? CHtml::listData($typeList, 'id', 'id') : [], CHtml::listData($typeList, 'id', 'name')); ?>
         </td>
         <td>
             <?php
-                foreach(TiresService::model()->findAll(['condition' => 'is_fixed = 1', 'order' => 'pos']) as $service) {
+                foreach($serviceList as $service) {
                     echo '<div class="clearfix">';
                     echo CHtml::label($service->description, '');
-                    echo CHtml::textField("Service[$service->id]", '', ['style' => 'width: 50px; float: right;']);
+                    echo CHtml::textField("Service[$service->id]", isset($model) ? $model->price : '', ['style' => 'width: 50px; float: right;']);
                     echo '</div>';
                 }
             ?>
         </td>
         <td>
-            <?=CHtml::hiddenField('company_id', $model->id); ?>
+            <?=CHtml::hiddenField('company_id', isset($model) ? $model->company_id : $company->id); ?>
             <?=CHtml::hiddenField('returnUrl', Yii::app()->request->urlReferrer)?>
-            <?=CHtml::submitButton('Добавить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
+            <?=CHtml::submitButton(isset($model) ? 'Сохранить' : 'Добавить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
         </td>
     <tr>
 </table>

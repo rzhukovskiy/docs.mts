@@ -54,6 +54,8 @@ class TiresController extends Controller
         $this->render('update', array(
             'model' => $model,
             'priceList' => $priceList,
+            'typeList' => Type::model()->findAll(),
+            'serviceList' => TiresService::model()->findAll(['condition' => 'is_fixed = 1', 'order' => 'pos']),
         ));
     }
 
@@ -92,6 +94,58 @@ class TiresController extends Controller
         }
 
         $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : Yii::app()->createUrl('/tires/list'));
+    }
+
+    public function actionUpdatePrice($id)
+    {
+        $companyTiresService = CompanyTiresService::model()->findByPk($id);
+        if (!$companyTiresService) {
+            throw new CHttpException(404, 'The requested page does not exist.');
+        }
+
+        if (isset($_POST['Type'])) {
+            foreach ($_POST['Type'] as $type_id) {
+                foreach ($_POST['Service'] as $service_id => $price) {
+                    $currentServicePrice = CompanyTiresService::model()->find([
+                        'condition' => 'company_id = :company_id AND price = :price AND tires_service_id = :service_id AND type_id = :type_id',
+                        'params' => [
+                            ':company_id' => $companyTiresService->company_id,
+                            ':price'      => $companyTiresService->price,
+                            ':service_id' => $service_id,
+                            ':type_id'    => $type_id,
+                        ],
+                    ]);
+                    if ($currentServicePrice) {
+                        $currentServicePrice->price = $price;
+                        $currentServicePrice->save();
+                    }
+                }
+            }
+
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : Yii::app()->createUrl('/tires/list'));
+        }
+
+        $this->render('/company-tires-service/update', array(
+            'model' => $companyTiresService,
+            'typeList' => Type::model()->findAll([
+                'with' => [
+                    'companyTiresService'
+                ],
+                'condition' => 'companyTiresService.company_id = :company_id AND companyTiresService.price = :price AND companyTiresService.tires_service_id = :service_id',
+                'params' => [
+                    ':company_id' => $companyTiresService->company_id,
+                    ':price'      => $companyTiresService->price,
+                    ':service_id' => $companyTiresService->tires_service_id,
+                ],
+            ]),
+            'serviceList' => TiresService::model()->findAll([
+                'condition' => 'id = :id',
+                'params' => [
+                    ':id' => $companyTiresService->tires_service_id,
+                ],
+                'order' => 'pos'
+            ]),
+        ));
     }
 
     public function loadModel($id)
