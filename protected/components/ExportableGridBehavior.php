@@ -165,6 +165,7 @@ class ExportableGridBehavior extends CBehavior
         $row = 12;
         $num = 0;
         $total = 0;
+        $count = 0;
         if ($this->companyType != Company::CARWASH_TYPE) {
             $first = $dataList[0];
             $companyWorkSheet->setCellValue('H5', date("d ", strtotime($first->service_date)) . $monthName[1] . date(' Y', $this->time));
@@ -191,35 +192,32 @@ class ExportableGridBehavior extends CBehavior
                 $num = 0;
 
                 $companyWorkSheet->mergeCells("B$row:C$row");
-                $companyWorkSheet->setCellValue("B$row", "Число");
+                $companyWorkSheet->setCellValue("B$row", "ЧИСЛО");
                 $companyWorkSheet->mergeCells("D$row:E$row");
-                $companyWorkSheet->setCellValue("D$row", "№ Карты");
-                $companyWorkSheet->setCellValue("F$row", "Марка ТС");
+                $companyWorkSheet->setCellValue("D$row", "№ КАРТЫ");
+                $companyWorkSheet->setCellValue("F$row", "МАРКА ТС");
                 if ($this->showCompany) {
                     $companyWorkSheet->mergeCells("G$row:H$row");
-                    $companyWorkSheet->setCellValue("G$row", "Госномер");
-                    $companyWorkSheet->setCellValue("I$row", "Город");
+                    $companyWorkSheet->setCellValue("G$row", "ГОСНОМЕР");
+                    $companyWorkSheet->setCellValue("I$row", "ГОРОД");
                 } else {
                     $companyWorkSheet->mergeCells("G$row:I$row");
-                    $companyWorkSheet->setCellValue("G$row", "Госномер");
+                    $companyWorkSheet->setCellValue("G$row", "ГОСНОМЕР");
                 }
                 $companyWorkSheet->getStyle("B$row:I$row")->applyFromArray(array(
                         'font' => array(
                             'bold' => true,
                             'color' => array('argb' => 'FF006699'),
+                            'size' => 12,
+                        ),
+                        'borders' => array(
+                            'allborders' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'color' => array('argb' => 'FF000000'),
+                            ),
                         ),
                     )
                 );
-                $companyWorkSheet->getStyle("B$row:I$row")
-                    ->applyFromArray(array(
-                            'borders' => array(
-                                'allborders' => array(
-                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
-                                    'color' => array('argb' => 'FF000000'),
-                                ),
-                            ),
-                        )
-                    );
 
                 $row++;
                 $date = new DateTime($data->service_date);
@@ -243,6 +241,9 @@ class ExportableGridBehavior extends CBehavior
                                     'style' => PHPExcel_Style_Border::BORDER_THIN,
                                     'color' => array('argb' => 'FF000000'),
                                 ),
+                            ),
+                            'font' => array(
+                                'bold' => true,
                             ),
                         )
                     );
@@ -286,6 +287,7 @@ class ExportableGridBehavior extends CBehavior
                         $subtotal += $scope->amount * $scope->expense;
                     }
                     $subcount += $scope->amount;
+                    $count += $scope->amount;
                 }
                 $row++;
                 $companyWorkSheet->mergeCells("B$row:F$row");
@@ -434,8 +436,17 @@ class ExportableGridBehavior extends CBehavior
                 $companyWorkSheet->setCellValue("H$row", "$total");
             }
         } else {
-            $companyWorkSheet->setCellValue("H$row", "ВСЕГО:");
+            $companyWorkSheet->setCellValue("F$row", "ВСЕГО:");
+            $companyWorkSheet->setCellValue("G$row", "$count");
+            $companyWorkSheet->setCellValue("H$row", "$total");
             $companyWorkSheet->setCellValue("I$row", "$total");
+            $companyWorkSheet->getStyle("B$row:I$row")->applyFromArray(array(
+                    'font' => array(
+                        'bold' => true,
+                        'size' => 12,
+                    ),
+                )
+            );
         }
 
         $row++; $row++;
