@@ -544,6 +544,7 @@ class Act extends CActiveRecord
         $this->client_id = $car->company_id;
         $this->number = $car->number;
         $this->partner_service = 5;
+        $this->service = Company::DISINFECTION_TYPE;
 
         $this->service_date = $this->month . '-01';
 

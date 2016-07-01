@@ -13,7 +13,7 @@ if (!$model->isNewRecord) {
 }
 $form = $this->beginWidget('CActiveForm', array(
         'id' => 'action-form',
-        'action' => array(Yii::app()->createUrl("/company/addPrice")),
+        'action' => $model->isNewRecord ? [Yii::app()->createUrl("/company/addPrice")] : [Yii::app()->createUrl("/price/update", ['id' => $model->id])],
         'errorMessageCssClass' => 'help-inline',
         'htmlOptions' => array('class' => 'stdform'),
         'enableAjaxValidation' => true,
@@ -49,6 +49,7 @@ $form = $this->beginWidget('CActiveForm', array(
         </td>
         <td rowspan="2">
             <?=$form->hiddenField($model, 'company_id'); ?>
+            <?=CHtml::hiddenField('returnUrl', Yii::app()->request->urlReferrer)?>
             <?=CHtml::submitButton($model->isNewRecord ? 'Добавить' : 'Сохранить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
         </td>
     </tr>

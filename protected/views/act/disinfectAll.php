@@ -9,12 +9,7 @@ if (
     || Yii::app()->user->model->company->type == Company::UNIVERSAL_TYPE
 ) {
     foreach (Company::$listService as $service => $name) {
-        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) ||
-            Yii::app()->user->model->company->carwash == $service ||
-            Yii::app()->user->model->company->remont == $service ||
-            Yii::app()->user->model->company->tires == $service ||
-            Yii::app()->user->model->company->disinfection == $service
-        ) {
+        if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) || Yii::app()->user->model->company->hasService($service)) {
 
             $this->tabs[$service] = [
                 'url' => Yii::app()->createUrl("act/$service"),
