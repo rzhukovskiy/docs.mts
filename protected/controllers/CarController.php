@@ -61,6 +61,7 @@ class CarController extends Controller
             $model->attributes = $_GET['Act'];
         }
         $model->number = $carModel->number;
+        $model->companyType = Company::CARWASH_TYPE;
 
         $this->render('history', array(
             'model' => $model,

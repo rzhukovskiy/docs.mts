@@ -83,7 +83,7 @@ class ActController extends Controller
     {
         $model = new Act('search');
         $model->unsetAttributes();
-        $model->companyType = Company::CARWASH_TYPE;
+        $model->companyType = Yii::app()->getRequest()->getParam('type', Company::CARWASH_TYPE);
         $model->showCompany = Yii::app()->getRequest()->getParam('showCompany', false);
 
         if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {

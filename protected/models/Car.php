@@ -125,6 +125,7 @@ class Car extends CActiveRecord
         $criteria->compare('t.number', $this->number, true);
         $criteria->compare('t.mark_id', $this->mark_id);
         $criteria->compare('t.type_id', $this->type_id);
+        $criteria->compare('act.service', Company::CARWASH_TYPE);
         if (isset($this->from_date)) {
             $criteria->addBetweenCondition('act.service_date', $this->from_date, $this->to_date);
         }

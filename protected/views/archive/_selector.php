@@ -18,7 +18,7 @@ $form = $this->beginWidget('CActiveForm', array(
         <tr>
             <th style="width: 250px">
                 <?=CHtml::label('Выбор периода', '')?>
-                <?=$form->textField($model, 'month')?>
+                <?=CHtml::textField('Act[month]', $model->monthAsString)?>
             </th>
             <th style="width: 400px">
                 <?php if(count(Yii::app()->user->model->company->children)) { ?>

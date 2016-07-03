@@ -437,10 +437,10 @@ class Act extends CActiveRecord
     {
         $criteria = $this->getDbCriteria();
 
-        $criteria->group = 'partnerType';
+        $criteria->group = 'service';
 
         $criteria->select = [
-            'partner.type as partnerType',
+            'service',
             'COUNT(t.id) as amount',
             'SUM(expense) as expense',
             'SUM(income) as income',
@@ -499,7 +499,8 @@ class Act extends CActiveRecord
                 $hasError = !isset($this->car->company_id);
                 break;
             case 'truck':
-                $hasError = $this->client->is_split && $this->extra_number && !Car::model()->find('number = :number', [':number' => $this->extra_number]);
+                $hasError = ($this->client->is_split && !$this->extra_number) ||
+                    ($this->client->is_split && $this->extra_number && !Car::model()->find('number = :number', [':number' => $this->extra_number]));
                 break;
         }
 

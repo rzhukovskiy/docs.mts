@@ -38,7 +38,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => 'Услуга',
             'name' => 'service',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => 'Company::$listService[$data->partner->type]',
+            'value' => 'Company::$listService[$data->service]',
         ),
         array(
             'header' => 'Обслужено',
@@ -50,9 +50,9 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'header' => 'Расход',
             'name' => 'expense',
-            'value' => '$data->getFormattedField("expense")',
+            'value' => '$data->getFormattedField("income")',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'footer' => $model->totalField($provider, 'expense'),
+            'footer' => $model->totalField($provider, 'income'),
             'footerHtmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(

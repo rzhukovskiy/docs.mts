@@ -46,6 +46,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'service_date',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => 'date("d-m-Y", strtotime($data->service_date))',
+            'visible' => $model->companyType != Company::DISINFECTION_TYPE,
         ),
         array(
             'name' => 'client',
@@ -61,6 +62,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => 'isset($data->card) ? $data->card->number : "error"',
             'cssClassExpression' => '$data->hasError("card") ? "error" : ""',
+            'visible' => $model->companyType != Company::DISINFECTION_TYPE,
         ),
         array(
             'header' => 'Номер',
@@ -108,7 +110,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => 'Город',
             'htmlOptions' => array('style' => 'text-align:center;'),
             'value' => '$data->partner->address',
-            'visible' => $model->showCompany,
+            'visible' => $model->showCompany && $model->companyType != Company::DISINFECTION_TYPE,
         ),
         array(
             'name' => 'check',
@@ -139,7 +141,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                     'options' => array('class' => 'update show-act-details')
                 ),
             ),
-            'visible' => $model->companyType != Company::CARWASH_TYPE,
+            'visible' => $model->companyType != Company::CARWASH_TYPE && $model->companyType != Company::DISINFECTION_TYPE,
         ),
     ),
 ));

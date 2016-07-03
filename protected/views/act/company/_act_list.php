@@ -36,9 +36,14 @@ foreach($model->getClientsByType($model->companyType) as $actClient) {
         }
         if($model->companyType == Company::DISINFECTION_TYPE) {
             $filename = "Справка {$actClient->client->name} от " . date('m-Y', $time) . ".xls";
-        } else {
-            $filename = "Акт {$actClient->client->name} от " . date('m-Y', $time) . ".xls";
+            $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
+            if(file_exists($fullFilename)) {
+                echo CHtml::link($filename, '/' . $fullFilename) . '<br /><br />';
+            } else {
+                //echo "<span class='error'>$filename</span><br /><br />";
+            }
         }
+        $filename = "Акт {$actClient->client->name} от " . date('m-Y', $time) . ".xls";
         $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
         if(file_exists($fullFilename)) {
             echo CHtml::link($filename, '/' . $fullFilename) . '<br /><br />';

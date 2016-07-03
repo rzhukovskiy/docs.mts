@@ -75,6 +75,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 range(1, date('t', strtotime("$model->month-$model->day"))),
                 array('empty' => 'Все')),
             'footer' => count($provider->getData()) . ' ' . StringNum::getNumEnding(count($provider->getData()), array('машина', 'машины', 'машин')),
+            'visible' => $model->companyType != Company::DISINFECTION_TYPE,
         ),
         array(
             'class' => 'DataColumn',
@@ -94,6 +95,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'width: 60px;'),
             'value' => 'isset($data->card) ? $data->card->number : "error"',
             'cssClassExpression' => '$data->hasError("card") ? "error" : ""',
+            'visible' => $model->companyType != Company::DISINFECTION_TYPE,
         ),
         array(
             'name' => 'number',

@@ -26,10 +26,10 @@
                 ?>
             </th>
             <th>
-                <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) && $model->companyType == Company::CARWASH_TYPE) { ?>
+                <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) && ($model->companyType == Company::CARWASH_TYPE || $model->companyType == Company::DISINFECTION_TYPE)) { ?>
                     <?php
                     $form = $this->beginWidget('CActiveForm', array(
-                        'method' => 'get',
+                        'method' => 'POST',
                         'action' => Yii::app()->createUrl("/act/fix?" . Yii::app()->getRequest()->queryString),
                         'id' => 'action-form',
                         'errorMessageCssClass' => 'help-inline',
@@ -37,6 +37,7 @@
                     ));
                     ?>
                         Пересчет цен
+                        <?=CHtml::hiddenField('type', $model->companyType)?>
                         <?=CHtml::submitButton('Исправить', array('class' => 'submit radius2', 'style' => 'opacity: 1; margin-left: 20px;')); ?>
                     <?php
                     $this->endWidget();

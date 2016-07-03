@@ -14,15 +14,15 @@ if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
                 tableSelector: "#act-grid",
                 footers: [
                     {
+                        className: '.client',
+                        title: 'Итого',
+                        rowClass: 'total'
+                    },
+                    {
                         className: '.parent',
                         title: 'Всего',
                         rowClass: 'main total'
                     },
-                    {
-                        className: '.client',
-                        title: 'Итого',
-                        rowClass: 'total'
-                    }
                 ],
                 headers: [
                     {

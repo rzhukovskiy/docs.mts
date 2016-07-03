@@ -112,13 +112,13 @@ $form = $this->beginWidget('CActiveForm', array(
         </div>
     <?php } ?>
 
-    <?php if((Yii::app()->user->checkAccess(User::ADMIN_ROLE) || !$model->is_closed) && $model->companyType != Company::CARWASH_TYPE) {
+    <?php if((Yii::app()->user->checkAccess(User::ADMIN_ROLE) || !$model->is_closed) && $model->service != Company::CARWASH_TYPE && $model->service != Company::DISINFECTION_TYPE) {
         $this->renderPartial('_scope', array('model' => $model));
     } ?>
 
     <div class="row">
         <span class="field">
-            <?=CHtml::hiddenField('Act[service]', $model->companyType); ?>
+            <?=CHtml::hiddenField('Act[service]', $model->service); ?>
             <?=CHtml::hiddenField('Act[old_expense]', $model->expense)?>
             <?=CHtml::hiddenField('Act[old_income]', $model->income)?>
             <?=CHtml::hiddenField('returnUrl', Yii::app()->request->urlReferrer)?>
