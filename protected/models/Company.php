@@ -117,6 +117,7 @@ class Company extends CActiveRecord
             'parent' => array(self::BELONGS_TO, 'Company', 'parent_id'),
             'children' => array(self::HAS_MANY, 'Company', 'parent_id'),
             'services' => array(self::HAS_MANY, 'CompanyService', 'company_id'),
+            'requisites' => array(self::HAS_MANY, 'Requisites', 'company_id'),
         );
     }
 
@@ -152,6 +153,20 @@ class Company extends CActiveRecord
                 'pageSize' => 100,
             ),
         ));
+    }
+
+    public function getRequisites($service_type, $field)
+    {
+        if($this->type == Company::COMPANY_TYPE) {
+            foreach ($this->requisites as $requisites) {
+                if ($requisites->service_type == $service_type && isset($requisites->$field)) {
+                    return $requisites->$field;
+                }
+            }
+        }
+
+        if ($field == 'header') return $this->act_header;
+        return $this->$field;
     }
 
     /**

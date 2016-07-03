@@ -180,7 +180,7 @@ class ExportableGridBehavior extends CBehavior
             $text = "АКТ СДАЧИ-ПРИЕМКИ РАБОТ (УСЛУГ)";
             $companyWorkSheet->setCellValue('B2', $text);
             $companyWorkSheet->mergeCells('B3:E3');
-            $text = "по договору на оказание услуг $company->contract";
+            $text = "по договору на оказание услуг " . $company->getRequisites($this->companyType, 'contract');
             $companyWorkSheet->setCellValue('B3', $text);
             $companyWorkSheet->mergeCells('B4:E4');
             $text = "За услуги, оказанные в $monthName[2] " . date('Y', $this->time) . ".";
@@ -193,7 +193,7 @@ class ExportableGridBehavior extends CBehavior
                 )
             ));
             if ($this->showCompany) {
-                $companyWorkSheet->setCellValue('E5', date("t ", $this->time) . $monthName[1] . date(' Y', $this->time));
+                $companyWorkSheet->setCellValue('E5', '1 ' . $monthName[1] . date(' Y', $this->time));
             } else {
                 $companyWorkSheet->setCellValue('E5', date('d ') . $currentMonthName[1] . date(' Y'));
             }
@@ -215,7 +215,7 @@ class ExportableGridBehavior extends CBehavior
                     'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY,
                 )
             ));
-            $companyWorkSheet->setCellValue('B10', $company->act_header);
+            $companyWorkSheet->setCellValue('B10', $company->getRequisites($this->companyType, 'header'));
         } else {
             $companyWorkSheet->getStyle('B2:I4')->applyFromArray(array(
                 'alignment' => array(
@@ -229,7 +229,7 @@ class ExportableGridBehavior extends CBehavior
             $text = "АКТ СДАЧИ-ПРИЕМКИ РАБОТ (УСЛУГ)";
             $companyWorkSheet->setCellValue('B2', $text);
             $companyWorkSheet->mergeCells('B3:I3');
-            $text = "по договору на оказание услуг $company->contract";
+            $text = "по договору на оказание услуг " . $company->getRequisites($this->companyType, 'contract');
             $companyWorkSheet->setCellValue('B3', $text);
             $companyWorkSheet->mergeCells('B4:I4');
             $text = "За услуги, оказанные в $monthName[2] " . date('Y', $this->time) . ".";
@@ -268,7 +268,7 @@ class ExportableGridBehavior extends CBehavior
                     'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY,
                 )
             ));
-            $companyWorkSheet->setCellValue('B10', $company->act_header);
+            $companyWorkSheet->setCellValue('B10', $company->getRequisites($this->companyType, 'header'));
         }
 
 
@@ -637,19 +637,20 @@ class ExportableGridBehavior extends CBehavior
             $companyWorkSheet->setCellValue("B$row", $text);
 
             $row++; $row++;
-            $companyWorkSheet->mergeCells("B$row:E$row");
             $companyWorkSheet->setCellValue("B$row", "Работу сдал");
+            $companyWorkSheet->setCellValue("E$row", "Работу принял");
 
             $row++; $row++;
-            $companyWorkSheet->mergeCells("B$row:E$row");
             $companyWorkSheet->setCellValue("B$row", "Исполнитель");
+            $companyWorkSheet->setCellValue("E$row", "Заказчик");
 
             $row++; $row++;
-            $companyWorkSheet->mergeCells("B$row:E$row");
             $companyWorkSheet->setCellValue("B$row", "____________Мосесян Г.А.");
+            $companyWorkSheet->setCellValue("E$row", "____________$company->contact");
 
             $row++; $row++;
             $companyWorkSheet->setCellValue("B$row", "М.П.");
+            $companyWorkSheet->setCellValue("E$row", "М.П.");
         } else {
             $row++;
             if ($this->companyType == Company::CARWASH_TYPE) {

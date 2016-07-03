@@ -21,7 +21,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'class' => '',
         )
     ),
-    'dataProvider' => $model->search(),
+    'dataProvider' => $model->without(Company::DISINFECTION_TYPE)->search(),
     'emptyText' => '',
     'cssFile' => false,
     'template' => "{items}\n{pager}",

@@ -33,7 +33,7 @@ $form = $this->beginWidget('CActiveForm', array(
 <div class="row">
     <?= $form->label($model, 'parent_id'); ?>
     <span class="field">
-        <?=$form->dropDownList(
+        <?= $form->dropDownList(
             $model,
             'parent_id',
             CHtml::listData(Company::model()->findAll('type = :type', [':type' => 'company']), 'id', 'name'),
@@ -68,20 +68,26 @@ $form = $this->beginWidget('CActiveForm', array(
         <?= $form->error($model, 'contact'); ?>
     </span>
 </div>
-<div class="row">
-    <?= $form->label($model, 'contract'); ?>
-    <span class="field">
-        <?= $form->textField($model, 'contract', array('class' => 'span5')); ?>
-        <?= $form->error($model, 'contract'); ?>
-    </span>
-</div>
-<div class="row">
-    <?= $form->label($model, 'act_header'); ?>
-    <span class="field">
-        <?= $form->textArea($model, 'act_header', array('class' => 'span5')); ?>
-        <?= $form->error($model, 'act_header'); ?>
-    </span>
-</div>
+<?php foreach (Company::$listService as $service => $serviceName) { ?>
+    <div class="row">
+        <span class="field">
+            <?= $serviceName ?>
+        </span>
+    </div>
+    <div class="row">
+        <?= $form->label($model, 'contract'); ?>
+        <span class="field">
+            <?= CHtml::hiddenField('Requisites[service_type][]', $service); ?>
+            <?= CHtml::textField('Requisites[contract][]', $model->getRequisites($service, 'contract'), array('class' => 'span5')); ?>
+        </span>
+    </div>
+    <div class="row">
+        <?= $form->label($model, 'act_header'); ?>
+        <span class="field">
+            <?= CHtml::textField('Requisites[header][]', $model->getRequisites($service, 'header'),array('class' => 'span5')); ?>
+        </span>
+    </div>
+<?php } ?>
 <div class="row">
     <span class="field">
         <?= CHtml::submitButton($model->isNewRecord ? 'Создать компанию' : 'Сохранить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>

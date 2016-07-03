@@ -348,6 +348,16 @@ class Act extends CActiveRecord
         return $provider;
     }
 
+    public function without($service)
+    {
+        $criteria = new CDbCriteria();
+        $criteria->addCondition('service != "' . $service . '"');
+
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        return $this;
+    }
+
     public function withErrors()
     {
         $criteria = new CDbCriteria();

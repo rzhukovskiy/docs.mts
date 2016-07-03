@@ -31,7 +31,18 @@ class CompanyController extends Controller
             $model->attributes = $_POST['Company'];
             $model->type = $this->type;
             $this->performAjaxValidation($model);
-            $model->save();
+
+            if ($model->save() && isset($_POST['Requisites'])) {
+                $listRequisites = $_POST['Requisites'];
+                for($i = 0; $i < count($listRequisites); $i++) {
+                    $requisites = new Requisites();
+                    $requisites->company_id = $model->id;
+                    $requisites->service_type = $listRequisites['service_type'][$i];
+                    $requisites->contract = $listRequisites['contract'][$i];
+                    $requisites->header = $listRequisites['header'][$i];
+                    $requisites->save();
+                }
+            }
         }
 
         $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array($this->type . '/list'));
@@ -54,9 +65,22 @@ class CompanyController extends Controller
         if (isset($_POST['Company'])) {
             $model->attributes = $_POST['Company'];
             $this->performAjaxValidation($model);
-            if ($model->save()) {
-                $this->redirect(Yii::app()->createUrl($this->type . '/list'));
+
+            if ($model->save() && isset($_POST['Requisites'])) {
+                $listRequisites = $_POST['Requisites'];
+                Requisites::model()->deleteAll('company_id = :company_id', [':company_id' => $model->id]);
+
+                for($i = 0; $i < count($listRequisites['service_type']); $i++) {
+                    $requisites = new Requisites();
+                    $requisites->company_id = $model->id;
+                    $requisites->service_type = $listRequisites['service_type'][$i];
+                    $requisites->contract = $listRequisites['contract'][$i];
+                    $requisites->header = $listRequisites['header'][$i];
+                    $requisites->save();
+                }
             }
+
+            $this->redirect(Yii::app()->createUrl($this->type . '/list'));
         }
 
         if (isset($_GET['Car'])) {
