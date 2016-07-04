@@ -245,7 +245,7 @@ class ExportableGridBehavior extends CBehavior
             if($company->is_split) {
                 $companyWorkSheet->mergeCells('H5:J5');
             }
-            if ($this->showCompany) {
+            if ($this->showCompany || $this->companyType == Company::TIRES_TYPE) {
                 $companyWorkSheet->setCellValue('H5', date("t ", $this->time) . $monthName[1] . date(' Y', $this->time));
             } else {
                 $companyWorkSheet->setCellValue('H5', date('d ') . $currentMonthName[1] . date(' Y'));
@@ -278,10 +278,11 @@ class ExportableGridBehavior extends CBehavior
         $total = 0;
         $count = 0;
         switch($this->companyType) {
-            case Company::TIRES_TYPE:
             case Company::SERVICE_TYPE:
                 $first = $dataList[0];
                 $companyWorkSheet->setCellValue('H5', date("d ", strtotime($first->service_date)) . $monthName[1] . date(' Y', $this->time));
+            case Company::TIRES_TYPE:
+                $first = $dataList[0];
 
                 $row = 11;
 

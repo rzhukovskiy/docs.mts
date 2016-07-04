@@ -79,12 +79,50 @@ class CompanyTiresService extends CActiveRecord
         $sort->defaultOrder = 'type_id ASC';
         $sort->applyOrder($criteria);
 
+        $this->getDbCriteria()->mergeWith($criteria);
+
         return new CActiveDataProvider(get_class($this), array(
-            'criteria' => $criteria,
+            'criteria' => $this->getDbCriteria(),
             'sort' => $sort,
             'pagination' => array(
                 'pageSize' => 100,
             ),
         ));
+    }
+
+    public function byPrice()
+    {
+        $criteria = new CDbCriteria;
+
+        $criteria->group = 'tires_service_id + price';
+
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        return $this;
+    }
+
+    public function getSamePrices()
+    {
+        $samePrices = CompanyTiresService::model()->findAll([
+            'condition' => 'company_id = :company_id AND price = :price AND tires_service_id = :service_id',
+            'params' => [
+                ':company_id' => $this->company_id,
+                ':price'      => $this->price,
+                ':service_id' => $this->tires_service_id,
+            ],
+        ]);
+
+        $cnt = 0;
+        $types = [];
+        foreach($samePrices as $price) {
+            $types[] = $price->type->name;
+            $cnt++;
+            if ($cnt == 3) {
+                $types[] = '...';
+                break;
+            }
+        }
+
+        return implode(", ", $types);
     }
 }

@@ -71,7 +71,7 @@ $form = $this->beginWidget('CActiveForm', array(
 <?php foreach (Company::$listService as $service => $serviceName) { ?>
     <div class="row">
         <span class="field">
-            <?= $serviceName ?>
+            <strong><?= $serviceName ?></strong>
         </span>
     </div>
     <div class="row">
@@ -84,7 +84,7 @@ $form = $this->beginWidget('CActiveForm', array(
     <div class="row">
         <?= $form->label($model, 'act_header'); ?>
         <span class="field">
-            <?= CHtml::textField('Requisites[header][]', $model->getRequisites($service, 'header'),array('class' => 'span5')); ?>
+            <?= CHtml::textArea('Requisites[header][]', $model->getRequisites($service, 'header'),array('class' => 'span5')); ?>
         </span>
     </div>
 <?php } ?>

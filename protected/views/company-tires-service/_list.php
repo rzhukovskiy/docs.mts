@@ -12,7 +12,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'company-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
-    'dataProvider' => $priceList->search(),
+    'dataProvider' => $priceList->byPrice()->search(),
     'emptyText' => '',
     'cssFile' => false,
     'template' => "{items}",
@@ -20,7 +20,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
     'columns' => array(
         array(
             'name' => 'type_id',
-            'value' => '$data->type->name',
+            'value' => '$data->samePrices',
             'htmlOptions' => array(),
         ),
         array(
