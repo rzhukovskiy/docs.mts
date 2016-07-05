@@ -25,8 +25,8 @@
                 $this->endWidget();
                 ?>
             </th>
-            <th>
-                <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) && ($model->companyType == Company::CARWASH_TYPE || $model->companyType == Company::DISINFECTION_TYPE)) { ?>
+            <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) && ($model->companyType == Company::CARWASH_TYPE || $model->companyType == Company::DISINFECTION_TYPE)) { ?>
+                <th>
                     <?php
                     $form = $this->beginWidget('CActiveForm', array(
                         'method' => 'POST',
@@ -42,13 +42,14 @@
                     <?php
                     $this->endWidget();
                     ?>
-                <?php } ?>
-            </th>
+                </th>
+            <?php } ?>
+            <?php
+            if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) &&
+                (($model->companyType != Company::SERVICE_TYPE && $model->companyType != Company::DISINFECTION_TYPE) || $model->showCompany)
+            ) { ?>
             <th>
                 <?php
-                if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) &&
-                    (($model->companyType != Company::SERVICE_TYPE && $model->companyType != Company::DISINFECTION_TYPE) || $model->showCompany)
-                ) {
                     $this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
                         'selector' => '#act-grid',
                     ));

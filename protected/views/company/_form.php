@@ -23,6 +23,7 @@ $form = $this->beginWidget('CActiveForm', array(
         <?= $form->error($model, 'name'); ?>
     </span>
 </div>
+<?php if (!$model->isNewRecord) { ?>
 <div class="row">
     <?= $form->label($model, 'is_split'); ?>
     <span class="field">
@@ -30,6 +31,7 @@ $form = $this->beginWidget('CActiveForm', array(
         <?= $form->error($model, 'is_split'); ?>
     </span>
 </div>
+<?php } ?>
 <div class="row">
     <?= $form->label($model, 'parent_id'); ?>
     <span class="field">
@@ -49,6 +51,7 @@ $form = $this->beginWidget('CActiveForm', array(
         <?= $form->error($model, 'address'); ?>
     </span>
 </div>
+<?php if (!$model->isNewRecord) { ?>
 <div class="row">
     <?= $form->label($model, 'cardList'); ?>
     <span class="field">
@@ -87,6 +90,7 @@ $form = $this->beginWidget('CActiveForm', array(
             <?= CHtml::textArea('Requisites[header][]', $model->getRequisites($service, 'header'),array('class' => 'span5')); ?>
         </span>
     </div>
+<?php } ?>
 <?php } ?>
 <div class="row">
     <span class="field">

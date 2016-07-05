@@ -50,6 +50,14 @@ $form = $this->beginWidget('CActiveForm', array(
 </div>
 
 <div class="row">
+    <?=$form->label($model, 'extra_number'); ?>
+    <span class="field">
+        <?=$form->textField($model, 'extra_number'); ?>
+        <?=$form->error($model, 'extra_number'); ?>
+    </span>
+</div>
+
+<div class="row">
     <?=$form->label($model, 'mark_id'); ?>
     <span class="field">
         <?=$form->dropDownList($model, 'mark_id', CHtml::listData(Mark::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
@@ -105,7 +113,7 @@ $form = $this->beginWidget('CActiveForm', array(
     </div>
 <?php } ?>
 
-<?php if((Yii::app()->user->checkAccess(User::ADMIN_ROLE) || !$model->is_closed) && $model->companyType != Company::CARWASH_TYPE) {
+<?php if((Yii::app()->user->checkAccess(User::ADMIN_ROLE) || !$model->is_closed) && $model->service != Company::CARWASH_TYPE && $model->service != Company::DISINFECTION_TYPE) {
     $this->renderPartial('_scope', array('model' => $model));
 } ?>
 

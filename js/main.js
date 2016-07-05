@@ -343,7 +343,7 @@ this.addHeaders = function(options) {
                     currentValue = $(row).find(trigger.className).attr('data-header');
                 }
 
-                if (previousValue != currentValue) {
+                if (currentValue && previousValue != currentValue) {
                     var td = $('<td>').text(currentValue).attr("colspan", $(row).find('td').length);
                     var tr = $('<tr>').addClass(trigger.rowClass).addClass(defaultClass).append(td);
                     $(row).before(tr);

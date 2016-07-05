@@ -85,44 +85,44 @@ if ($model->companyType == Company::TIRES_TYPE) {
     </thead>
     <tbody>
     <tr>
-        <td>
+        <td  style="text-align: center">
             <?= CHtml::hiddenField('Act[service]', $model->companyType); ?>
             <?= $form->textField($model, 'service_date', array('class' => 'date-select', 'style' => 'width:70px')); ?>
         </td>
         <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
-            <td>
+            <td  style="text-align: center">
                 <?= $form->dropDownList($model, 'partner_id', CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name')); ?>
             </td>
         <?php } ?>
-        <td>
+        <td  style="text-align: center">
             <?= $form->textField($model, 'cardNumber'); ?>
         </td>
-        <td>
+        <td  style="text-align: center">
             <?= $form->textField($model, 'number', array('class' => 'number_fill', 'style' => 'width:80px')); ?>
         </td>
-        <td>
+        <td  style="text-align: center">
             <?= $form->textField($model, 'extra_number', array('class' => 'number_fill', 'style' => 'width:80px')); ?>
         </td>
-        <td>
+        <td  style="text-align: center">
             <?= $form->dropDownList($model, 'mark_id', CHtml::listData(Mark::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
         </td>
-        <td>
+        <td  style="text-align: center">
             <?= $form->dropDownList($model, 'type_id', CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name'), array('style' => 'width:100px')); ?>
         </td>
         <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
-            <td>
+            <td  style="text-align: center">
                 <?= $form->dropDownList($model, 'partner_service', Act::$carwashList, array('style' => 'width:80px')); ?>
             </td>
-            <td>
+            <td  style="text-align: center">
                 <?= $form->textField($model, 'check', array('style' => 'width:60px')); ?>
             </td>
-            <td>
+            <td  style="text-align: center">
                 <?= $form->fileField($model, 'screen'); ?>
             </td>
         <?php } ?>
 
         <?php if ($model->companyType == Company::CARWASH_TYPE || $model->companyType == Company::DISINFECTION_TYPE) { ?>
-            <td>
+            <td  style="text-align: center">
                 <?= CHtml::submitButton('+', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
             </td>
         <?php } ?>
@@ -145,26 +145,26 @@ if ($model->companyType == Company::TIRES_TYPE) {
         <tbody>
         <tr class="scope example">
             <?php if ($model->companyType == Company::TIRES_TYPE) { ?>
-                <td><?= CHtml::dropDownList('Scope[description][]', 0, CHtml::listData(TiresService::model()->findAll(['order' => 'pos']), 'id', 'description'), ['class' => 'tires-select']) ?></td>
+                <td  style="text-align: center"><?= CHtml::dropDownList('Scope[description][]', 0, CHtml::listData(TiresService::model()->findAll(['order' => 'pos']), 'id', 'description'), ['class' => 'tires-select']) ?></td>
             <?php } else { ?>
-                <td><?= CHtml::textField('Scope[description][]') ?></td>
+                <td  style="text-align: center"><?= CHtml::textField('Scope[description][]') ?></td>
             <?php } ?>
-            <td><?= CHtml::numberField('Scope[amount][]', 1, ['class' => 'tires-amount']) ?></td>
-            <td><?= CHtml::textField('Scope[expense][]', '', ['class' => 'tires-expense']) ?></td>
-            <td>
+            <td  style="text-align: center"><?= CHtml::numberField('Scope[amount][]', 1, ['class' => 'tires-amount']) ?></td>
+            <td  style="text-align: center"><?= CHtml::textField('Scope[expense][]', '', ['class' => 'tires-expense']) ?></td>
+            <td  style="text-align: center">
                 <?= CHtml::button('+', array('class' => 'add_scope', 'style' => 'float: left; margin-right: 10px')) ?>
                 <?= CHtml::button('-', array('class' => 'remove_scope', 'style' => 'float: left')) ?>
             </td>
         </tr>
         <tr class="scope">
             <?php if ($model->companyType == Company::TIRES_TYPE) { ?>
-                <td><?= CHtml::dropDownList('Scope[description][]', 0, CHtml::listData(TiresService::model()->findAll(['order' => 'pos']), 'id', 'description'), ['class' => 'tires-select']) ?></td>
+                <td  style="text-align: center"><?= CHtml::dropDownList('Scope[description][]', 0, CHtml::listData(TiresService::model()->findAll(['order' => 'pos']), 'id', 'description'), ['class' => 'tires-select']) ?></td>
             <?php } else { ?>
-                <td><?= CHtml::textField('Scope[description][]') ?></td>
+                <td  style="text-align: center"><?= CHtml::textField('Scope[description][]') ?></td>
             <?php } ?>
-            <td><?= CHtml::numberField('Scope[amount][]', 1, ['class' => 'tires-amount']) ?></td>
-            <td><?= CHtml::textField('Scope[expense][]', '', ['class' => 'tires-expense']) ?></td>
-            <td>
+            <td  style="text-align: center"><?= CHtml::numberField('Scope[amount][]', 1, ['class' => 'tires-amount']) ?></td>
+            <td  style="text-align: center"><?= CHtml::textField('Scope[expense][]', '', ['class' => 'tires-expense']) ?></td>
+            <td  style="text-align: center">
                 <?= CHtml::button('+', array('class' => 'add_scope', 'style' => 'float: left; margin-right: 10px')) ?>
                 <?= CHtml::button('-', array('class' => 'remove_scope', 'style' => 'float: left')) ?>
             </td>

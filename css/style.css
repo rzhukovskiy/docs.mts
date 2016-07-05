@@ -135,7 +135,7 @@ button,input,select,textarea { font-size: 12px; font-family: Arial, Helvetica, s
 .headright .notialert:hover { text-decoration: none; }
 
 .headright .userinfo, .headright .btn {
-	display: inline-block; border: 1px solid #272727; padding: 3px 25px 3px 3px; color: #ccc; 
+	display: inline-block; border: 1px solid #272727; padding: 0 15px; color: #ccc;
 	vertical-align: top; background: #373737; position: relative;
     height: 25px; line-height: 25px;
 	-moz-box-shadow: 0 1px 0 #444; -webkit-box-shadow: 0 1px 0 #444; box-shadow: 0 1px 0 #444;
