@@ -15,6 +15,10 @@ $(document).ready(function() {
         datePickerDays ();
     });
 
+    $("[data-toggle='collapse']").click(function() {
+        $($(this).attr('data-target')).toggle();
+    });
+
     datePickerDays ();
 
     imagePreview();
