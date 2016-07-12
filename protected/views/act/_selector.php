@@ -25,7 +25,7 @@
                 $this->endWidget();
                 ?>
             </th>
-            <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) && ($model->companyType == Company::CARWASH_TYPE || $model->companyType == Company::DISINFECTION_TYPE)) { ?>
+            <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE) && ($model->companyType != Company::SERVICE_TYPE)) { ?>
                 <th>
                     <?php
                     $form = $this->beginWidget('CActiveForm', array(

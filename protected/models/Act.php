@@ -265,6 +265,42 @@ class Act extends CActiveRecord
             }
         }
 
+        if ($this->fixMode && $this->service == Company::TIRES_TYPE && !$this->is_closed) {
+            if ($this->showCompany) {
+                $total = 0;
+                /** @var ActScope $scope */
+                foreach ($this->scope as $scope) {
+                    $tiresService = CompanyTiresService::model()->find('type_id = :type_id AND company_id = :company_id AND tiresService.description = :description', [
+                        ':type_id' => $this->type_id,
+                        ':company_id' => $this->client_id,
+                        ':description' => $scope->description,
+                    ]);
+                    if ($tiresService) {
+                        $scope->income = $tiresService->price;
+                        $scope->save();
+                    }
+                    $total += $scope->income;
+                }
+                $this->income = $total;
+            } else {
+                $total = 0;
+                /** @var ActScope $scope */
+                foreach ($this->scope as $scope) {
+                    $tiresService = CompanyTiresService::model()->find('type_id = :type_id AND company_id = :company_id AND tiresService.description = :description', [
+                        ':type_id' => $this->type_id,
+                        ':company_id' => $this->partner_id,
+                        ':description' => $scope->description,
+                    ]);
+                    if ($tiresService) {
+                        $scope->expense = $tiresService->price;
+                        $scope->save();
+                    }
+                    $total += $scope->expense;
+                }
+                $this->expense = $total;
+            }
+        }
+
         $this->profit = $this->income - $this->expense;
 
         return true;
