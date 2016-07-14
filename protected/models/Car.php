@@ -270,7 +270,15 @@ class Car extends CActiveRecord
                     }
 
                     $car = new Car();
+
+                    $number = mb_strtoupper(str_replace(' ', '', $number), 'UTF-8');
+                    $number = strtr($number, Translit::$rules);
+                    if ($existed = Car::model()->find('number = :number', [':number' => $number])) {
+                        $car = $existed;
+                    }
+
                     $car->attributes = $this->attributes;
+                    $car->number = $number;
 
                     if ($type = Type::model()->find('name = :name', [':name' => $type])) {
                         $car->type_id = $type->id;
@@ -279,14 +287,13 @@ class Car extends CActiveRecord
                     $name = explode('-', explode(' ', $name)[0])[0];
                     if ($mark = Mark::model()->find('name = :name', [':name' => $name])) {
                         $car->mark_id = $mark->id;
+                    } else {
+                        $mark = new Mark();
+                        $mark->name = $name;
+                        if ($mark->save()) {
+                            $car->mark_id = $mark->id;
+                        }
                     }
-
-                    $number = mb_strtoupper(str_replace(' ', '', $number), 'UTF-8');
-                    $number = strtr($number, Translit::$rules);
-                    if ($existed = Car::model()->find('number = :number', [':number' => $number])) {
-                        continue;
-                    }
-                    $car->number = $number;
 
                     $car->save();
                     $res[] = $car;
