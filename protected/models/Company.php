@@ -251,7 +251,11 @@ class Company extends CActiveRecord
                 }
             } else {
                 if ($previous > 0) {
-                    $range .= $previous . ', ';
+                    if (substr($range, -1) == '-') {
+                        $range .= $previous . ', ';
+                    } else {
+                        $range .= ', ';
+                    }
                 }
                 $range .= $card->number;
             }

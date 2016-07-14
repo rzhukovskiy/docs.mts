@@ -156,7 +156,6 @@ class Car extends CActiveRecord
             AND mts_act.number = t.number AND date_format(mts_act.service_date, "%Y-%m") = "' . $this->month . '")');
         $criteria->compare('company_id', $this->company_id);
         $criteria->compare('is_infected', 1);
-        $criteria->addCondition('type_id != 7');
         $criteria->group = 't.id';
 
         $sort = new CSort();
