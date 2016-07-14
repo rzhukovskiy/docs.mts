@@ -282,13 +282,13 @@ class Car extends CActiveRecord
                     }
 
                     $number = mb_strtoupper(str_replace(' ', '', $number), 'UTF-8');
+                    $number = strtr($number, Translit::$rules);
                     if ($existed = Car::model()->find('number = :number', [':number' => $number])) {
                         continue;
                     }
                     $car->number = $number;
 
                     $car->save();
-
                     $res[] = $car;
                 }
             }
