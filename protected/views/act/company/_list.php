@@ -14,14 +14,14 @@ if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
                 tableSelector: "#act-grid",
                 footers: [
                     {
-                        className: '.client',
-                        title: 'Итого',
-                        rowClass: 'total'
-                    },
-                    {
                         className: '.parent',
                         title: 'Всего',
                         rowClass: 'main total'
+                    },
+                    {
+                        className: '.client',
+                        title: 'Итого',
+                        rowClass: 'total'
                     },
                 ],
                 headers: [
@@ -68,7 +68,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'width: 40px; text-align:center;'),
             'value' => '++$row',
             'footer' => 'Всего',
-            'footerHtmlOptions' => array('style' => 'text-align:center;'),
+            'footerHtmlOptions' => array('style' => 'text-align:center; font-size: 14px'),
         ),
         array(
             'name' => 'month',
@@ -143,7 +143,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'width: 60px; text-align:center;', 'class' => 'sum'),
             'cssClassExpression' => '$data->hasError("income") ? "error" : ""',
             'footer' => $model->totalField($provider, 'income'),
-            'footerHtmlOptions' => array('style' => 'text-align:center;'),
+            'footerHtmlOptions' => array('style' => 'text-align:center; font-size: 14px'),
             'filter' => false,
         ),
         array(

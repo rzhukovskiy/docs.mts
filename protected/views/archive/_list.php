@@ -51,7 +51,10 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'name' => 'client',
             'value' => '$data->client->name',
-            'htmlOptions' => array('class' => 'client'),
+            'htmlOptions' => array('class' => 'client', 'style' => 'display: none'),
+            'headerHtmlOptions' => array('style' => 'display:none'),
+            'footerHtmlOptions' => array('style' => 'display:none'),
+            'filterHtmlOptions' => array('style' => 'display:none'),
             'header' => 'Филиал',
             'filter' => CHtml::listData(Company::model()->findAll('parent_id = :parent_id', [':parent_id' => $model->client_id]), 'id', 'name'),
             'visible' => Yii::app()->user->model->company->children,
