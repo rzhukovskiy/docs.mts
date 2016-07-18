@@ -1709,3 +1709,35 @@ div.load{opacity:.6;z-index:1029;background-color:#FFF;width:100%;position:absol
     background: #ffea96;
     font-weight: bold;
 }
+
+.act {
+	border-collapse: collapse;
+	color: #000;
+	width: 100%;
+	border: 1px solid black;
+}
+.act td {
+	border: 1px solid black;
+	padding: 10px 5px 0px 5px;
+}
+.act th {
+	border: 1px solid black;
+	font-size: 14px;
+	text-align: left;
+	text-transform: uppercase;
+	padding: 10px 5px 0 5px;
+}
+.act .strong {
+	font-weight: bold;
+}
+.act .header {
+	color: #069;
+	font-weight: bold;
+}
+
+.sign {
+	color: #000;
+}
+.sign td {
+	vertical-align: middle;
+}

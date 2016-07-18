@@ -106,6 +106,22 @@ class ActController extends Controller
     public function actionCreate()
     {
         $model = new Act();
+
+        if (isset($_POST['image'])) {
+            $data = explode('base64,', $_POST['image']);
+
+            $str = base64_decode($data[1]);
+            $image = imagecreatefromstring($str);
+            $id = uniqid();
+
+            imagealphablending($image, false);
+            imagesavealpha($image, true);
+            $dir = $_SERVER['DOCUMENT_ROOT'] . '/files/signs/';
+            imagepng($image, $dir . $id . '.png');
+            echo CJSON::encode(['file' => $id]);
+            Yii::app()->end();
+        }
+
         if (isset($_POST['Act'])) {
             $model->attributes = $_POST['Act'];
             if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
@@ -263,6 +279,16 @@ class ActController extends Controller
 
         $view = $model->showCompany ? 'company' : 'service';
         $this->render("$view/update", array(
+            'model' => $model
+        ));
+    }
+
+    public function actionSign($id)
+    {
+        $model = Act::model()->findByPk((int)$id);
+        $model->companyType = $model->partner->type;
+
+        $this->render("service/sign", array(
             'model' => $model
         ));
     }

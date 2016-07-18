@@ -22,6 +22,16 @@ class WHTMLHead extends CWidget{
         $clientScript->registerCssFile('/css/style.brightblue.css');
         $clientScript->registerCssFile('/css/plugins/jquery.tablesorter.css');
         $clientScript->registerCssFile('/js/select2/select2.css');
+
+        $clientScript->registerScriptFile('/js/wpaint/lib/jquery.ui.core.1.10.3.min.js');
+        $clientScript->registerScriptFile('/js/wpaint/lib/jquery.ui.widget.1.10.3.min.js');
+        $clientScript->registerScriptFile('/js/wpaint/lib/jquery.ui.mouse.1.10.3.min.js');
+        $clientScript->registerScriptFile('/js/wpaint/lib/jquery.ui.draggable.1.10.3.min.js');
+        $clientScript->registerScriptFile('/js/wpaint/lib/wColorPicker.min.js');
+        $clientScript->registerCssFile('/js/wpaint/lib/wColorPicker.min.css');
+        $clientScript->registerCssFile('/js/wpaint/wPaint.min.css');
+        $clientScript->registerScriptFile('/js/wpaint/wPaint.min.js');
+        $clientScript->registerScriptFile('/js/wpaint/plugins/main/wPaint.menu.main.min.js');
     }
 
     public function run() {

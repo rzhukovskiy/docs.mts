@@ -31,6 +31,13 @@ $form = $this->beginWidget('CActiveForm', array(
     </span>
 </div>
 <div class="row">
+    <?= $form->label($model, 'is_sign'); ?>
+    <span class="field">
+            <?= $form->checkBox($model, 'is_sign', array('class' => 'span5')); ?>
+            <?= $form->error($model, 'is_sign'); ?>
+        </span>
+</div>
+<div class="row">
     <span class="field">
         Для актов
     </span>

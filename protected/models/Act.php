@@ -33,6 +33,7 @@
  * @property string $clientName
  * @property string $service
  * @property string $cardNumber
+ * @property string $sign
  */
 class Act extends CActiveRecord
 {

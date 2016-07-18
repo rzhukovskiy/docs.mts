@@ -10,6 +10,7 @@
  * @property int $is_infected
  * @property int $is_deleted
  * @property int $is_main
+ * @property int $is_sign
  * @property string $name
  * @property string $address
  * @property string $phone
@@ -79,7 +80,7 @@ class Company extends CActiveRecord
         return array(
             array('name','required'),
             array('name','unique'),
-            array('is_infected, parent_id, is_split, address, phone, contact, contract, act_header, type, cardList','safe'),
+            array('is_infected, parent_id, is_sign, is_split, address, phone, contact, contract, act_header, type, cardList','safe'),
             array('carwash', 'safe'),
             array('remont', 'safe'),
             array('tires', 'safe'),
@@ -92,6 +93,7 @@ class Company extends CActiveRecord
         return array(
             'id' => 'ID',
             'is_split' => 'Разделять тягач и п/п',
+            'is_sign' => 'Может подписывать',
             'name' => 'Название',
             'address' => 'Город',
             'phone' => 'Телефон',
