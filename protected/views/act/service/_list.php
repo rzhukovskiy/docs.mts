@@ -186,7 +186,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                     'options' => array('class' => 'view')
                 ),
             ),
-            'visible' => '$data->partner->is_sign',
+            'visible' => Yii::app()->user->model->company->is_sign,
         ),
     ),
 ));
