@@ -170,9 +170,55 @@ if ($model->companyType == Company::TIRES_TYPE) {
             </td>
         </tr>
         <tr>
-            <td colspan="4">
-                <?= CHtml::submitButton('Загрузить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
-            </td>
+            <?php if ($model->companyType == Company::TIRES_TYPE) { ?>
+                <td colspan="2">
+                    <div id="wPaint" style="position:relative; width:100%; height:200px; background-color:#eee;">
+                    </div>
+                    <script type="text/javascript">
+                        function saveImage(image) {
+                            var _this = this;
+
+                            $.ajax({
+                                type: 'POST',
+                                url: '/act/create',
+                                data: {image: image},
+                                success: function (resp) {
+                                    resp = $.parseJSON(resp);
+                                    var data = $('form').serialize() + '&Act[sign]=' + resp.file;
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '/act/create',
+                                        data: data,
+                                        success: function (resp) {
+                                            document.location.href = document.location.href;
+                                        }
+                                    });
+                                }
+                            });
+                        }
+
+                        // init wPaint
+                        $('#wPaint').wPaint({
+                            path: '/js/wpaint/',
+                            saveImg:     saveImage,
+                            bg:          '#eee',
+                            lineWidth:   '1',       // starting line width
+                            fillStyle:   '#fff', // starting fill style
+                            strokeStyle: '#3355aa'  // start stroke style
+                        });
+                    </script>
+                </td>
+                <td>
+                    <?=CHtml::button('Очистить', array('class' => 'submit radius2', 'onclick' => "$('#wPaint').wPaint('clear');")); ?>
+                </td>
+                <td>
+                    <?= CHtml::button('Загрузить', array('class' => 'submit radius2', 'style' => 'opacity: 1;', 'onclick' => "saveImage($('#wPaint').wPaint('image'));")); ?>
+                </td>
+            <?php } else { ?>
+                <td colspan="4">
+                    <?= CHtml::submitButton('Загрузить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
+                </td>
+            <?php } ?>
         </tr>
         </tbody>
     </table>

@@ -476,7 +476,7 @@ class ExportableGridBehavior extends CBehavior
                     $date = new DateTime($data->service_date);
                     $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $num);
                     $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $date->format('j'));
-                    $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->card->number);
+                    $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, isset($data->card) ? $data->card->number : $data->card_id);
                     $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, isset($data->mark) ? $data->mark->name : "");
                     $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->number);
                     if($company->is_split) {
