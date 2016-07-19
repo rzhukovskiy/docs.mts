@@ -1411,11 +1411,11 @@ a.btn_table { background-position: -82px -480px; }
 /***************** all pages *************************/
 
 @media screen and (max-width: 1024px) {
-	.maincontent { margin-right: 260px; margin-left: 230px; }
+	.maincontent { margin-right: 160px; margin-left: 160px; }
 	.mainright { width: 250px; }
 	.contenttitle, .widgetbox .title { height: 32px; overflow: hidden; }
 	.contenttitle h2, .widgetbox .title h2 { font-size: 16px; }
-	.mainleft { width: 220px; }
+	.mainleft { width: 150px; }
 	.notification p { }
 	.noright { margin-right: 0; }
 	.errorWrapper { width: auto; }
