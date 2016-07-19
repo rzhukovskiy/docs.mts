@@ -59,60 +59,14 @@
             </td>
 
             <td colspan="2">
-                <div id="wPaint1" style="position:relative; width:250px; height:50px; background-color:#eee; margin-right: 30px">
-                </div>
-                <script type="text/javascript">
-                    function saveImage(image) {
-                        var _this = this;
-
-                        $.ajax({
-                            type: 'POST',
-                            url: '/act/create',
-                            data: {image: image},
-                            success: function (resp) {
-                                resp = $.parseJSON(resp);
-                                var data = $('form').serialize() + '&Act[sign]=' + resp.file;
-                                $.ajax({
-                                    type: 'POST',
-                                    url: '/act/create',
-                                    data: data,
-                                    success: function (resp) {
-                                        document.location.href = document.location.href;
-                                    }
-                                });
-                            }
-                        });
-                    }
-
-                    // init wPaint
-                    $('#wPaint1').wPaint({
-                        path: '/js/wpaint/',
-                        saveImg:     saveImage,
-                        bg:          '#eee',
-                        lineWidth:   '1',       // starting line width
-                        fillStyle:   '#fff', // starting fill style
-                        strokeStyle: '#3355aa'  // start stroke style
-                    });
-                </script>
+                <img style="width:200px" src="<?='/files/signs/' . $model->sign . '-name.png'?>"/>
             </td>
             <td>
                 Подпись водителя
             </td>
 
             <td colspan="2">
-                <div id="wPaint2" style="position:relative; width:300px; height:50px; background-color:#eee;">
-                </div>
-                <script type="text/javascript">
-                    // init wPaint
-                    $('#wPaint2').wPaint({
-                        path: '/js/wpaint/',
-                        saveImg:     saveImage,
-                        bg:          '#eee',
-                        lineWidth:   '1',       // starting line width
-                        fillStyle:   '#fff', // starting fill style
-                        strokeStyle: '#3355aa'  // start stroke style
-                    });
-                </script>
+                <img style="width:200px" src="<?='/files/signs/' . $model->sign . '-sign.png'?>"/>
             </td>
         </tr>
     </table>

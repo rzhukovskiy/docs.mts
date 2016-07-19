@@ -127,7 +127,7 @@ class Act extends CActiveRecord
         return array(
             array('number', 'required'),
             array('check', 'unique'),
-            array('type_id, mark_id, service, card_id, cardNumber, extra_number, is_fixed, from_date, to_date, period, month, day, check, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
+            array('sign, type_id, mark_id, service, card_id, cardNumber, extra_number, is_fixed, from_date, to_date, period, month, day, check, old_expense, old_income, month, partner_id, client_id, partner_service, client_service, service_date, profit, income, expense, check_image', 'safe'),
             array('company_id, id, number, mark_id, type_id, card_id, service_date', 'safe', 'on' => 'search'),
         );
     }

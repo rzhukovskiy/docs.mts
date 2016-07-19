@@ -107,8 +107,8 @@ class ActController extends Controller
     {
         $model = new Act();
 
-        if (isset($_POST['image'])) {
-            $data = explode('base64,', $_POST['image']);
+        if (isset($_POST['name'])) {
+            $data = explode('base64,', $_POST['name']);
 
             $str = base64_decode($data[1]);
             $image = imagecreatefromstring($str);
@@ -117,7 +117,22 @@ class ActController extends Controller
             imagealphablending($image, false);
             imagesavealpha($image, true);
             $dir = $_SERVER['DOCUMENT_ROOT'] . '/files/signs/';
-            imagepng($image, $dir . $id . '.png');
+            imagepng($image, $dir . $id . '-name.png');
+            echo CJSON::encode(['file' => $id]);
+            Yii::app()->end();
+        }
+
+        if (isset($_POST['sign'])) {
+            $data = explode('base64,', $_POST['sign']);
+
+            $str = base64_decode($data[1]);
+            $image = imagecreatefromstring($str);
+            $id = $_GET['file'];
+
+            imagealphablending($image, false);
+            imagesavealpha($image, true);
+            $dir = $_SERVER['DOCUMENT_ROOT'] . '/files/signs/';
+            imagepng($image, $dir . $id . '-sign.png');
             echo CJSON::encode(['file' => $id]);
             Yii::app()->end();
         }

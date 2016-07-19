@@ -174,19 +174,5 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 ),
             ),
         ),
-        array(
-            'class' => 'CButtonColumn',
-            'template' => '{details}',
-            'header' => 'Подпись',
-            'buttons' => array(
-                'details' => array(
-                    'label' => '',
-                    'imageUrl' => false,
-                    'url' => 'Yii::app()->createUrl("/act/sign", array("id" => $data->id))',
-                    'options' => array('class' => 'view')
-                ),
-            ),
-            'visible' => isset(Yii::app()->user->model->company) && Yii::app()->user->model->company->is_sign,
-        ),
     ),
 ));

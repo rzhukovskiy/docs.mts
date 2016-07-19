@@ -169,28 +169,38 @@ if ($model->companyType == Company::TIRES_TYPE) {
                 <?= CHtml::button('-', array('class' => 'remove_scope', 'style' => 'float: left')) ?>
             </td>
         </tr>
-        <tr>
-            <?php if ($model->companyType == Company::TIRES_TYPE) { ?>
-                <td colspan="2">
-                    <div id="wPaint" style="position:relative; width:100%; height:200px; background-color:#eee;">
+        <?php if (isset(Yii::app()->user->model->company) && Yii::app()->user->model->company->is_sign) { ?>
+            <tr>
+                <td colspan="3">
+                    Фамилия и инициалы водителя:
+                    <div id="wPaint1" style="position:relative; width:600px; height:100px; background-color:#eee; border: 1px solid #eee;">
                     </div>
                     <script type="text/javascript">
-                        function saveImage(image) {
-                            var _this = this;
+                        function saveSign() {
+                            var image = $('#wPaint1').wPaint('image');
 
                             $.ajax({
                                 type: 'POST',
                                 url: '/act/create',
-                                data: {image: image},
+                                data: {name: image},
                                 success: function (resp) {
                                     resp = $.parseJSON(resp);
-                                    var data = $('form').serialize() + '&Act[sign]=' + resp.file;
+                                    image = $('#wPaint2').wPaint('image');
                                     $.ajax({
                                         type: 'POST',
-                                        url: '/act/create',
-                                        data: data,
+                                        url: '/act/create?file=' + resp.file,
+                                        data: {sign: image},
                                         success: function (resp) {
-                                            document.location.href = document.location.href;
+                                            resp = $.parseJSON(resp);
+                                            var data = $('form').serialize() + '&Act[sign]=' + resp.file;
+                                            $.ajax({
+                                                type: 'POST',
+                                                url: '/act/create',
+                                                data: data,
+                                                success: function (resp) {
+                                                    document.location.href = document.location.href;
+                                                }
+                                            });
                                         }
                                     });
                                 }
@@ -198,10 +208,10 @@ if ($model->companyType == Company::TIRES_TYPE) {
                         }
 
                         // init wPaint
-                        $('#wPaint').wPaint({
+                        $('#wPaint1').wPaint({
                             path: '/js/wpaint/',
-                            saveImg:     saveImage,
-                            bg:          '#eee',
+                            saveImg:     saveSign,
+                            bg:          '#fff',
                             lineWidth:   '1',       // starting line width
                             fillStyle:   '#fff', // starting fill style
                             strokeStyle: '#3355aa'  // start stroke style
@@ -209,17 +219,42 @@ if ($model->companyType == Company::TIRES_TYPE) {
                     </script>
                 </td>
                 <td>
-                    <?=CHtml::button('Очистить', array('class' => 'submit radius2', 'onclick' => "$('#wPaint').wPaint('clear');")); ?>
+                    <?=CHtml::button('Очистить', array('class' => 'submit radius2', 'onclick' => "$('#wPaint1').wPaint('clear');")); ?>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    Подпись водителя:
+                    <div id="wPaint2" style="position:relative; width:600px; height:100px; background-color:#eee; border: 1px solid #eee;">
+                    </div>
+                    <script type="text/javascript">
+                        // init wPaint
+                        $('#wPaint2').wPaint({
+                            path: '/js/wpaint/',
+                            saveImg:     saveSign,
+                            bg:          '#fff',
+                            lineWidth:   '1',       // starting line width
+                            fillStyle:   '#fff', // starting fill style
+                            strokeStyle: '#3355aa'  // start stroke style
+                        });
+                    </script>
                 </td>
                 <td>
-                    <?= CHtml::button('Загрузить', array('class' => 'submit radius2', 'style' => 'opacity: 1;', 'onclick' => "saveImage($('#wPaint').wPaint('image'));")); ?>
+                    <?=CHtml::button('Очистить', array('class' => 'submit radius2', 'onclick' => "$('#wPaint2').wPaint('clear');")); ?>
                 </td>
-            <?php } else { ?>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <?= CHtml::button('Загрузить', array('class' => 'submit radius2', 'style' => 'opacity: 1;', 'onclick' => "saveSign();")); ?>
+                </td>
+            </tr>
+        <?php } else { ?>
+            <tr>
                 <td colspan="4">
                     <?= CHtml::submitButton('Загрузить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
                 </td>
-            <?php } ?>
-        </tr>
+            </tr>
+        <?php } ?>
         </tbody>
     </table>
 <?php } ?>
