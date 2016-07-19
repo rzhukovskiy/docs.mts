@@ -338,7 +338,7 @@ class ExportableGridBehavior extends CBehavior
                     $companyWorkSheet->mergeCells("B$row:C$row");
                     $companyWorkSheet->setCellValueByColumnAndRow(1, $row, $date->format('j'));
                     $companyWorkSheet->mergeCells("D$row:E$row");
-                    $companyWorkSheet->setCellValueByColumnAndRow(3, $row, $data->card->number);
+                    $companyWorkSheet->setCellValueByColumnAndRow(3, $row, isset($data->card) ? $data->card->number : $data->card_id);
                     $companyWorkSheet->setCellValueByColumnAndRow(5, $row, isset($data->mark) ? $data->mark->name : "");
                     if ($this->showCompany) {
                         $companyWorkSheet->mergeCells("G$row:H$row");
