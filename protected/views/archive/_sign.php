@@ -14,7 +14,7 @@
         <th>Город</th>
     </tr>
     <tr class="strong">
-        <td><?=date("m/d/Y", strtotime($model->service_date))?></td>
+        <td><?=date("Y.m.d", strtotime($model->service_date))?></td>
         <td><?=$model->card->number?></td>
         <td><?=$model->mark->name?></td>
         <td colspan="2"><?=$model->number?></td>
@@ -59,14 +59,14 @@
             </td>
 
             <td colspan="2">
-                <img style="width:200px" src="<?='/files/signs/' . $model->sign . '-name.png'?>"/>
+                <img style="width:250px" src="<?='/files/signs/' . $model->sign . '-name.png'?>"/>
             </td>
             <td>
                 Подпись водителя
             </td>
 
             <td colspan="2">
-                <img style="width:200px" src="<?='/files/signs/' . $model->sign . '-sign.png'?>"/>
+                <img style="width:250px" src="<?='/files/signs/' . $model->sign . '-sign.png'?>"/>
             </td>
         </tr>
     </table>

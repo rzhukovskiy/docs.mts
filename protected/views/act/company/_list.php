@@ -174,7 +174,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'class' => 'CButtonColumn',
-            'template' => '{update}{delete}',
+            'template' => '{details}{update}{delete}',
             'header' => '',
             'buttons' => array(
                 'update' => array(
@@ -188,6 +188,12 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                     'imageUrl' => false,
                     'url' => 'Yii::app()->createUrl("/act/delete", ["id" => $data->id])',
                     'options' => array('class' => 'delete')
+                ),
+                'details' => array(
+                    'label' => '',
+                    'imageUrl' => false,
+                    'url' => 'Yii::app()->createUrl("/archive/sign", array("id" => $data->id))',
+                    'options' => array('class' => 'view')
                 ),
             ),
         ),

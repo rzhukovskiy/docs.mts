@@ -298,16 +298,6 @@ class ActController extends Controller
         ));
     }
 
-    public function actionSign($id)
-    {
-        $model = Act::model()->findByPk((int)$id);
-        $model->companyType = $model->partner->type;
-
-        $this->render("service/sign", array(
-            'model' => $model
-        ));
-    }
-
     public function actionDelete($id)
     {
         $this->loadModel($id)->delete();

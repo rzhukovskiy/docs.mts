@@ -135,12 +135,12 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'class' => 'CButtonColumn',
             'template' => '{details}',
             'header' => 'Подпись',
-            'cssClassExpression' => '$data->partner->is_sign ? "hidden" : ""',
+            'cssClassExpression' => '$data->partner->is_sign ? "" : "hidden"',
             'buttons' => array(
                 'details' => array(
                     'label' => '',
                     'imageUrl' => false,
-                    'url' => 'Yii::app()->createUrl("/act/sign", array("id" => $data->id))',
+                    'url' => 'Yii::app()->createUrl("/archive/sign", array("id" => $data->id))',
                     'options' => array('class' => 'view')
                 ),
             ),

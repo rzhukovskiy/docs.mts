@@ -10,6 +10,16 @@ class ArchiveController extends Controller
             ));
     }
 
+    public function actionSign($id)
+    {
+        $model = Act::model()->findByPk((int)$id);
+        $model->companyType = $model->partner->type;
+
+        $this->render("sign", array(
+            'model' => $model
+        ));
+    }
+
     public function actionList($type)
     {
         $model = new Act('search');

@@ -36,7 +36,7 @@ class Controller extends CController
                 'roles' => array(User::PARTNER_ROLE),
             ),
             array('allow',
-                'controllers' => ['card', 'statCompany', 'car', 'home', 'archive', 'actScope', 'user'],
+                'controllers' => ['act', 'card', 'statCompany', 'car', 'home', 'archive', 'actScope', 'user'],
                 'roles' => array(User::CLIENT_ROLE),
             ),
             array('deny',
