@@ -45,7 +45,7 @@
     </tr>
 </table>
 
-<div class="row" style="margin-top: 50px;">
+<div class="row" style="margin-top: 20px;">
     <span class="sign">
             По качеству работы претензий не имею.
     </span>
@@ -59,14 +59,14 @@
             </td>
 
             <td colspan="2">
-                <img style="width:250px" src="<?='/files/signs/' . $model->sign . '-name.png'?>"/>
+                <?php if ($model->sign ) { ?><img style="width:250px" src="<?='/files/signs/' . $model->sign . '-name.png'?>"/><?php } ?>
             </td>
             <td>
                 Подпись водителя
             </td>
 
             <td colspan="2">
-                <img style="width:250px" src="<?='/files/signs/' . $model->sign . '-sign.png'?>"/>
+                <?php if ($model->sign ) { ?><img style="width:250px" src="<?='/files/signs/' . $model->sign . '-sign.png'?>"/><?php } ?>
             </td>
         </tr>
     </table>
