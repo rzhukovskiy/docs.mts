@@ -5,7 +5,7 @@
  */
 
 $this->tabs = array(
-    'list' => array('url' => Yii::app()->createUrl("archive/$model->companyType"), 'name' => 'Услуги'),
+    'list' => array('url' => Yii::app()->request->urlReferrer, 'name' => 'Услуги'),
     'sign' => array('url' => '#', 'name' => 'Предварительный акт'),
 );
 

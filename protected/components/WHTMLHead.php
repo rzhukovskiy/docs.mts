@@ -32,6 +32,9 @@ class WHTMLHead extends CWidget{
         $clientScript->registerCssFile('/js/wpaint/wPaint.min.css');
         $clientScript->registerScriptFile('/js/wpaint/wPaint.min.js');
         $clientScript->registerScriptFile('/js/wpaint/plugins/main/wPaint.menu.main.min.js');
+        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+            $clientScript->registerCssFile('/css/media.css');
+        }
     }
 
     public function run() {

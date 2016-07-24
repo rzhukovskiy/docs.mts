@@ -107,36 +107,6 @@ class ActController extends Controller
     {
         $model = new Act();
 
-        if (isset($_POST['name'])) {
-            $data = explode('base64,', $_POST['name']);
-
-            $str = base64_decode($data[1]);
-            $image = imagecreatefromstring($str);
-            $id = uniqid();
-
-            imagealphablending($image, false);
-            imagesavealpha($image, true);
-            $dir = $_SERVER['DOCUMENT_ROOT'] . '/files/signs/';
-            imagepng($image, $dir . $id . '-name.png');
-            echo CJSON::encode(['file' => $id]);
-            Yii::app()->end();
-        }
-
-        if (isset($_POST['sign'])) {
-            $data = explode('base64,', $_POST['sign']);
-
-            $str = base64_decode($data[1]);
-            $image = imagecreatefromstring($str);
-            $id = $_GET['file'];
-
-            imagealphablending($image, false);
-            imagesavealpha($image, true);
-            $dir = $_SERVER['DOCUMENT_ROOT'] . '/files/signs/';
-            imagepng($image, $dir . $id . '-sign.png');
-            echo CJSON::encode(['file' => $id]);
-            Yii::app()->end();
-        }
-
         if (isset($_POST['Act'])) {
             $model->attributes = $_POST['Act'];
             if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
@@ -223,9 +193,52 @@ class ActController extends Controller
                     $scope->save();
                 }
             }
+
+            if($model->service == Company::TIRES_TYPE && isset(Yii::app()->user->model->company) && Yii::app()->user->model->company->is_sign) {
+                return $this->redirect(Yii::app()->createUrl('act/sign', ['id' => $model->id]));
+            }
         }
 
-        $this->redirect(isset(Yii::app()->request->urlReferrer) ? Yii::app()->request->urlReferrer : array('act/carwash'));
+        return $this->redirect(isset(Yii::appY()->request->urlReferrer) ? Yii::app()->request->urlReferrer : array('act/carwash'));
+    }
+
+    public function actionSign($id)
+    {
+        $model = Act::model()->findByPk((int)$id);
+
+        if (isset($_POST['name'])) {
+            $data = explode('base64,', $_POST['name']);
+
+            $str = base64_decode($data[1]);
+            $image = imagecreatefromstring($str);
+
+            imagealphablending($image, false);
+            imagesavealpha($image, true);
+            $dir = $_SERVER['DOCUMENT_ROOT'] . '/files/signs/';
+            imagepng($image, $dir . $id . '-name.png');
+            $model->sign = $id;
+            $model->save();
+            echo CJSON::encode(['file' => $id]);
+            Yii::app()->end();
+        }
+
+        if (isset($_POST['sign'])) {
+            $data = explode('base64,', $_POST['sign']);
+
+            $str = base64_decode($data[1]);
+            $image = imagecreatefromstring($str);
+
+            imagealphablending($image, false);
+            imagesavealpha($image, true);
+            $dir = $_SERVER['DOCUMENT_ROOT'] . '/files/signs/';
+            imagepng($image, $dir . $id . '-sign.png');
+            echo CJSON::encode(['file' => $id]);
+            Yii::app()->end();
+        }
+
+        $this->render("sign", array(
+            'model' => $model
+        ));
     }
 
     public function actionUpdate($id)

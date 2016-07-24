@@ -45,10 +45,13 @@ class HomeController extends Controller
     {
         if ($error = Yii::app()->errorHandler->error) {
             if (Yii::app()->request->isAjaxRequest) {
-                echo $error['message'];
+                print_r($error);
+                die;
             }
-            else
-                $this->render('error', $error);
+            else {
+                print_r($error);
+                die;
+            }
         }
     }
 

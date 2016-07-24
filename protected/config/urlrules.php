@@ -14,6 +14,7 @@ return array(
     'act/delete' => 'act/delete',
     'act/disinfectAll' => 'act/disinfectAll',
     'act/fix' => 'act/fix',
+    'act/sign' => 'act/sign',
     'act/<type:\w+>' => 'act/list',
     'archive/error' => 'archive/error',
     'archive/update' => 'archive/update',
