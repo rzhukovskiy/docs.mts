@@ -207,7 +207,11 @@ function datePickerDays () {
         dateFormat: "yy-mm-dd"
     });
     $( ".date-select" ).datepicker({
-        dateFormat: "yy-mm-dd"
+        dateFormat: "yy-mm-dd",
+        beforeShow: function(input, inst)
+        {
+            inst.dpDiv.css({marginTop: (-input.offsetHeight + 50) + 'px', marginLeft: input.offsetWidth + 'px'});
+        }
     });
 
     $( "input[name='Act[create_date]']" ).datepicker({

@@ -14,7 +14,7 @@
         <th>Город</th>
     </tr>
     <tr class="strong">
-        <td><?=date("Y.m.d", strtotime($model->service_date))?></td>
+        <td><?=date("d.m.Y", strtotime($model->service_date))?></td>
         <td><?=$model->card->number?></td>
         <td><?=$model->mark->name?></td>
         <td colspan="2"><?=$model->number?></td>
@@ -51,7 +51,7 @@
     </span>
 </div>
 
-<div class="row" style="margin-top: 50px;">
+<div class="row" style="margin-top: 20px;">
     <table class="sign">
         <tr>
             <td>
@@ -59,14 +59,14 @@
             </td>
 
             <td colspan="2">
-                <?php if ($model->sign ) { ?><img style="width:250px" src="<?='/files/signs/' . $model->sign . '-name.png'?>"/><?php } ?>
+                <?php if ($model->sign ) { ?><img style="width:250px; border-bottom: 1px solid black;" src="<?='/files/signs/' . $model->sign . '-name.png'?>"/><?php } ?>
             </td>
             <td>
                 Подпись водителя
             </td>
 
             <td colspan="2">
-                <?php if ($model->sign ) { ?><img style="width:250px" src="<?='/files/signs/' . $model->sign . '-sign.png'?>"/><?php } ?>
+                <?php if ($model->sign ) { ?><img style="width:250px; border-bottom: 1px solid black;" src="<?='/files/signs/' . $model->sign . '-sign.png'?>"/><?php } ?>
             </td>
         </tr>
     </table>

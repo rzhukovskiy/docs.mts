@@ -171,18 +171,18 @@ class ExportableGridBehavior extends CBehavior
         $currentMonthName = StringNum::getMonthName($date->getTimestamp());
 
         if ($this->companyType == Company::DISINFECTION_TYPE) {
-            $companyWorkSheet->getStyle('B2:E4')->applyFromArray(array(
+            $companyWorkSheet->getStyle('B2:F4')->applyFromArray(array(
                 'alignment' => array(
                     'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
                 )
             ));
-            $companyWorkSheet->mergeCells('B2:E2');
+            $companyWorkSheet->mergeCells('B2:F2');
             $text = "АКТ СДАЧИ-ПРИЕМКИ РАБОТ (УСЛУГ)";
             $companyWorkSheet->setCellValue('B2', $text);
-            $companyWorkSheet->mergeCells('B3:E3');
+            $companyWorkSheet->mergeCells('B3:F3');
             $text = "по договору на оказание услуг " . $company->getRequisites($this->companyType, 'contract');
             $companyWorkSheet->setCellValue('B3', $text);
-            $companyWorkSheet->mergeCells('B4:E4');
+            $companyWorkSheet->mergeCells('B4:F4');
             $text = "За услуги, оказанные в $monthName[2] " . date('Y', $this->time) . ".";
             $companyWorkSheet->setCellValue('B4', $text);
 
@@ -193,13 +193,13 @@ class ExportableGridBehavior extends CBehavior
                 )
             ));
             if ($this->showCompany) {
-                $companyWorkSheet->setCellValue('E5', '1 ' . $monthName[1] . date(' Y', $this->time));
+                $companyWorkSheet->setCellValue('F5', '1 ' . $monthName[1] . date(' Y', $this->time));
             } else {
-                $companyWorkSheet->setCellValue('E5', date('d ') . $currentMonthName[1] . date(' Y'));
+                $companyWorkSheet->setCellValue('F5', date('d ') . $currentMonthName[1] . date(' Y'));
             }
 
-            $companyWorkSheet->mergeCells('B8:E8');
-            $companyWorkSheet->mergeCells('B7:E7');
+            $companyWorkSheet->mergeCells('B8:F8');
+            $companyWorkSheet->mergeCells('B7:F7');
             if ($this->showCompany) {
                 $companyWorkSheet->setCellValue('B8', "Исполнитель: ООО «Международный Транспортный Сервис»");
                 $companyWorkSheet->setCellValue('B7', "Заказчик: $company->name");
@@ -208,9 +208,9 @@ class ExportableGridBehavior extends CBehavior
                 $companyWorkSheet->setCellValue('B8', "Заказчик: ООО «Международный Транспортный Сервис»");
             }
 
-            $companyWorkSheet->mergeCells('B10:E10');
-            $companyWorkSheet->getStyle('B10:E10')->getAlignment()->setWrapText(true);
-            $companyWorkSheet->getStyle('B10:E10')->applyFromArray(array(
+            $companyWorkSheet->mergeCells('B10:F10');
+            $companyWorkSheet->getStyle('B10:F10')->getAlignment()->setWrapText(true);
+            $companyWorkSheet->getStyle('B10:F10')->applyFromArray(array(
                 'alignment' => array(
                     'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY,
                 )
@@ -543,11 +543,12 @@ class ExportableGridBehavior extends CBehavior
 
             case Company::DISINFECTION_TYPE:
                 $companyWorkSheet->getColumnDimension('B')->setWidth(5);
-                $companyWorkSheet->getColumnDimension('C')->setWidth(25);
-                $companyWorkSheet->getColumnDimension('D')->setWidth(25);
-                $companyWorkSheet->getColumnDimension('E')->setWidth(25);
+                $companyWorkSheet->getColumnDimension('C')->setWidth(20);
+                $companyWorkSheet->getColumnDimension('D')->setWidth(20);
+                $companyWorkSheet->getColumnDimension('E')->setWidth(26);
+                $companyWorkSheet->getColumnDimension('F')->setWidth(15);
 
-                $headers = ['№', 'Марка ТС', 'Госномер', 'Стоимость'];
+                $headers = ['№', 'Марка ТС', 'Госномер', 'Вид услуги', 'Стоимость'];
                 $companyWorkSheet->fromArray($headers, null, 'B12');
                 /** @var Act $data */
                 $currentId = 0;
@@ -559,7 +560,7 @@ class ExportableGridBehavior extends CBehavior
                     if ($isParent && $currentId != $data->client_id) {
                         $row++;
 
-                        $companyWorkSheet->getStyle("B$row:E$row")->applyFromArray(array(
+                        $companyWorkSheet->getStyle("B$row:F$row")->applyFromArray(array(
                                 'font' => array(
                                     'bold' => true,
                                     'color' => array('argb' => 'FF006699'),
@@ -567,7 +568,7 @@ class ExportableGridBehavior extends CBehavior
                             )
                         );
 
-                        $companyWorkSheet->mergeCells("B$row:E$row");
+                        $companyWorkSheet->mergeCells("B$row:F$row");
                         $companyWorkSheet->setCellValue("B$row", $data->client->name);
                         $currentId = $data->client_id;
                     }
@@ -579,6 +580,7 @@ class ExportableGridBehavior extends CBehavior
                     $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $num);
                     $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, isset($data->mark) ? $data->mark->name : "");
                     $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->number);
+                    $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, 'Санитарная обработка кузова');
                     if ($this->showCompany) {
                         $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, $data->income);
                         $total += $data->income;
@@ -595,7 +597,7 @@ class ExportableGridBehavior extends CBehavior
                     $companyWorkSheet->setCellValueByColumnAndRow($column++, $row, ' ' . $data->check);
                 }
 
-                $companyWorkSheet->getStyle('B12:E12')
+                $companyWorkSheet->getStyle('B12:F12')
                     ->applyFromArray(array(
                         'font' => array(
                             'bold' => true,
@@ -604,7 +606,7 @@ class ExportableGridBehavior extends CBehavior
                     )
                 );
 
-                $companyWorkSheet->getStyle("B12:E$row")
+                $companyWorkSheet->getStyle("B12:F$row")
                     ->applyFromArray(array(
                         'borders' => array(
                             'allborders' => array(
@@ -621,32 +623,35 @@ class ExportableGridBehavior extends CBehavior
         //footer
         if ($this->companyType == Company::DISINFECTION_TYPE) {
             $row++;
-            $companyWorkSheet->setCellValue("E$row", "$total");
+            $companyWorkSheet->setCellValue("F$row", "$total");
 
             $row++;$row++;
-            $companyWorkSheet->mergeCells("B$row:E$row");
+            $companyWorkSheet->mergeCells("B$row:F$row");
             $companyWorkSheet->getRowDimension($row)->setRowHeight(30);
-            $companyWorkSheet->getStyle("B$row:E$row")->getAlignment()->setWrapText(true);
+            $companyWorkSheet->getStyle("B$row:F$row")->getAlignment()->setWrapText(true);
             $text = "Общая стоимость выполненных услуг составляет: $total (" . StringNum::num2str($total) . ") рублей. НДС нет.";
             $companyWorkSheet->setCellValue("B$row", $text);
 
             $row++;
-            $companyWorkSheet->mergeCells("B$row:E$row");
+            $companyWorkSheet->mergeCells("B$row:F$row");
             $companyWorkSheet->getRowDimension($row)->setRowHeight(30);
-            $companyWorkSheet->getStyle("B$row:E$row")->getAlignment()->setWrapText(true);
+            $companyWorkSheet->getStyle("B$row:F$row")->getAlignment()->setWrapText(true);
             $text = "Настоящий Акт составлен в 2 (двух) экземплярах, один из которых находится у Исполнителя, второй – у Заказчика.";
             $companyWorkSheet->setCellValue("B$row", $text);
 
             $row++; $row++;
             $companyWorkSheet->setCellValue("B$row", "Работу сдал");
+            $companyWorkSheet->mergeCells("E$row:F$row");
             $companyWorkSheet->setCellValue("E$row", "Работу принял");
 
             $row++; $row++;
             $companyWorkSheet->setCellValue("B$row", "Исполнитель");
+            $companyWorkSheet->mergeCells("E$row:F$row");
             $companyWorkSheet->setCellValue("E$row", "Заказчик");
 
             $row++; $row++;
             $companyWorkSheet->setCellValue("B$row", "____________Мосесян Г.А.");
+            $companyWorkSheet->mergeCells("E$row:F$row");
             $companyWorkSheet->setCellValue("E$row", "____________$company->contact");
 
             $row++; $row++;

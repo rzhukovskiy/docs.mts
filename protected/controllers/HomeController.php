@@ -55,6 +55,35 @@ class HomeController extends Controller
         }
     }
 
+    public function actionHelp()
+    {
+        $acts = Act::model()->with([
+            'scope' => [
+                'joinType'=>'INNER JOIN',
+            ]
+        ])->findAll();
+
+        foreach ($acts as $act) {
+            $totalIncome = 0;
+            $totalExpense = 0;
+            foreach ($act->scope as $scope) {
+                $totalIncome += $scope->income * $scope->amount;
+                $totalExpense += $scope->expense * $scope->amount;
+            }
+            if ($act->income != $totalIncome || $act->income != $totalIncome) {
+                echo "Ошибочка <br/>";
+                echo "Акт $act->id: <br/>";
+                echo "Приход $act->income - $totalIncome<br/>";
+                echo "Расход $act->expense - $totalExpense<br/>";
+                echo "##########################################<br/><br/>";
+
+                $act->expense = $totalExpense;
+                $act->income = $totalIncome;
+                $act->save();
+            }
+        }
+    }
+
     protected function performAjaxValidation($model, $id_form)
     {
         if (isset($_POST['ajax']) && $_POST['ajax'] === $id_form) {
