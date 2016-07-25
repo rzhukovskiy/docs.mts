@@ -5,7 +5,7 @@
 */
 
 $this->tabs = array(
-    'sign' => array('url' => '#', 'name' => 'Подпись'),
+    'sign' => array('url' => '#', 'name' => 'Оформление акта'),
 );
 ?>
 <div class="row">

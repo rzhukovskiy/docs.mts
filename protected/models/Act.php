@@ -112,6 +112,17 @@ class Act extends CActiveRecord
             } else {
                 $this->month = $value;
             }
+        } elseif ($name == 'service_date') {
+            if (count(explode('-', $value)) > 2) {
+                list($year, $month, $day) = explode('-', $value);
+                if(strlen($year) == 2) {
+                    $this->service_date = $day . '-' . $month . '-' . $year;
+                } else {
+                    $this->service_date = $value;
+                }
+            } else {
+                $this->service_date = $value;
+            }
         } else {
             parent::__set($name, $value);
         }
@@ -546,8 +557,8 @@ class Act extends CActiveRecord
                 $hasError = !isset($this->car->company_id);
                 break;
             case 'truck':
-                $hasError = ($this->client->is_split && !$this->extra_number) ||
-                    ($this->client->is_split && $this->extra_number && !Car::model()->find('number = :number', [':number' => $this->extra_number]));
+                $hasError = (isset($this->client) && $this->client->is_split && !$this->extra_number) ||
+                    (isset($this->client) && $this->client->is_split && $this->extra_number && !Car::model()->find('number = :number', [':number' => $this->extra_number]));
                 break;
         }
 

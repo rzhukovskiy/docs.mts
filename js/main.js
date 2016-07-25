@@ -207,10 +207,10 @@ function datePickerDays () {
         dateFormat: "yy-mm-dd"
     });
     $( ".date-select" ).datepicker({
-        dateFormat: "yy-mm-dd",
+        dateFormat: "dd-mm-yy",
         beforeShow: function(input, inst)
         {
-            inst.dpDiv.css({marginTop: (-input.offsetHeight + 50) + 'px', marginLeft: input.offsetWidth + 'px'});
+            inst.dpDiv.css({marginTop: -(input.offsetHeight + 150) + 'px', marginLeft: input.offsetWidth + 'px'});
         }
     });
 

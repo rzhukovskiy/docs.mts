@@ -38,13 +38,13 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'header' => 'Компания',
             'name' => 'client',
             'htmlOptions' => array('style' => 'text-align:center;', 'class' => 'value_0'),
-            'value' => '$data->client->name',
+            'value' => 'isset($data->client) ? $data->client->name : ""',
         ),
         array(
             'header' => 'Город',
             'name' => 'address',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->client->address',
+            'value' => 'isset($data->client) ? $data->client->address : ""',
         ),
         array(
             'header' => 'Обслужено',

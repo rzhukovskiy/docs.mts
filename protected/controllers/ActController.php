@@ -199,7 +199,7 @@ class ActController extends Controller
             }
         }
 
-        return $this->redirect(isset(Yii::appY()->request->urlReferrer) ? Yii::app()->request->urlReferrer : array('act/carwash'));
+        return $this->redirect(isset(Yii::app()->request->urlReferrer) ? Yii::app()->request->urlReferrer : array('act/carwash'));
     }
 
     public function actionSign($id)

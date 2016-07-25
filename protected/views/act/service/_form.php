@@ -87,7 +87,7 @@ if ($model->companyType == Company::TIRES_TYPE) {
     <tr>
         <td>
             <?= CHtml::hiddenField('Act[service]', $model->companyType); ?>
-            <?= $form->textField($model, 'service_date', array('class' => 'date-select', 'style' => 'width:70px')); ?>
+            <?= $form->textField($model, 'service_date', array('class' => 'date-select')); ?>
         </td>
         <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
             <td  style="text-align: center">
@@ -98,10 +98,10 @@ if ($model->companyType == Company::TIRES_TYPE) {
             <?= $form->textField($model, 'cardNumber'); ?>
         </td>
         <td>
-            <?= $form->textField($model, 'number', array('class' => 'number_fill', 'style' => 'width:80px')); ?>
+            <?= $form->textField($model, 'number', array('class' => 'number_fill')); ?>
         </td>
         <td>
-            <?= $form->textField($model, 'extra_number', array('class' => 'number_fill', 'style' => 'width:80px')); ?>
+            <?= $form->textField($model, 'extra_number', array('class' => 'number_fill')); ?>
         </td>
         <td>
             <?= $form->dropDownList($model, 'mark_id', CHtml::listData(Mark::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
@@ -136,7 +136,7 @@ if ($model->companyType == Company::TIRES_TYPE) {
             <th colspan="4">Состав работ</th>
         </tr>
         <tr>
-            <th>Вид работ</th>
+            <th style="text-align: left;">Вид работ</th>
             <th style="width: 100px;">Количество</th>
             <th style="width: 100px;">Цена 1 ед.</th>
             <th></th>

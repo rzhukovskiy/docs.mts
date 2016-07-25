@@ -62,6 +62,9 @@
                 <?php if ($model->sign ) { ?><img style="width:250px; border-bottom: 1px solid black;" src="<?='/files/signs/' . $model->sign . '-name.png'?>"/><?php } ?>
             </td>
             <td>
+              &nbsp; &nbsp; &nbsp;
+            </td>
+            <td>
                 Подпись водителя
             </td>
 
