@@ -38,6 +38,16 @@ class CarController extends Controller
         ));
     }
 
+    public function actionCheckExtra($number)
+    {
+        $car = Car::model()->find('number = :number', [':number' => $number]);
+        if ($car && isset($car->company) && $car->company->is_split) {
+            echo CJSON::encode(['res' => 1]);
+        } else {
+            echo CJSON::encode(['res' => 0]);
+        }
+    }
+
     public function actionDirty()
     {
         $model = new Car('search');

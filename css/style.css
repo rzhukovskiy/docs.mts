@@ -1744,3 +1744,7 @@ table.sign {
 	color: #000;
 	font-size: 14px;
 }
+
+.extra-number {
+	display: none;
+}

@@ -133,33 +133,18 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'class' => 'CButtonColumn',
-            'template' => '{details}',
-            'header' => 'Подпись',
-            'cssClassExpression' => '$data->partner->is_sign ? "" : "hidden"',
+            'template' => '{view}',
+            'header' => '',
+            'cssClassExpression' => '$data->partner->type == Company::CARWASH_TYPE ? "hidden" : ""',
             'buttons' => array(
-                'details' => array(
+                'view' => array(
                     'label' => '',
                     'imageUrl' => false,
                     'url' => 'Yii::app()->createUrl("/archive/sign", array("id" => $data->id))',
                     'options' => array('class' => 'view')
                 ),
             ),
-            'visible' => $model->companyType == Company::TIRES_TYPE,
-        ),
-        array(
-            'class' => 'CButtonColumn',
-            'template' => '{details}',
-            'header' => '',
-            'cssClassExpression' => '$data->partner->type == Company::CARWASH_TYPE ? "hidden" : ""',
-            'buttons' => array(
-                'details' => array(
-                    'label' => '',
-                    'imageUrl' => false,
-                    'url' => 'Yii::app()->createUrl("car/details", array("id" => $data->id))',
-                    'options' => array('class' => 'update show-act-details')
-                ),
-            ),
-            'visible' => $model->companyType == Company::SERVICE_TYPE,
+            'visible' => $model->companyType == Company::SERVICE_TYPE || $model->companyType == Company::TIRES_TYPE,
         ),
     ),
 ));

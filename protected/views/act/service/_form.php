@@ -56,7 +56,7 @@ if ($model->companyType == Company::TIRES_TYPE) {
         <th>
             <?= $attributes['number']; ?>
         </th>
-        <th>
+        <th class="extra-number">
             <?= $attributes['extra_number']; ?>
         </th>
         <th>
@@ -84,49 +84,51 @@ if ($model->companyType == Company::TIRES_TYPE) {
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>
-            <?= CHtml::hiddenField('Act[service]', $model->companyType); ?>
-            <?= $form->textField($model, 'service_date', array('class' => 'date-select')); ?>
-        </td>
-        <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
-            <td  style="text-align: center">
-                <?= $form->dropDownList($model, 'partner_id', CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name')); ?>
-            </td>
-        <?php } ?>
-        <td>
-            <?= $form->textField($model, 'cardNumber'); ?>
-        </td>
-        <td>
-            <?= $form->textField($model, 'number', array('class' => 'number_fill')); ?>
-        </td>
-        <td>
-            <?= $form->textField($model, 'extra_number', array('class' => 'number_fill')); ?>
-        </td>
-        <td>
-            <?= $form->dropDownList($model, 'mark_id', CHtml::listData(Mark::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
-        </td>
-        <td>
-            <?= $form->dropDownList($model, 'type_id', CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name'), array('style' => 'width:100px')); ?>
-        </td>
-        <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
+        <tr>
             <td>
-                <?= $form->dropDownList($model, 'partner_service', Act::$carwashList, array('style' => 'width:80px')); ?>
+                <?= CHtml::hiddenField('Act[service]', $model->companyType); ?>
+                <?= $form->textField($model, 'service_date', array('class' => 'date-select')); ?>
+            </td>
+            <?php if (Yii::app()->user->checkAccess(User::ADMIN_ROLE)) { ?>
+                <td  style="text-align: center">
+                    <?= $form->dropDownList($model, 'partner_id', CHtml::listData(Company::model()->findAll('type = :type', array(':type' => $model->companyType)), 'id', 'name')); ?>
+                </td>
+            <?php } ?>
+            <td>
+                <?= $form->textField($model, 'cardNumber'); ?>
             </td>
             <td>
-                <?= $form->textField($model, 'check', array('style' => 'width:60px')); ?>
+                <?= $form->textField($model, 'number', array('class' => 'number_fill main-number')); ?>
+            </td>
+            <td class="extra-number">
+                <?= $form->textField($model, 'extra_number', array('class' => 'number_fill')); ?>
             </td>
             <td>
-                <?= $form->fileField($model, 'screen'); ?>
+                <?= $form->dropDownList($model, 'mark_id', CHtml::listData(Mark::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
             </td>
-        <?php } ?>
+            <td>
+                <?= $form->dropDownList($model, 'type_id',
+                    CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name'), array('style' => $model->companyType == Company::CARWASH_TYPE ? 'width:100px' : 'width:200px')
+                ); ?>
+            </td>
+            <?php if ($model->companyType == Company::CARWASH_TYPE) { ?>
+                <td>
+                    <?= $form->dropDownList($model, 'partner_service', Act::$carwashList, array('style' => 'width:80px')); ?>
+                </td>
+                <td>
+                    <?= $form->textField($model, 'check', array('style' => 'width:60px')); ?>
+                </td>
+                <td>
+                    <?= $form->fileField($model, 'screen'); ?>
+                </td>
+            <?php } ?>
 
-        <?php if ($model->companyType == Company::CARWASH_TYPE || $model->companyType == Company::DISINFECTION_TYPE) { ?>
-            <td>
-                <?= CHtml::submitButton('+', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
-            </td>
-        <?php } ?>
-    </tr>
+            <?php if ($model->companyType == Company::CARWASH_TYPE || $model->companyType == Company::DISINFECTION_TYPE) { ?>
+                <td>
+                    <?= CHtml::submitButton('+', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
+                </td>
+            <?php } ?>
+        </tr>
     </tbody>
 </table>
 <?php if ($model->companyType == Company::SERVICE_TYPE || $model->companyType == Company::TIRES_TYPE) { ?>

@@ -6,6 +6,7 @@
 if (
     Yii::app()->user->checkAccess(User::ADMIN_ROLE)
     || Yii::app()->user->model->company->type == Company::UNIVERSAL_TYPE
+    || Yii::app()->user->model->company->type == Company::COMPANY_TYPE
 ) {
     foreach(Company::$listService as $service => $name) {
         $this->tabs[$model->companyType != $service ? $service : 'list'] = ['url' => Yii::app()->createUrl("archive/$service"), 'name' => $name];

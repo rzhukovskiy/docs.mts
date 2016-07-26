@@ -6,6 +6,25 @@ $(document).ready(function() {
         localStorage.removeItem(storageName);
     }
 
+    $('.main-number').focusout(function() {
+        if ($(this).val().length >= 8) {
+            $.ajax({
+                type: "GET",
+                url: '/car/checkExtra?number=' + $(this).val(),
+                success: function(response) {
+                    response = JSON.parse(response);
+                    if (response.res == 1) {
+                        $('.extra-number').show();
+                    } else {
+                        $('.extra-number').hide();
+                    }
+                }
+            });
+        } else {
+            $('.extra-number').hide();
+        }
+    });
+
     $('td a').click(function(e) {
         var storageName = window.location.href + '_pos';
         localStorage[storageName] = $(window).scrollTop();
