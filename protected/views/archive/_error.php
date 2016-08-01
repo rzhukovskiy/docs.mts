@@ -40,12 +40,14 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'header' => 'Партнер',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->partner->name',
+            'value' => 'isset($data->partner) ? $data->partner->name : "error"',
+            'cssClassExpression' => '!isset($data->partner) ? "error" : ""',
         ),
         array(
             'header' => 'Клиент',
             'htmlOptions' => array('style' => 'text-align:center;'),
-            'value' => '$data->client->name',
+            'value' => 'isset($data->client) ? $data->client->name : "error"',
+            'cssClassExpression' => '!isset($data->client) ? "error" : ""',
         ),
         array(
             'name' => 'card_id',
