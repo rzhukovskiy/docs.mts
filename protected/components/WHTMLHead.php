@@ -32,7 +32,7 @@ class WHTMLHead extends CWidget{
         $clientScript->registerCssFile('/js/wpaint/wPaint.min.css');
         $clientScript->registerScriptFile('/js/wpaint/wPaint.min.js');
         $clientScript->registerScriptFile('/js/wpaint/plugins/main/wPaint.menu.main.min.js');
-        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
+        if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE) && Yii::app()->user->model->company->type != Company::COMPANY_TYPE) {
             $clientScript->registerCssFile('/css/media.css');
         }
     }
