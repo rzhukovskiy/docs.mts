@@ -97,6 +97,7 @@ class ActController extends Controller
             $act->old_expense = $act->expense;
             $act->old_income = $act->income;
             $act->fixMode = true;
+            $act->showCompany = Yii::app()->getRequest()->getParam('showCompany', false);
             $act->save();
         }
 

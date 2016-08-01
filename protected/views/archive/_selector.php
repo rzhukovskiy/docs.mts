@@ -25,7 +25,7 @@ $form = $this->beginWidget('CActiveForm', array(
                     <?=CHtml::label('Выбор филиала', '')?>
                     <?=$form->dropDownList($model,
                         'client_id',
-                        CHtml::listData(Yii::app()->user->model->company->children, 'id', 'name'),
+                        CHtml::listData(Company::model()->findAll('parent_id = :parent_id AND is_deleted = 0', ['parent_id' => Yii::app()->user->model->company->id]), 'id', 'name'),
                         ['class' => 'autoinput', 'empty' => 'все']
                     )?>
                 <?php } ?>

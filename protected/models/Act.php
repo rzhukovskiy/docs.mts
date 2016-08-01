@@ -282,7 +282,7 @@ class Act extends CActiveRecord
                 $total = 0;
                 /** @var ActScope $scope */
                 foreach ($this->scope as $scope) {
-                    $tiresService = CompanyTiresService::model()->find('type_id = :type_id AND company_id = :company_id AND tiresService.description = :description', [
+                    $tiresService = CompanyTiresService::model()->with('tiresService')->find('type_id = :type_id AND company_id = :company_id AND tiresService.description = :description', [
                         ':type_id' => $this->type_id,
                         ':company_id' => $this->client_id,
                         ':description' => $scope->description,
@@ -298,7 +298,7 @@ class Act extends CActiveRecord
                 $total = 0;
                 /** @var ActScope $scope */
                 foreach ($this->scope as $scope) {
-                    $tiresService = CompanyTiresService::model()->find('type_id = :type_id AND company_id = :company_id AND tiresService.description = :description', [
+                    $tiresService = CompanyTiresService::model()->with('tiresService')->find('type_id = :type_id AND company_id = :company_id AND tiresService.description = :description', [
                         ':type_id' => $this->type_id,
                         ':company_id' => $this->partner_id,
                         ':description' => $scope->description,
@@ -349,7 +349,7 @@ class Act extends CActiveRecord
                 $sort->defaultOrder = 't.service_date';
             } else {
                 if ($this->showCompany) {
-                    $sort->defaultOrder = 'client_id, t.service_date, profit DESC';
+                    $sort->defaultOrder = 'clientParent.id, client_id, t.service_date, profit DESC';
                 } else {
                     $sort->defaultOrder = 'partner_id, t.service_date, profit DESC';
                 }
@@ -418,6 +418,7 @@ class Act extends CActiveRecord
         $criteria->addCondition('`check` is NULL AND partner_service IN(0,1,2)', 'OR');
         $criteria->addCondition('`check` = "" AND partner_service IN(0,1,2)', 'OR');
         $criteria->addCondition('card.company_id != car.company_id', 'OR');
+        $criteria->addCondition('card.company_id is NULL', 'OR');
         $criteria->addCondition('client.is_split = 1 AND truck.company_id is NULL', 'OR');
         $criteria->addCondition('car.company_id is NULL', 'OR');
 
