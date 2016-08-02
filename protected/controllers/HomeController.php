@@ -49,8 +49,7 @@ class HomeController extends Controller
                 die;
             }
             else {
-                print_r($error);
-                die;
+                $this->render('error', $error);
             }
         }
     }
