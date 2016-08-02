@@ -32,10 +32,10 @@
         <tr>
             <td colspan="3"><?=$num . '. ' . $scope->description?></td>
             <td><?=$scope->amount?></td>
-            <td><?=$scope->income?></td>
-            <td><?=$scope->income * $scope->amount?></td>
+            <td><?=Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? $scope->expense : $scope->income?></td>
+            <td><?=Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? $scope->expense * $scope->amount : $scope->income * $scope->amount?></td>
         </tr>
-    <?php $num++; $total += $scope->income * $scope->amount; } ?>
+    <?php $num++; $total += Yii::app()->user->checkAccess(User::PARTNER_ROLE) ? $scope->expense * $scope->amount : $scope->income * $scope->amount; } ?>
 
     <tr class="strong">
         <td colspan="3">Итого</td>
