@@ -175,7 +175,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'class' => 'CButtonColumn',
-            'template' => '{details}{update}{delete}',
+            'template' => $model->companyType == Company::CARWASH_TYPE ? '{update}{delete}' : '{view}{update}{delete}',
             'header' => '',
             'buttons' => array(
                 'update' => array(
@@ -190,7 +190,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                     'url' => 'Yii::app()->createUrl("/act/delete", ["id" => $data->id])',
                     'options' => array('class' => 'delete')
                 ),
-                'details' => array(
+                'view' => array(
                     'label' => '',
                     'imageUrl' => false,
                     'url' => 'Yii::app()->createUrl("/archive/sign", array("id" => $data->id))',

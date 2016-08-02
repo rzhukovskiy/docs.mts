@@ -291,7 +291,7 @@ class Act extends CActiveRecord
                         $scope->income = $tiresService->price;
                         $scope->save();
                     }
-                    $total += $scope->income;
+                    $total += $scope->income * $scope->amount;
                 }
                 $this->income = $total;
             } else {
@@ -307,7 +307,7 @@ class Act extends CActiveRecord
                         $scope->expense = $tiresService->price;
                         $scope->save();
                     }
-                    $total += $scope->expense;
+                    $total += $scope->expense * $scope->amount;
                 }
                 $this->expense = $total;
             }

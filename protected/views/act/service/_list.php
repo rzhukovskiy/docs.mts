@@ -156,7 +156,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
         ),
         array(
             'class' => 'CButtonColumn',
-            'template' => '{update}{delete}',
+            'template' => $model->companyType == Company::CARWASH_TYPE ? '{update}{delete}' : '{view}{update}{delete}',
             'header' => '',
             'cssClassExpression' => !Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? '$data->is_closed ? "hidden" : ""' : '',
             'buttons' => array(
@@ -171,6 +171,12 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                     'imageUrl' => false,
                     'url' => 'Yii::app()->createUrl("/act/delete", array("id" => $data->id))',
                     'options' => array('class' => 'delete')
+                ),
+                'view' => array(
+                    'label' => '',
+                    'imageUrl' => false,
+                    'url' => 'Yii::app()->createUrl("/archive/sign", array("id" => $data->id))',
+                    'options' => array('class' => 'view')
                 ),
             ),
         ),
