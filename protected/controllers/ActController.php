@@ -302,7 +302,7 @@ class ActController extends Controller
                     }
                 }
 
-                $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : Yii::app()->createUrl('act/carwash'));
+                return $this->redirect(isset($_POST['returnUrl']) && $_POST['returnUrl'] ? $_POST['returnUrl'] : Yii::app()->createUrl('act/carwash'));
             }
         }
 
