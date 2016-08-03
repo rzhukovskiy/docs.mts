@@ -267,32 +267,65 @@ class ActController extends Controller
             $this->performAjaxValidation($model);
 
             $sumName = $model->showCompany ? 'income' : 'expense';
+            $totalExpense = 0;
+            $totalIncome = 0;
             if (isset($_POST['Scope'])) {
-                $scopeList = $_POST['Scope'];
-                $total = 0;
-                for ($i = 0; $i < count($scopeList[$sumName]) || $i < count($scopeList['amount']); $i++) {
-                    $total += abs($scopeList[$sumName][$i]) * abs($scopeList['amount'][$i]);
-                }
-                $model->$sumName = $total;
-            }
-
-            if ($model->save()) {
                 $oldScopes = CHtml::listData($model->scope, 'id', 'id');
                 if (isset($_POST['Scope'])) {
                     $scopeList = $_POST['Scope'];
                     for ($i = 0; $i < count($scopeList[$sumName]) || $i < count($scopeList['description']); $i++) {
+                        $scope = new ActScope();
                         if ($scopeList['id'][$i]) {
                             $scope = ActScope::model()->findByPk($scopeList['id'][$i]);
-                            $scope->$sumName = $scopeList[$sumName][$i];
-                            unset($oldScopes[$scopeList['id'][$i]]);
-                        } else {
-                            $scope = new ActScope();
+                            if ($model->service == Company::TIRES_TYPE) {
+                                $scope->description = TiresService::model()->findByPk($scopeList['description'][$i])->description;
+                            } else {
+                                $scope->description = $scopeList['description'][$i];
+                            }
+                            $scope->amount = $scopeList['amount'][$i];
+                            if ($scopeList[$sumName][$i]) {
+                                $scope->$sumName = $scopeList[$sumName][$i];
+                                unset($oldScopes[$scopeList['id'][$i]]);
+                            }
+                            if (!$scope->save()) {
+                                print_r($scope->getErrors());
+                                die;
+                            }
+                        } elseif($scopeList['amount'][$i]) {
+                            $scope->description = $scopeList['description'][$i];
+                            $scope->amount = $scopeList['amount'][$i];
                             $scope->act_id = $model->id;
-                            $scope->income = $scope->expense = $scopeList[$sumName][$i];
+                            if ($scopeList[$sumName][$i]) {
+                                $scope->income = $scope->expense = $scopeList[$sumName][$i];
+                            } elseif ($model->service == Company::TIRES_TYPE) {
+                                $scope->description = TiresService::model()->findByPk($scopeList['description'][$i])->description;
+                                $tiresService = CompanyTiresService::model()->find('company_id = :company_id AND tires_service_id = :tires_service_id',[
+                                    ':company_id' => $model->partner->id,
+                                    ':tires_service_id' => $scopeList['description'][$i],
+                                ]);
+                                if ($tiresService && $tiresService->price) {
+                                    $scope->expense = $tiresService->price;
+                                } else {
+                                    $scope->expense = abs($scopeList['expense'][$i]);
+                                }
+                                $tiresService = CompanyTiresService::model()->find('company_id = :company_id AND tires_service_id = :tires_service_id',[
+                                    ':company_id' => $model->client->id,
+                                    ':tires_service_id' => $scopeList['description'][$i],
+                                ]);
+                                if ($tiresService && $tiresService->price) {
+                                    $scope->income = $tiresService->price;
+                                } else {
+                                    $scope->income = 1.2 * abs($scopeList['expense'][$i]);
+                                }
+                            }
+                            if (!$scope->save()) {
+                                print_r($scope->getErrors());
+                                die;
+                            }
                         }
-                        $scope->description = $scopeList['description'][$i];
-                        $scope->amount = $scopeList['amount'][$i];
-                        $scope->save();
+
+                        $totalExpense += $scope->expense * $scope->amount;
+                        $totalIncome += $scope->income * $scope->amount;
                     }
                 }
                 foreach ($oldScopes as $scopeId) {
@@ -302,6 +335,11 @@ class ActController extends Controller
                     }
                 }
 
+                $model->expense = $totalExpense;
+                $model->income = $totalIncome;
+            }
+
+            if ($model->save()) {
                 return $this->redirect(isset($_POST['returnUrl']) && $_POST['returnUrl'] ? $_POST['returnUrl'] : Yii::app()->createUrl('act/carwash'));
             }
         }
