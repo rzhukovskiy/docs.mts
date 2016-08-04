@@ -72,7 +72,7 @@ $form = $this->beginWidget('CActiveForm', array(
         </span>
     </div>
 
-    <?php if($model->partner->type == Company::CARWASH_TYPE) { ?>
+    <?php if($model->service == Company::CARWASH_TYPE) { ?>
         <div class="row">
             <?=$form->label($model, 'partner_service'); ?>
             <span class="field">
@@ -100,8 +100,8 @@ $form = $this->beginWidget('CActiveForm', array(
 
     <?php if(
         Yii::app()->user->checkAccess(User::ADMIN_ROLE)
-        && $model->partner->type != Company::SERVICE_TYPE
-        && $model->partner->type != Company::TIRES_TYPE
+        && $model->service != Company::SERVICE_TYPE
+        && $model->service != Company::TIRES_TYPE
     ) { ?>
         <div class="row">
             <?=$form->label($model, 'expense'); ?>
