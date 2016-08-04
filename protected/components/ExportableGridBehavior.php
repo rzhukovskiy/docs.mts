@@ -649,13 +649,35 @@ class ExportableGridBehavior extends CBehavior
             $companyWorkSheet->mergeCells("E$row:F$row");
             $companyWorkSheet->setCellValue("E$row", "Заказчик");
 
-            $row++; $row++;
+            $row++;
+            //подпись
+            $signImage = imagecreatefromjpeg('files/sign.jpg');
+            $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+            $objDrawing->setName('Sample image');
+            $objDrawing->setDescription('Sample image');
+            $objDrawing->setImageResource($signImage);
+            $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+            $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+            $objDrawing->setCoordinates("B$row");
+            $objDrawing->setWorksheet($companyWorkSheet);
+            $row++;
             $companyWorkSheet->setCellValue("B$row", "____________Мосесян Г.А.");
+
             $companyWorkSheet->mergeCells("E$row:F$row");
             $companyWorkSheet->setCellValue("E$row", "____________$company->contact");
 
             $row++; $row++;
-            $companyWorkSheet->setCellValue("B$row", "М.П.");
+            //печать
+            $gdImage = imagecreatefromjpeg('files/post.jpg');
+            $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+            $objDrawing->setName('Sample image');
+            $objDrawing->setDescription('Sample image');
+            $objDrawing->setImageResource($gdImage);
+            $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+            $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+            $objDrawing->setCoordinates("B$row");
+            $objDrawing->setWorksheet($companyWorkSheet);
+
             $companyWorkSheet->setCellValue("E$row", "М.П.");
         } else {
             $row++;
@@ -729,22 +751,40 @@ class ExportableGridBehavior extends CBehavior
                 $companyWorkSheet->setCellValue("G$row", "Исполнитель");
             }
 
-            $row++; $row++;
+
+            $row++;
+            //подпись
+            $signImage = imagecreatefromjpeg('files/sign.jpg');
+            $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+            $objDrawing->setName('Sample image');
+            $objDrawing->setDescription('Sample image');
+            $objDrawing->setImageResource($signImage);
+            $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+            $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+            $objDrawing->setCoordinates("B$row");
+            $objDrawing->setWorksheet($companyWorkSheet);
+            $row++;
+
             $companyWorkSheet->mergeCells("B$row:E$row");
             $companyWorkSheet->mergeCells("G$row:I$row");
             if($company->is_split) {
                 $companyWorkSheet->mergeCells("G$row:J$row");
             }
-            if ($this->showCompany) {
-                $companyWorkSheet->setCellValue("B$row", "____________Мосесян Г.А.");
-                $companyWorkSheet->setCellValue("G$row", "____________$company->contact");
-            } else {
-                $companyWorkSheet->setCellValue("B$row", "____________Мосесян Г.А.");
-                $companyWorkSheet->setCellValue("G$row", "____________$company->contact");
-            }
+            $companyWorkSheet->setCellValue("B$row", "____________Мосесян Г.А.");
+            $companyWorkSheet->setCellValue("G$row", "____________$company->contact");
 
             $row++; $row++;
-            $companyWorkSheet->setCellValue("C$row", "М.П.");
+            //печать
+            $gdImage = imagecreatefromjpeg('files/post.jpg');
+            $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+            $objDrawing->setName('Sample image');
+            $objDrawing->setDescription('Sample image');
+            $objDrawing->setImageResource($gdImage);
+            $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+            $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+            $objDrawing->setCoordinates("B$row");
+            $objDrawing->setWorksheet($companyWorkSheet);
+
             $companyWorkSheet->setCellValue("G$row", "М.П.");
         }
 
@@ -985,6 +1025,16 @@ class ExportableGridBehavior extends CBehavior
         $row++;
         $companyWorkSheet->mergeCells("B$row:E$row");
         $companyWorkSheet->setCellValue("B$row", 'Мосесян Г.А.');
+        //подпись
+        $signImage = imagecreatefromjpeg('files/sign.jpg');
+        $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+        $objDrawing->setName('Sample image');
+        $objDrawing->setDescription('Sample image');
+        $objDrawing->setImageResource($signImage);
+        $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+        $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+        $objDrawing->setCoordinates("C$row");
+        $objDrawing->setWorksheet($companyWorkSheet);
 
         //saving document
         $path = "acts/" . date('m-Y', $this->time);
