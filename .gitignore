@@ -1,0 +1,6 @@
+/index.php
+assets
+protected/runtime
+.idea/*
+.idea/docs.mts.iml
+test-db.php
