@@ -549,7 +549,7 @@ class Act extends CActiveRecord
                 $hasError = !$this->income;
                 break;
             case 'check':
-                $hasError = (!$this->check || !$this->check_image) && $this->partner->type == Company::CARWASH_TYPE;
+                $hasError = (!$this->check || !$this->check_image) && $this->service == Company::CARWASH_TYPE;
                 break;
             case 'card':
                 $hasError = !isset($this->card) || (isset($this->car->company_id) && $this->card->company_id != $this->car->company_id);
