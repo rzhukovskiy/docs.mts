@@ -31,6 +31,20 @@ tr.highlight td, .stdtable tbody tr.highlight:hover td { background: #75A3CC; co
     background-color: #3071a9;
 }
 
+.go-to-bottom {
+    position: fixed;
+    bottom: 2em;
+    right: 40px;
+    text-decoration: none;
+    color: #000000;
+    background-color: #428bca;
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: 0.8;
+    padding: 1em;
+    display: none;
+}
+
 .ui-autocomplete.ui-widget-content {
     background: #fff;
     color: #000;
