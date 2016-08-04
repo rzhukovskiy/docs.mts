@@ -256,6 +256,7 @@ class Car extends CActiveRecord
                     $name   = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
                     $number = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
                     $type   = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
+                    $is_infected = $worksheet->getCellByColumnAndRow(3, $row)->getValue();
 
                     if (
                         PHPExcel_Cell_DefaultValueBinder::dataTypeForValue($name) == PHPExcel_Cell_DataType::TYPE_STRING
@@ -292,6 +293,10 @@ class Car extends CActiveRecord
                         if ($mark->save()) {
                             $car->mark_id = $mark->id;
                         }
+                    }
+
+                    if (PHPExcel_Cell_DefaultValueBinder::dataTypeForValue($is_infected) == PHPExcel_Cell_DataType::TYPE_STRING) {
+                        $car->is_infected = $is_infected;
                     }
 
                     $car->save();

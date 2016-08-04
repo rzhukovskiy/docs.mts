@@ -110,11 +110,8 @@ class Card extends CActiveRecord
             } else {
                 $existed = Card::model()->find('number = :number', [':number' => $this->number]);
                 if ($existed) {
-                    if ($existed->cardCompany->is_deleted) {
-                        $existed->company_id = $this->company_id;
-                        $existed->save();
-                    }
-                    return false;
+                    Act::model()->updateAll(['is_fixed' => 1], 'card_id = :card_id', [':card_id' => $existed->id]);
+                    $this->id = $existed->id;
                 }
             }
         }
