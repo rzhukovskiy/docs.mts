@@ -52,6 +52,8 @@ class CompanyController extends Controller
     {
         $model = Company::model()->findByPk((int)$id);
 
+        $carByTypes = Car::getCountCarsByTypes($model->id);
+
         $carModel = new Car();
         $carModel->company_id = $model->id;
 
@@ -94,6 +96,7 @@ class CompanyController extends Controller
             'tiresServiceList' => $tiresServiceList,
             'typeList' => Type::model()->findAll(),
             'serviceList' => TiresService::model()->findAll(['condition' => 'is_fixed = 1', 'order' => 'pos']),
+            'carByTypes' => $carByTypes,
         ));
     }
 
