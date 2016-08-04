@@ -14,11 +14,19 @@ $this->tabs = array(
 
 $this->renderPartial('_form', array('model' => $model));
 
-$this->renderPartial('/price/_list', array('model' => $model, 'priceList' => $priceList));
+$this->renderPartial('/price/_list', array(
+    'model' => $model,
+    'priceList' => $priceList,
+    'title' => 'Редактировать прайс по мойке',
+));
 $this->renderPartial('/price/_form', array('model' => $priceList));
 echo "<br />";
 
-$this->renderPartial('/company-tires-service/_list', array('model' => $model, 'priceList' => $tiresServiceList));
+$this->renderPartial('/company-tires-service/_list', array(
+    'model' => $model,
+    'priceList' => $tiresServiceList,
+    'title' => 'Редактировать прайс по шиномонтажу',
+));
 $this->renderPartial('/company-tires-service/_form', array(
     'company' => $model,
     'typeList' => $typeList,
