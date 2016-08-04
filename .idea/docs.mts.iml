@@ -7,10 +7,12 @@
     <orderEntry type="module-library">
       <library name="PHP">
         <CLASSES>
-          <root url="file://$MODULE_DIR$/../../../../yii1.1.17/framework" />
+          <root url="file:///Applications/MAMP/bin/php/php5.6.7/lib/php" />
+          <root url="file://$MODULE_DIR$/../silex.test/vendor" />
         </CLASSES>
         <SOURCES>
-          <root url="file://$MODULE_DIR$/../../../../yii1.1.17/framework" />
+          <root url="file:///Applications/MAMP/bin/php/php5.6.7/lib/php" />
+          <root url="file://$MODULE_DIR$/../silex.test/vendor" />
         </SOURCES>
       </library>
     </orderEntry>

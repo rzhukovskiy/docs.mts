@@ -6,7 +6,7 @@ if(!function_exists('mb_ucfirst')) {
     }
 }
 $config = dirname(__FILE__) . '/protected/config/main.php';
-$yii = '../../framework/yii.php';
+$yii = '../yii-1.1.17.467ff50/framework/yii.php';
 
 if ($_SERVER['HTTP_HOST'] == 'docs.mts') {
     $config = dirname(__FILE__) . '/protected/config/test.php';

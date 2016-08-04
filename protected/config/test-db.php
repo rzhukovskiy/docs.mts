@@ -1,9 +1,9 @@
 <?php
 return array(
-    'connectionString' => 'mysql:host=localhost;dbname=mts',
+    'connectionString' => 'mysql:host=localhost;dbname=manage-mts',
     'emulatePrepare' => true,
     'username' => 'root',
-    'password' => '',
+    'password' => 'password',
     'charset' => 'utf8',
     'tablePrefix' => 'mts_',
     'enableProfiling' => true,
