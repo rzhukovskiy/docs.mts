@@ -120,7 +120,7 @@ class Car extends CActiveRecord
         $criteria->compare('car.company_id', $category);
         $criteria->group = 'car.type_id';
 
-        return new CActiveDataProvider(self::class, array(
+        return new CActiveDataProvider(__CLASS__, array(
             'criteria' => $criteria,
             'pagination' => false,
         ));
