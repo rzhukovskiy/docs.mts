@@ -59,6 +59,12 @@ class WMenu extends CWidget
                     'role'   => User::CLIENT_ROLE,
                     'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) || Yii::app()->user->model->company->type == Company::COMPANY_TYPE,
                 ),
+                'carCount' => array(
+                    'title'  => 'Кол-во ТС',
+                    'class'  => 'empty',
+                    'action' => 'list',
+                    'role'   => User::CLIENT_ROLE
+                ),
                 'stat' => array(
                     'title'  => Yii::app()->user->role == User::ADMIN_ROLE ? 'Статистика партнеров' : 'Доходы',
                     'class'  => 'empty',
