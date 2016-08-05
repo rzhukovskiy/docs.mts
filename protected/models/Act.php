@@ -406,6 +406,11 @@ class Act extends CActiveRecord
         return $this;
     }
 
+    /**
+     * Выбор ошибочных актов
+     *
+     * @return $this
+     */
     public function withErrors()
     {
         $criteria = new CDbCriteria();

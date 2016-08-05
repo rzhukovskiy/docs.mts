@@ -4,7 +4,7 @@
  * @var $model Act
  * @var $form CActiveForm
  */
-$provider = $model->withErrors()->search();
+
 $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'act-grid',
     'htmlOptions' => array('class' => 'my-grid'),
