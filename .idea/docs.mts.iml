@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/assets" />
+      <excludeFolder url="file://$MODULE_DIR$/protected/runtime" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library name="PHP">
         <CLASSES>
           <root url="file:///Applications/MAMP/bin/php/php5.6.7/lib/php" />
-          <root url="file://$MODULE_DIR$/../silex.test/vendor" />
         </CLASSES>
         <SOURCES>
           <root url="file:///Applications/MAMP/bin/php/php5.6.7/lib/php" />
-          <root url="file://$MODULE_DIR$/../silex.test/vendor" />
         </SOURCES>
       </library>
     </orderEntry>
