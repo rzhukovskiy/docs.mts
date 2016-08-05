@@ -12,6 +12,14 @@ if ($_SERVER['HTTP_HOST'] == 'docs.mts') {
     $config = dirname(__FILE__) . '/protected/config/test.php';
 }
 
+/**
+ * Для локальной разработки hello.omny
+ */
+if ($_SERVER['HTTP_HOST'] == 'docs-mts.dev') {
+    $config = dirname(__FILE__) . '/protected/config/test-hello.omny.php';
+    $yii = dirname(__FILE__) . '/vendor/yiisoft/yii/framework/yii.php';
+}
+
 if (strpos($_SERVER['HTTP_HOST'], 'demo') !== false) {
     $config = dirname(__FILE__) . '/protected/config/demo.php';
 }

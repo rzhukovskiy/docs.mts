@@ -1,12 +1,17 @@
+<?php
+    /**
+     * @var $this CompanyController
+     * @var $model Company
+     * @var $priceList Price
+     * @var $title null|string
+     */
+    $viewTitle = empty($title) ? 'Редактировать прайс' : $title;
+?>
 <div class="contenttitle radiusbottom0">
-    <h2 class="table"><span>Редактировать прайс</span></h2>
+    <h2 class="table"><span><?php echo $viewTitle; ?></span></h2>
 </div>
 <?php
-/**
- * @var $this CompanyController
- * @var $model Company
- * @var $priceList Price
- */
+
 $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'company-grid',
     'htmlOptions' => array('class' => 'my-grid'),

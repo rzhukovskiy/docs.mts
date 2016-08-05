@@ -40,7 +40,7 @@ class Card extends CActiveRecord
     {
         return array(
             array('company_id, number', 'required'),
-            array('id, number, type, active, create_date', 'safe', 'on' => 'search'),
+            array('id, number, type, active, create_date, cardCompany', 'safe', 'on' => 'search'),
         );
     }
 
@@ -61,16 +61,19 @@ class Card extends CActiveRecord
         // should not be searched.
 
         $criteria = new CDbCriteria;
+        $criteria->with = array('cardCompany');
 
         if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $criteria->with = ['cardCompany'];
             $criteria->compare('company_id', Yii::app()->user->model->company_id);
             $criteria->compare('cardCompany.parent_id', Yii::app()->user->model->company_id, false, 'OR');
         }
+
         $criteria->compare('id', $this->id);
         $criteria->compare('number', $this->number);
         $criteria->compare('company_id', $this->company_id);
         $criteria->compare('active', $this->active);
+
+        $criteria->compare('cardCompany.name', $this->cardCompany, true);
 
         $sort = new CSort;
         $sort->defaultOrder = 'company_id, number';
@@ -90,6 +93,7 @@ class Card extends CActiveRecord
             'company_id' => 'Компания',
             'active' => 'Active',
             'create_date' => 'Create Date',
+            'card_company' => 'Компания',
         );
     }
 

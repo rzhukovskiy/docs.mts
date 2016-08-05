@@ -25,6 +25,8 @@ class Car extends CActiveRecord
     public $month;
     public $external;
 
+    public $cars_count;
+
     public static $periodList = array('все время', 'месяц', 'квартал', 'полгода', 'год');
     /**
      * Returns the static model of the specified AR class.
@@ -94,6 +96,32 @@ class Car extends CActiveRecord
 
         return new CActiveDataProvider(get_class($this), array(
             'criteria' => $this->getDbCriteria(),
+            'pagination' => false,
+        ));
+    }
+
+    /**
+     * Возвращает кол-во типов ТС для компании
+     *
+     * @param $category
+     * @return CActiveDataProvider
+     */
+    public static function getCountCarsByTypes( $category )
+    {
+        /**
+         * select count(c.id), t.name from mts_car as c
+         * left join mts_type as t on c.type_id = t.id
+         * where c.company_id=$company group by c.type_id
+         */
+        $criteria = new CDbCriteria;
+        $criteria->alias = 'car';
+        $criteria->select = 'count(car.id) as cars_count, car.type_id, type.name';
+        $criteria->join = 'INNER JOIN mts_type as type ON car.type_id = type.id';
+        $criteria->compare('car.company_id', $category);
+        $criteria->group = 'car.type_id';
+
+        return new CActiveDataProvider(__CLASS__, array(
+            'criteria' => $criteria,
             'pagination' => false,
         ));
     }

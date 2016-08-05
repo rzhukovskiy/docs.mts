@@ -12,6 +12,11 @@ $this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
     'selector' => '.my-grid',
     'words' => $attributes
 ));
+?>
+    <div class="contenttitle radiusbottom0">
+        <h2 class="table"><span>Список ТС</span></h2>
+    </div>
+<?php
 $this->widget('zii.widgets.grid.CGridView', array(
     'afterAjaxUpdate' => 'function(id, data){searchHighlight(id, data);}',
     'id' => 'car-grid',

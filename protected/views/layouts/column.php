@@ -11,13 +11,9 @@
 </div><!--mainleft-->
 <div class="maincontent noright">
     <div class="maincontentinner">
-        <?php if (!empty($this->tabs)) { ?>
-            <ul class="maintabmenu">
-                <?php foreach ($this->tabs as $key => $value) { if(!isset($value['role']) || Yii::app()->user->checkAccess($value['role'])) { ?>
-                    <li<?php if (Yii::app()->controller->action->id == $key) { ?> class="current"<?php } ?>><a href="<?php echo $value['url']; ?>"><?php echo $value['name']; ?></a></li>
-                <?php } } ?>
-            </ul><!--maintabmenu-->
-        <?php } ?>
+        <?php if (!empty($this->tabs))
+            $this->widget('WTabsMenu', array('items' => $this->tabs));
+        ?>
         <div class="content">
             <?=$content; ?>
         </div><!--content-->

@@ -47,8 +47,10 @@ $(document).ready(function() {
     $(window).scroll(function() {
         if ($(this).scrollTop() > offset) {
             $('.back-to-top').fadeIn(duration);
+            $('.go-to-bottom').fadeOut(duration);
         } else {
             $('.back-to-top').fadeOut(duration);
+            $('.go-to-bottom').fadeIn(duration);
         }
     });
 
@@ -56,7 +58,13 @@ $(document).ready(function() {
         event.preventDefault();
         $('html, body').animate({scrollTop: 0}, duration);
         return false;
-    })
+    });
+
+    $('.go-to-bottom').click(function(event) {
+        event.preventDefault();
+        $('html, body').animate({scrollTop: $(document).height()}, duration);
+        return false;
+    });
 
     $('body').on('change','#act-grid select', function(e) {
         var value = $(this).val();

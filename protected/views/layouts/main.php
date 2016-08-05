@@ -16,6 +16,7 @@
             </div><!--mainwrapperinner-->
         </div>
         <div class="overlay"></div>
+        <a href="#" class="go-to-bottom">Вниз</a>
         <a href="#" class="back-to-top">Наверх</a>
     </body>
 </html>

@@ -1,0 +1,8 @@
+assets
+protected/runtime
+.idea/*
+.idea/docs.mts.iml
+vendor
+composer.*
+acts
+protected/extensions/yii2-debug

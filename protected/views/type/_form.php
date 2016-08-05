@@ -1,5 +1,5 @@
 <div class="contenttitle radiusbottom0">
-    <h2 class="table"><span>Добавить марку ТС</span></h2>
+    <h2 class="table"><span>Добавить вид ТС</span></h2>
 </div>
 <?php
 /**

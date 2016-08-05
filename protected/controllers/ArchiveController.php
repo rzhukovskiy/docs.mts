@@ -41,17 +41,21 @@ class ArchiveController extends Controller
         ));
     }
 
-    public function actionError()
+    public function actionError($type = null)
     {
         $model = new Act('search');
-        $model->unsetAttributes();
+        $model->companyType = $type;
+        $provider = $model->withErrors()->search();
 
-        if (isset($_GET['Act'])) {
-            $model->attributes = $_GET['Act'];
-        }
+//        Если нужно пользоваться фильтром для поиска по таблице раскоментировать
+//        $model->unsetAttributes();
+//        if (isset($_GET['Act'])) {
+//            $model->attributes = $_GET['Act'];
+//        }
 
         $this->render('error', array(
             'model' => $model,
+            'provider' => $provider,
         ));
     }
 
