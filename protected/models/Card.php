@@ -107,12 +107,13 @@ class Card extends CActiveRecord
                     $card->save();
                 }
                 $this->number = intval($numPointList[1]);
-            } else {
-                $existed = Card::model()->find('number = :number', [':number' => $this->number]);
-                if ($existed) {
-                    Act::model()->updateAll(['is_fixed' => 1], 'card_id = :card_id', [':card_id' => $existed->id]);
-                    $this->id = $existed->id;
-                }
+            }
+            $existed = Card::model()->find('number = :number', [':number' => $this->number]);
+            if ($existed) {
+                Act::model()->updateAll(['is_fixed' => 1], 'card_id = :card_id', [':card_id' => $existed->id]);
+                $existed->company_id = $this->company_id;
+                $existed->save();
+                return false;
             }
         }
         return true;

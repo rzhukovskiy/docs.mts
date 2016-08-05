@@ -193,7 +193,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
                 'view' => array(
                     'label' => '',
                     'imageUrl' => false,
-                    'url' => 'Yii::app()->createUrl("/archive/sign", array("id" => $data->id))',
+                    'url' => 'Yii::app()->createUrl("/archive/sign", ["id" => $data->id, "showCompany" => 1])',
                     'options' => array('class' => 'view')
                 ),
             ),

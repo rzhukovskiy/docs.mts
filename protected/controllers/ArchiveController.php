@@ -13,7 +13,7 @@ class ArchiveController extends Controller
     public function actionSign($id)
     {
         $model = Act::model()->findByPk((int)$id);
-        $model->companyType = $model->partner->type;
+        $model->showCompany = Yii::app()->getRequest()->getParam('showCompany', false);
 
         $this->render("sign", array(
             'model' => $model

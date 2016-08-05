@@ -92,6 +92,7 @@ class ExportableGridBehavior extends CBehavior
 
         $cnt = 0;
         $shts = 2;
+        $files = 0;
         foreach ($dataList as $data) {
             $endDate = date_create($data->service_date);
             $startDate = clone($endDate);
@@ -114,12 +115,30 @@ class ExportableGridBehavior extends CBehavior
             $cnt++;
 
             if ($cnt == 4) {
-                $newCompanyWorkSheet = $companyWorkSheet->copy();
-                $newCompanyWorkSheet->setTitle('Лист ' . $shts);
-                $this->objPHPExcel->addSheet($newCompanyWorkSheet);
-                $companyWorkSheet = $newCompanyWorkSheet;
-                $cnt = 0;
-                $shts++;
+                if ($shts > 50) {
+                    $files++;
+                    //saving document
+                    $path = "acts/" . date('m-Y', $this->time);
+                    if (!is_dir($path)) {
+                        mkdir($path, 0755, 1);
+                    }
+                    $filename = "Справка $company->name от " . date('m-Y', $this->time) . "-$files.xls";
+                    $fullFilename = str_replace(' ', '_', "$path/" . str_replace('"', '', "$filename"));
+                    $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
+                    $objWriter->save($fullFilename);
+                    if ($zip) $zip->addFile($fullFilename, iconv('utf-8', 'cp866', $filename));
+
+                    $this->objPHPExcel = $objReader->load($fileName);
+                    $this->objPHPExcel->setActiveSheetIndex(0);
+                    $companyWorkSheet = $this->objPHPExcel->getActiveSheet();
+                } else {
+                    $newCompanyWorkSheet = $companyWorkSheet->copy();
+                    $newCompanyWorkSheet->setTitle('Лист ' . $shts);
+                    $this->objPHPExcel->addSheet($newCompanyWorkSheet);
+                    $companyWorkSheet = $newCompanyWorkSheet;
+                    $cnt = 0;
+                    $shts++;
+                }
             }
         }
 
@@ -128,7 +147,7 @@ class ExportableGridBehavior extends CBehavior
         if (!is_dir($path)) {
             mkdir($path, 0755, 1);
         }
-        $filename = "Справка $company->name от " . date('m-Y', $this->time) . ".xls";
+        $filename = $files ? "Справка $company->name от " . date('m-Y', $this->time) . "-" . ++$files . ".xls" : "Справка $company->name от " . date('m-Y', $this->time) . ".xls";
         $fullFilename = str_replace(' ', '_', "$path/" . str_replace('"', '', "$filename"));
         $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
         $objWriter->save($fullFilename);
@@ -311,9 +330,9 @@ class ExportableGridBehavior extends CBehavior
                     $companyWorkSheet->setCellValue("D$row", "№ КАРТЫ");
                     $companyWorkSheet->setCellValue("F$row", "МАРКА ТС");
                     if ($this->showCompany) {
-                        $companyWorkSheet->mergeCells("G$row:H$row");
+                        $companyWorkSheet->mergeCells("H$row:I$row");
                         $companyWorkSheet->setCellValue("G$row", "ГОСНОМЕР");
-                        $companyWorkSheet->setCellValue("I$row", "ГОРОД");
+                        $companyWorkSheet->setCellValue("H$row", "ГОРОД");
                     } else {
                         $companyWorkSheet->mergeCells("G$row:I$row");
                         $companyWorkSheet->setCellValue("G$row", "ГОСНОМЕР");
@@ -341,9 +360,9 @@ class ExportableGridBehavior extends CBehavior
                     $companyWorkSheet->setCellValueByColumnAndRow(3, $row, isset($data->card) ? $data->card->number : $data->card_id);
                     $companyWorkSheet->setCellValueByColumnAndRow(5, $row, isset($data->mark) ? $data->mark->name : "");
                     if ($this->showCompany) {
-                        $companyWorkSheet->mergeCells("G$row:H$row");
+                        $companyWorkSheet->mergeCells("H$row:I$row");
                         $companyWorkSheet->setCellValueByColumnAndRow(6, $row, $data->number);
-                        $companyWorkSheet->setCellValueByColumnAndRow(8, $row, $data->partner->address);
+                        $companyWorkSheet->setCellValueByColumnAndRow(7, $row, $data->partner->address);
                     } else {
                         $companyWorkSheet->mergeCells("G$row:I$row");
                         $companyWorkSheet->setCellValueByColumnAndRow(6, $row, $data->number);
@@ -649,35 +668,14 @@ class ExportableGridBehavior extends CBehavior
             $companyWorkSheet->mergeCells("E$row:F$row");
             $companyWorkSheet->setCellValue("E$row", "Заказчик");
 
-            $row++;
-            //подпись
-            $signImage = imagecreatefromjpeg('files/sign.jpg');
-            $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-            $objDrawing->setName('Sample image');
-            $objDrawing->setDescription('Sample image');
-            $objDrawing->setImageResource($signImage);
-            $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-            $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-            $objDrawing->setCoordinates("B$row");
-            $objDrawing->setWorksheet($companyWorkSheet);
-            $row++;
+            $row++; $row++;
             $companyWorkSheet->setCellValue("B$row", "____________Мосесян Г.А.");
 
             $companyWorkSheet->mergeCells("E$row:F$row");
             $companyWorkSheet->setCellValue("E$row", "____________$company->contact");
 
             $row++; $row++;
-            //печать
-            $gdImage = imagecreatefromjpeg('files/post.jpg');
-            $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-            $objDrawing->setName('Sample image');
-            $objDrawing->setDescription('Sample image');
-            $objDrawing->setImageResource($gdImage);
-            $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-            $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-            $objDrawing->setCoordinates("B$row");
-            $objDrawing->setWorksheet($companyWorkSheet);
-
+            $companyWorkSheet->setCellValue("B$row", "М.П.");
             $companyWorkSheet->setCellValue("E$row", "М.П.");
         } else {
             $row++;
@@ -752,18 +750,7 @@ class ExportableGridBehavior extends CBehavior
             }
 
 
-            $row++;
-            //подпись
-            $signImage = imagecreatefromjpeg('files/sign.jpg');
-            $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-            $objDrawing->setName('Sample image');
-            $objDrawing->setDescription('Sample image');
-            $objDrawing->setImageResource($signImage);
-            $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-            $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-            $objDrawing->setCoordinates("B$row");
-            $objDrawing->setWorksheet($companyWorkSheet);
-            $row++;
+            $row++; $row++;
 
             $companyWorkSheet->mergeCells("B$row:E$row");
             $companyWorkSheet->mergeCells("G$row:I$row");
@@ -774,17 +761,7 @@ class ExportableGridBehavior extends CBehavior
             $companyWorkSheet->setCellValue("G$row", "____________$company->contact");
 
             $row++; $row++;
-            //печать
-            $gdImage = imagecreatefromjpeg('files/post.jpg');
-            $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-            $objDrawing->setName('Sample image');
-            $objDrawing->setDescription('Sample image');
-            $objDrawing->setImageResource($gdImage);
-            $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-            $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-            $objDrawing->setCoordinates("B$row");
-            $objDrawing->setWorksheet($companyWorkSheet);
-
+            $companyWorkSheet->setCellValue("B$row", "М.П.");
             $companyWorkSheet->setCellValue("G$row", "М.П.");
         }
 
@@ -795,7 +772,7 @@ class ExportableGridBehavior extends CBehavior
         }
         if ($this->companyType == Company::SERVICE_TYPE) {
             $first = $dataList[0];
-            $filename = "Акт $company->name от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
+            $filename = "Акт $company->name - $first->number от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
         } else {
             $filename = "Акт $company->name от " . date('m-Y', $this->time) . ".xls";
         }
@@ -1025,16 +1002,6 @@ class ExportableGridBehavior extends CBehavior
         $row++;
         $companyWorkSheet->mergeCells("B$row:E$row");
         $companyWorkSheet->setCellValue("B$row", 'Мосесян Г.А.');
-        //подпись
-        $signImage = imagecreatefromjpeg('files/sign.jpg');
-        $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-        $objDrawing->setName('Sample image');
-        $objDrawing->setDescription('Sample image');
-        $objDrawing->setImageResource($signImage);
-        $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-        $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-        $objDrawing->setCoordinates("C$row");
-        $objDrawing->setWorksheet($companyWorkSheet);
 
         //saving document
         $path = "acts/" . date('m-Y', $this->time);
@@ -1043,7 +1010,7 @@ class ExportableGridBehavior extends CBehavior
         }
         if ($this->companyType == Company::SERVICE_TYPE) {
             $first = $dataList[0];
-            $filename = "Счет $company->name от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
+            $filename = "Счет $company->name - $first->number от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
         } else {
             $filename = "Счет $company->name от " . date('m-Y', $this->time) . ".xls";
         }
