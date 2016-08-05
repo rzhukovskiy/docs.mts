@@ -35,5 +35,7 @@ $this->renderPartial('/company-tires-service/_form', array(
 echo "<br />";
 
 $this->renderPartial('car/_form', array('model' => $carModel));
+?><br><?php
 $this->renderPartial('car/_types', array('carByTypes' => $carByTypes));
+?><br><?php
 $this->renderPartial('car/_list', array('model' => $carModel));

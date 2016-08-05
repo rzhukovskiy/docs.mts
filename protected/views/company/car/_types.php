@@ -20,6 +20,12 @@
             'cars_count:number:Кол-во',
             'type.name',
         ),
+        'id' => 'car-types-grid',
+        'htmlOptions' => array('class' => 'my-grid'),
+        'itemsCssClass' => 'stdtable grid',
+        'pagerCssClass' => 'dataTables_paginate paging_full_numbers',
         'emptyText' => '',
+        'cssFile' => false,
         'template' => "{items}",
+        'loadingCssClass' => false,
     ) );
