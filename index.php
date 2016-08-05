@@ -6,10 +6,18 @@ if(!function_exists('mb_ucfirst')) {
     }
 }
 $config = dirname(__FILE__) . '/protected/config/main.php';
-$yii = '../yii-1.1.17.467ff50/framework/yii.php';
+$yii = '../../framework/yii.php';
 
 if ($_SERVER['HTTP_HOST'] == 'docs.mts') {
     $config = dirname(__FILE__) . '/protected/config/test.php';
+}
+
+/**
+ * Для локальной разработки hello.omny
+ */
+if ($_SERVER['HTTP_HOST'] == 'docs-mts.dev') {
+    $config = dirname(__FILE__) . '/protected/config/test-hello.omny.php';
+    $yii = dirname(__FILE__) . '/vendor/yiisoft/yii/framework/yii.php';
 }
 
 if (strpos($_SERVER['HTTP_HOST'], 'demo') !== false) {
