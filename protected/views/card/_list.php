@@ -46,7 +46,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'text-align:center;'),
         ),
         array(
-            'name' => 'cardCompany',
+            'header' => 'Компания',
             'value' => '$data->cardCompany->name',
         ),
     ),

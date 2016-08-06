@@ -73,7 +73,7 @@ class Card extends CActiveRecord
         $criteria->compare('company_id', $this->company_id);
         $criteria->compare('active', $this->active);
 
-        $criteria->compare('cardCompany.name', $this->cardCompany, true);
+        $criteria->compare('cardCompany.name', isset($this->cardCompany->name) ? $this->cardCompany->name : $this->cardCompany, true);
 
         $sort = new CSort;
         $sort->defaultOrder = 'company_id, number';

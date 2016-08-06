@@ -211,7 +211,7 @@ class Act extends CActiveRecord
             $this->client_service = $this->partner_service;
         }
 
-        $this->client_id = isset($this->card) ? $this->card->company_id : 0;
+        $this->client_id = isset($this->card) ? $this->card->company_id : $this->client_id;
 
         if (($this->isNewRecord && !$this->income)
             || (
