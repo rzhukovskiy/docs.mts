@@ -3,22 +3,62 @@
  * @var $this CarController
  * @var $model Car
  */
-$company_id = $model->company_id;
-$attributes = array_values(array_filter(isset($_GET['Car']) ? $_GET['Car'] : array()));
-$model->unsetAttributes();
-$model->company_id = $company_id;
-echo CHtml::hiddenField('query', CJSON::encode($attributes));
-$this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
-    'selector' => '.my-grid',
-    'words' => $attributes
-));
+//$company_id = $model->company_id;
+//$attributes = array_values(array_filter(isset($_GET['Car']) ? $_GET['Car'] : array()));
+//$model->unsetAttributes();
+//$model->company_id = $company_id;
+//echo CHtml::hiddenField('query', CJSON::encode($attributes));
+//$this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
+//    'selector' => '.my-grid',
+//    'words' => $attributes
+//));
 ?>
     <div class="contenttitle radiusbottom0">
         <h2 class="table"><span>Список ТС</span></h2>
     </div>
 <?php
+    $this->widget('zii.widgets.grid.CGridView', array(
+        'id' => 'car-grid',
+        'filter' => $model,
+        'dataProvider' => $model->search(),
+        'emptyText' => '',
+        'htmlOptions' => array('class' => 'my-grid'),
+        'itemsCssClass' => 'stdtable grid',
+        'pagerCssClass' => 'dataTables_paginate paging_full_numbers',
+        'cssFile' => false,
+        'template' => "{items}",
+        'loadingCssClass' => false,
+        'columns' => array(
+            array(
+                'header' => '№',
+                'htmlOptions' => array('style' => 'width: 40px; text-align:center;'),
+                'value' => '++$row',
+            ),
+            array(
+                'name' => 'mark.name',
+                'htmlOptions' => array('style' => 'width: 100px; text-align:center;'),
+                'value' => 'isset($data->mark) ? $data->mark->name : ""',
+            ),
+            array(
+                'name' => 'number',
+                'htmlOptions' => array('style' => 'width: 100px; text-align:center;'),
+            ),
+            array(
+                'name' => 'type.name',
+                'value' => 'isset($data->type) ? $data->type->name : ""',
+                'htmlOptions' => array('style' => 'text-align:center;'),
+            ),
+            array(
+                'name' => 'is_infected',
+                'value' => '$data->is_infected ? "Да" : "Нет"',
+                'htmlOptions' => array('style' => 'width: 100px; text-align:center;'),
+
+            ),
+        )
+    ));
+    /*
 $this->widget('zii.widgets.grid.CGridView', array(
-    'afterAjaxUpdate' => 'function(id, data){searchHighlight(id, data);}',
+//    'afterAjaxUpdate' => 'function(id, data){searchHighlight(id, data);}',
     'id' => 'car-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
@@ -76,3 +116,5 @@ $this->widget('zii.widgets.grid.CGridView', array(
         )
     ),
 ));
+
+    */

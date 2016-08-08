@@ -139,16 +139,18 @@ class CompanyController extends Controller
     {
         $model = Company::model()->findByPk((int)$id);
 
-        $cardModel = new Card();
-        $cardModel->company_id = $model->id;
+        $cardNew = new Card();
+        $cardNew->company_id = $model->id;
 
+        $cardSearch = new Card('search');
         if (isset($_GET['Card'])) {
-            $cardModel->attributes = $_GET['Card'];
+            $cardSearch->attributes = $_GET['Card'];
         }
 
         $this->render('cards', array(
             'model' => $model,
-            'cardModel' => $cardModel,
+            'cardNew' => $cardNew,
+            'cardSearch' => $cardSearch,
         ));
     }
 
