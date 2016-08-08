@@ -1,20 +1,14 @@
+<?php
+    /**
+     * @var $this UserController
+     * @var $model User
+     */
+?>
 <div class="contenttitle radiusbottom0">
     <h2 class="table"><span>Пользователи</span></h2>
 </div>
 <?php
-/**
- * @var $this UserController
- * @var $model User
- */
-$attributes = array_values(array_filter($model->attributes));
-$model->unsetAttributes();
-echo CHtml::hiddenField('query', CJSON::encode($attributes));
-$this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
-    'selector' => '.my-grid',
-    'words' => $attributes
-));
 $this->widget('zii.widgets.grid.CGridView', array(
-    'afterAjaxUpdate' => 'function(id, data){searchHighlight(id, data);}',
     'id' => 'company-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
@@ -50,6 +44,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'company_id',
             'htmlOptions' => array(),
             'value' => 'isset($data->company->name) ? $data->company->name : ""',
+            'filter' => $companyListData,
         ),
         array(
             'class' => 'CButtonColumn',
