@@ -11,6 +11,7 @@
      * @var $countCarsByType int
      * @var $companyId int
      */
+
 ?>
     <div class="contenttitle radiusbottom0">
         <h2 class="table"><span>Список типов ТС</span></h2>
@@ -42,7 +43,7 @@
                     'history' => array(
                         'label' => '',
                         'imageUrl' => false,
-                        'url' => 'Yii::app()->createUrl("company/carsDetailedStatistic", array("type" => $data->type_id, "company" => ' . $companyId . '))',
+                        'url' => 'Yii::app()->createUrl("carCount/carsDetailedStatistic", array("type" => $data->type_id))',
                         'options' => array('class' => 'calendar')
                     ),
                 ),

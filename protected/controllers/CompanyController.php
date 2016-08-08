@@ -3,12 +3,12 @@
 class CompanyController extends Controller
 {
     private $type;
-    
+
     public function init()
     {
         $this->type = Yii::app()->controller->id;
     }
-    
+
     public function actionList()
     {
         $model = new Company('search');
@@ -50,9 +50,13 @@ class CompanyController extends Controller
 
     public function actionUpdate($id)
     {
-        $model = Company::model()->findByPk((int)$id);
+        $model = Company::model()
+            ->findByPk((int)$id);
 
-        $carByTypes = Car::getCountCarsByTypes($model->id);
+        $carByTypes = Car::model()
+            ->getCountCarsByTypes($model->id);
+        $countCarsByType = Car::model()
+            ->totalField($carByTypes, 'cars_count');
 
         $carModel = new Car();
         $carModel->company_id = $model->id;
@@ -97,6 +101,37 @@ class CompanyController extends Controller
             'typeList' => Type::model()->findAll(),
             'serviceList' => TiresService::model()->findAll(['condition' => 'is_fixed = 1', 'order' => 'pos']),
             'carByTypes' => $carByTypes,
+            'countCarsByType' => $countCarsByType,
+        ));
+    }
+
+    public function actionCarsDetailedStatistic( $type, $company = null )
+    {
+        $criteria = Car::model();
+        $companyModel = null;
+        if (!is_null($company)) {
+            $companyModel = Company::model()
+                ->findByPk( $company );
+            $criteria = $criteria
+                ->byCompany($company);
+        }
+
+        $typeModel = Type::model()
+            ->findByPk($type);
+
+        $criteria = $criteria
+            ->byType($type)
+            ->getDbCriteria();
+
+        $provider = new CActiveDataProvider('Car', array(
+            'criteria' => $criteria,
+            'pagination' => false,
+        ));
+
+        $this->render('cars_detailed_statistic', array(
+            'provider' => $provider,
+            'companyModel' => $companyModel,
+            'typeModel' => $typeModel,
         ));
     }
 

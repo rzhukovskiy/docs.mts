@@ -101,18 +101,14 @@ class Car extends CActiveRecord
     }
 
     /**
-     * Возвращает кол-во типов ТС для компании
-     *
-     * @param $category
-     * @return CActiveDataProvider
+     * @param null $category
+     * @return CDbCriteria $criteria
      */
-    public static function getCountCarsByTypes( $category )
+    private function carsCountByTypes( $category = null )
     {
-        /**
-         * select count(c.id), t.name from mts_car as c
-         * left join mts_type as t on c.type_id = t.id
-         * where c.company_id=$company group by c.type_id
-         */
+        if (is_null($category))
+            $category = $this->company_id;
+
         $criteria = new CDbCriteria;
         $criteria->alias = 'car';
         $criteria->select = 'count(car.id) as cars_count, car.type_id, type.name';
@@ -120,10 +116,79 @@ class Car extends CActiveRecord
         $criteria->compare('car.company_id', $category);
         $criteria->group = 'car.type_id';
 
-        return new CActiveDataProvider(__CLASS__, array(
+        return $criteria;
+    }
+
+    /**
+     * Возвращает кол-во типов ТС для компании
+     *
+     * @param $category
+     * @return CActiveDataProvider
+     */
+    public function getCountCarsByTypes( $category )
+    {
+        $criteria = $this->carsCountByTypes($category);
+
+        return new CActiveDataProvider(get_class($this), array(
             'criteria' => $criteria,
             'pagination' => false,
         ));
+    }
+
+    /**
+     * Scope for company
+     *
+     * @param $companyId
+     * @return $this
+     */
+    public function byCompany( $companyId )
+    {
+        $criteria = new CDbCriteria;
+        $criteria->compare('t.company_id', $companyId);
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        return $this;
+    }
+
+    /**
+     * Scope for type
+     *
+     * @param $typeId
+     * @return $this
+     */
+    public function byType( $typeId )
+    {
+        $criteria = new CDbCriteria;
+        $criteria->compare('t.type_id', $typeId);
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        return $this;
+    }
+
+    /**
+     * Scope for mark
+     *
+     * @param $markId
+     * @return $this
+     */
+    public function byMark( $markId )
+    {
+        $criteria = new CDbCriteria;
+        $criteria->compare('t.mark_id', $markId);
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        return $this;
+    }
+
+    public function totalField($provider, $field)
+    {
+        $total = 0;
+
+        foreach ($provider->getData() as $row) {
+            $total += $row->$field;
+        }
+
+        return number_format($total, 0, ".", " ");
     }
 
     /**
