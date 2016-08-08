@@ -16,7 +16,8 @@ class WHTMLHead extends CWidget{
         $clientScript->registerScriptFile('/js/numeral.min.js');
         $clientScript->registerScriptFile('/js/jquery/jquery.canvasjs.min.js');
 
-        
+
+        $clientScript->registerCssFile('/css/bootstrap_parts.css');
         $clientScript->registerCssFile('/css/style.css');
         $clientScript->registerCssFile('/js/jquery-ui/jquery-ui.min.css');
         $clientScript->registerCssFile('/css/style.brightblue.css');

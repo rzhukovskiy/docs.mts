@@ -294,7 +294,7 @@ button,input,select,textarea { font-size: 12px; font-family: Arial, Helvetica, s
 	border-top: 1px solid #ddd; -moz-border-radius: 2px 2px 0 0; -webkit-border-radius: 2px 2px 0 0; border-radius: 2px 2px 0 0; 
 }
 .leftmenu ul li:last-child a { -moz-border-radius: 0 0 2px 2px; -webkit-border-radius: 0 0 2px 2px; border-radius: 0 0 2px 2px; }
-.leftmenu ul li a span { display: block; padding: 8px 10px; border-left: 1px solid #eee; background: #fff; }
+.leftmenu ul li a span { display: block; padding: 8px 25px 8px 10px; border-left: 1px solid #eee; background: #fff; }
 .leftmenu ul li a:hover span { border-left: 1px solid #ddd; background: #f7f7f7; }
 .leftmenu ul li.current a { color: #fff; border: 1px solid #222; }
 .leftmenu > ul > li.current > a { background-color: #222; }

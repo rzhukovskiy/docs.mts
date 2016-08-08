@@ -7,6 +7,18 @@ class WMenu extends CWidget
     public $ticketcount;
     public $paymentcount;
     public $domaincount;
+
+    /**
+     * @var $items {
+     *      @var string $title required
+     *      @var string $class
+     *      @var string $action
+     *      @var string $role
+     *      @var string $visible
+     *      @var array $params
+     *      @var string $sufix
+     * }
+     */
     private $items;
 
     public function init()
@@ -91,9 +103,10 @@ class WMenu extends CWidget
                         : (Yii::app()->user->model->role == User::CLIENT_ROLE ? 'Услуги' : 'Архив'),
                     'class'  => 'empty',
                     'action' => Yii::app()->user->model->role == User::ADMIN_ROLE
-                        ? 'error'
+                        ? 'error?type=carwash'
                         : (Yii::app()->user->checkAccess(User::CLIENT_ROLE) || Yii::app()->user->model->company->type == Company::UNIVERSAL_TYPE ? Company::CARWASH_TYPE : Yii::app()->user->model->company->type),
                     'role'   => User::GUEST_ROLE,
+                    'sufix' => $this->getCountOfErrorActs(),
                 ),
             ]);
         }
@@ -103,7 +116,12 @@ class WMenu extends CWidget
 
     public function run()
     {
-        $this->render('menu/index');
+        $this->render('menu/index', array('items' => $this->getItems()));
     }
 
+
+    private function getCountOfErrorActs()
+    {
+        return count(Act::model()->find()->withErrors()->findAll());
+    }
 }
