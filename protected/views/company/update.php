@@ -4,6 +4,11 @@
  * @var $model Company
  * @var $carModel Car
  * @var $priceList Price
+ * @var $tiresServiceList;
+ * @var $typeList;
+ * @var $serviceList;
+ * @var $carByTypes CActiveDataProvider;
+ * @var $countCarsByType int;
  */
 
 $this->tabs = array(
@@ -32,10 +37,18 @@ $this->renderPartial('/company-tires-service/_form', array(
     'typeList' => $typeList,
     'serviceList' => $serviceList,
 ));
-echo "<br />";
+echo CHtml::tag('br');
 
 $this->renderPartial('car/_form', array('model' => $carModel));
-?><br><?php
-$this->renderPartial('car/_types', array('carByTypes' => $carByTypes));
-?><br><?php
+
+echo CHtml::tag('br');
+
+$this->renderPartial('car/_types', array(
+    'carByTypes' => $carByTypes,
+    'countCarsByType' => $countCarsByType,
+    'companyId' => $model->id,
+));
+
+echo CHtml::tag('br');
+
 $this->renderPartial('car/_list', array('model' => $carModel));
