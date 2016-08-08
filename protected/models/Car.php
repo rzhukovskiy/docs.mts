@@ -49,7 +49,7 @@ class Car extends CActiveRecord
             array('company_id, number, type_id', 'required'),
             array('number', 'unique'),
             array('is_infected, month, external, mark_id, client_id, from_date, to_date', 'safe'),
-            array('service_count, id, number, mark_id', 'safe', 'on' => 'search'),
+            array('service_count, id, type_id, is_infected, number, mark_id', 'safe', 'on' => 'search'),
         );
     }
 
@@ -82,6 +82,7 @@ class Car extends CActiveRecord
         // should not be searched.
 
         $criteria = new CDbCriteria;
+        $criteria->with = array('mark', 'type');
 
         if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
             $this->company_id = Yii::app()->user->model->company_id;
@@ -91,6 +92,7 @@ class Car extends CActiveRecord
         $criteria->compare('t.company_id', $this->company_id);
         $criteria->compare('t.mark_id', $this->mark_id);
         $criteria->compare('t.type_id', $this->type_id);
+        $criteria->compare('t.is_infected', $this->is_infected);
 
         $this->getDbCriteria()->mergeWith($criteria);
 
@@ -201,17 +203,16 @@ class Car extends CActiveRecord
         // should not be searched.
 
         $criteria = new CDbCriteria;
+        $criteria->with = ['act', 'company', 'mark', 'type'];
 
         if (!$this->company_id && !Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
             $this->company_id = Yii::app()->user->model->company_id;
         }
         if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $criteria->with = ['cardCompany'];
             $criteria->compare('company_id', Yii::app()->user->model->company_id);
             $criteria->compare('company.parent_id', Yii::app()->user->model->company_id, false, 'OR');
         }
 
-        $criteria->with = ['act', 'company'];
         $criteria->select = '*, count(act.id) as service_count';
         $criteria->group = 't.id';
         $criteria->compare('t.id', $this->id);

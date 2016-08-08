@@ -51,4 +51,10 @@ $this->renderPartial('car/_types', array(
 
 echo CHtml::tag('br');
 
-$this->renderPartial('car/_list', array('model' => $carModel));
+$this->renderPartial('car/_list', array(
+    'model' => $carModel,
+    'modelSearch' => $carSearch,
+    'companyMarks' => $companyMarks,
+    'companyTypes' => $companyTypes,
+    'companyOnOff' => $companyOnOff,
+    ));

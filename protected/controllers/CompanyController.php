@@ -52,6 +52,9 @@ class CompanyController extends Controller
     {
         $model = Company::model()
             ->findByPk((int)$id);
+        $companyMarks = $model->marks;
+        $companyTypes = $model->types;
+        $companyOnOff = $model->getOnOffs();
 
         $carByTypes = Car::model()
             ->getCountCarsByTypes($model->id);
@@ -60,6 +63,11 @@ class CompanyController extends Controller
 
         $carModel = new Car();
         $carModel->company_id = $model->id;
+
+        $carSearch = new Car('search');
+        if(isset($_GET['Car']))
+            $carSearch->attributes = $_GET['Car'];
+        $carSearch->company_id = $model->id;
 
         $priceList = new Price('search');
         $priceList->company_id = $model->id;
@@ -96,12 +104,16 @@ class CompanyController extends Controller
         $this->render('update', array(
             'model'            => $model,
             'carModel'         => $carModel,
+            'carSearch'        => $carSearch,
             'priceList'        => $priceList,
             'tiresServiceList' => $tiresServiceList,
             'typeList' => Type::model()->findAll(),
             'serviceList' => TiresService::model()->findAll(['condition' => 'is_fixed = 1', 'order' => 'pos']),
             'carByTypes' => $carByTypes,
             'countCarsByType' => $countCarsByType,
+            'companyMarks' => $companyMarks,
+            'companyTypes' => $companyTypes,
+            'companyOnOff' => $companyOnOff,
         ));
     }
 
