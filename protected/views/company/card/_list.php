@@ -27,7 +27,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'name' => 'company_id',
             'htmlOptions' => array(),
             'value' => '$data->cardCompany->name',
-            'filter' => CHtml::listData(Company::model()->findAll('type = :type', array(':type' => Company::COMPANY_TYPE)), 'id', 'name'),
+            'filter' => false,
         ),
         array(
             'name' => 'number',
