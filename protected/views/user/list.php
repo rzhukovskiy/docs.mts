@@ -9,4 +9,7 @@ foreach(Company::$listType as $service => $name) {
 }
 
 $this->renderPartial('_form', array('model'=>$model));
-$this->renderPartial('_list', array('model'=>$model));
+$this->renderPartial('_list', array(
+    'model'=>$model,
+    'companyListData' => $companyListData,
+    ));

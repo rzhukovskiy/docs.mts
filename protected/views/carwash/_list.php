@@ -1,20 +1,14 @@
+<?php
+    /**
+     * @var $this CompanyController
+     * @var $model Company
+     */
+?>
 <div class="contenttitle radiusbottom0">
     <h2 class="table"><span>Мойки</span></h2>
 </div>
 <?php
-/**
- * @var $this CompanyController
- * @var $model Company
- */
-$attributes = array_values(array_filter($model->attributes));
-$model->unsetAttributes(['address', 'name']);
-echo CHtml::hiddenField('query', CJSON::encode($attributes));
-$this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
-    'selector' => '.my-grid',
-    'words' => $attributes
-));
 $this->widget('zii.widgets.grid.CGridView', array(
-    'afterAjaxUpdate' => 'function(id, data){searchHighlight(id, data);}',
     'id' => 'company-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',

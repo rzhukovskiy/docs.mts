@@ -49,7 +49,7 @@ class Car extends CActiveRecord
             array('company_id, number, type_id', 'required'),
             array('number', 'unique'),
             array('is_infected, month, external, mark_id, client_id, from_date, to_date', 'safe'),
-            array('service_count, id, number, mark_id', 'safe', 'on' => 'search'),
+            array('service_count, id, type_id, is_infected, number, mark_id', 'safe', 'on' => 'search'),
         );
     }
 
@@ -82,6 +82,7 @@ class Car extends CActiveRecord
         // should not be searched.
 
         $criteria = new CDbCriteria;
+        $criteria->with = array('mark', 'type');
 
         if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
             $this->company_id = Yii::app()->user->model->company_id;
@@ -91,6 +92,7 @@ class Car extends CActiveRecord
         $criteria->compare('t.company_id', $this->company_id);
         $criteria->compare('t.mark_id', $this->mark_id);
         $criteria->compare('t.type_id', $this->type_id);
+        $criteria->compare('t.is_infected', $this->is_infected);
 
         $this->getDbCriteria()->mergeWith($criteria);
 
@@ -101,18 +103,14 @@ class Car extends CActiveRecord
     }
 
     /**
-     * Возвращает кол-во типов ТС для компании
-     *
-     * @param $category
-     * @return CActiveDataProvider
+     * @param null $category
+     * @return CDbCriteria $criteria
      */
-    public static function getCountCarsByTypes( $category )
+    private function carsCountByTypes( $category = null )
     {
-        /**
-         * select count(c.id), t.name from mts_car as c
-         * left join mts_type as t on c.type_id = t.id
-         * where c.company_id=$company group by c.type_id
-         */
+        if (is_null($category))
+            $category = $this->company_id;
+
         $criteria = new CDbCriteria;
         $criteria->alias = 'car';
         $criteria->select = 'count(car.id) as cars_count, car.type_id, type.name';
@@ -120,10 +118,79 @@ class Car extends CActiveRecord
         $criteria->compare('car.company_id', $category);
         $criteria->group = 'car.type_id';
 
-        return new CActiveDataProvider(__CLASS__, array(
+        return $criteria;
+    }
+
+    /**
+     * Возвращает кол-во типов ТС для компании
+     *
+     * @param $category
+     * @return CActiveDataProvider
+     */
+    public function getCountCarsByTypes( $category )
+    {
+        $criteria = $this->carsCountByTypes($category);
+
+        return new CActiveDataProvider(get_class($this), array(
             'criteria' => $criteria,
             'pagination' => false,
         ));
+    }
+
+    /**
+     * Scope for company
+     *
+     * @param $companyId
+     * @return $this
+     */
+    public function byCompany( $companyId )
+    {
+        $criteria = new CDbCriteria;
+        $criteria->compare('t.company_id', $companyId);
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        return $this;
+    }
+
+    /**
+     * Scope for type
+     *
+     * @param $typeId
+     * @return $this
+     */
+    public function byType( $typeId )
+    {
+        $criteria = new CDbCriteria;
+        $criteria->compare('t.type_id', $typeId);
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        return $this;
+    }
+
+    /**
+     * Scope for mark
+     *
+     * @param $markId
+     * @return $this
+     */
+    public function byMark( $markId )
+    {
+        $criteria = new CDbCriteria;
+        $criteria->compare('t.mark_id', $markId);
+        $this->getDbCriteria()->mergeWith($criteria);
+
+        return $this;
+    }
+
+    public function totalField($provider, $field)
+    {
+        $total = 0;
+
+        foreach ($provider->getData() as $row) {
+            $total += $row->$field;
+        }
+
+        return number_format($total, 0, ".", " ");
     }
 
     /**
@@ -136,17 +203,16 @@ class Car extends CActiveRecord
         // should not be searched.
 
         $criteria = new CDbCriteria;
+        $criteria->with = ['act', 'company', 'mark', 'type'];
 
         if (!$this->company_id && !Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
             $this->company_id = Yii::app()->user->model->company_id;
         }
         if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
-            $criteria->with = ['cardCompany'];
             $criteria->compare('company_id', Yii::app()->user->model->company_id);
             $criteria->compare('company.parent_id', Yii::app()->user->model->company_id, false, 'OR');
         }
 
-        $criteria->with = ['act', 'company'];
         $criteria->select = '*, count(act.id) as service_count';
         $criteria->group = 't.id';
         $criteria->compare('t.id', $this->id);

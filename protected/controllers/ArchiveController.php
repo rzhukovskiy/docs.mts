@@ -53,9 +53,22 @@ class ArchiveController extends Controller
 //            $model->attributes = $_GET['Act'];
 //        }
 
+        // Генерируем табы навигации
+        $currentTitle = 'Все ошибочные';
+        foreach ( Company::$listService as $service => $name ) {
+            $this->tabs[ $model->companyType != $service ? $service : 'list' ] = array(
+                'url' => Yii::app()->createUrl( "archive/error?type=$service" ),
+                'name' => $name,
+                'active' => ( $type == $service ),
+                'sufix' => $this->getCountActsByType($service),
+            );
+            $currentTitle = ($type == $service) ? $name : $currentTitle ;
+        }
+
         $this->render('error', array(
             'model' => $model,
             'provider' => $provider,
+            'title' => $currentTitle,
         ));
     }
 
@@ -138,5 +151,16 @@ class ArchiveController extends Controller
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
+    }
+
+    private function getCountActsByType ($type)
+    {
+        $acts = Act::model()
+            ->find()
+            ->byType($type)
+            ->withErrors()
+            ->findAll();
+
+        return count($acts);
     }
 }

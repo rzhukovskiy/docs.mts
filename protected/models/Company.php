@@ -280,4 +280,41 @@ class Company extends CActiveRecord
 
         return false;
     }
+
+    public function getMarks()
+    {
+        $criteria = new CDbCriteria();
+
+        $criteria->with = 'mark';
+        $criteria->select = 'mark.id as id, mark.name as name';
+        $criteria->compare('company_id', $this->id);
+
+        $result = Car::model()
+            ->findAll($criteria);
+
+        return $result;
+    }
+
+    public function getTypes()
+    {
+        $criteria = new CDbCriteria();
+
+        $criteria->with = 'type';
+        $criteria->select = 'type.id as id, type.name as name';
+        $criteria->compare('company_id', $this->id);
+
+        $result = Car::model()
+            ->findAll($criteria);
+
+        return $result;
+    }
+
+    public function getOnOffs()
+    {
+        return array(
+            array('id' => null, 'title' => 'все'),
+            array('id'=>'1', 'title'=>'Да'),
+            array('id'=>'0', 'title'=>'Нет'),
+        );
+    }
 }
