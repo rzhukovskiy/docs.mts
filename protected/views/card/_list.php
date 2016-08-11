@@ -29,7 +29,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
     'pagerCssClass' => 'dataTables_paginate paging_full_numbers',
-    'filter' => $model,
+    'filter' => Yii::app()->user->checkAccess(User::ADMIN_ROLE) ? $model : null,
     'dataProvider' => $model->search(),
     'emptyText' => '',
     'cssFile' => false,
