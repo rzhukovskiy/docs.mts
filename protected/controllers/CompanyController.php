@@ -155,6 +155,7 @@ class CompanyController extends Controller
         $cardNew->company_id = $model->id;
 
         $cardSearch = new Card('search');
+        $cardSearch->company_id = $id;
         if (isset($_GET['Card'])) {
             $cardSearch->attributes = $_GET['Card'];
         }
