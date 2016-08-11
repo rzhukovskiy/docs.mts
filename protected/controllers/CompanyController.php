@@ -3,12 +3,12 @@
 class CompanyController extends Controller
 {
     private $type;
-    
+
     public function init()
     {
         $this->type = Yii::app()->controller->id;
     }
-    
+
     public function actionList()
     {
         $model = new Company('search');
@@ -50,12 +50,24 @@ class CompanyController extends Controller
 
     public function actionUpdate($id)
     {
-        $model = Company::model()->findByPk((int)$id);
+        $model = Company::model()
+            ->findByPk((int)$id);
+        $companyMarks = $model->marks;
+        $companyTypes = $model->types;
+        $companyOnOff = $model->getOnOffs();
 
-        $carByTypes = Car::getCountCarsByTypes($model->id);
+        $carByTypes = Car::model()
+            ->getCountCarsByTypes($model->id);
+        $countCarsByType = Car::model()
+            ->totalField($carByTypes, 'cars_count');
 
         $carModel = new Car();
         $carModel->company_id = $model->id;
+
+        $carSearch = new Car('search');
+        if(isset($_GET['Car']))
+            $carSearch->attributes = $_GET['Car'];
+        $carSearch->company_id = $model->id;
 
         $priceList = new Price('search');
         $priceList->company_id = $model->id;
@@ -92,11 +104,46 @@ class CompanyController extends Controller
         $this->render('update', array(
             'model'            => $model,
             'carModel'         => $carModel,
+            'carSearch'        => $carSearch,
             'priceList'        => $priceList,
             'tiresServiceList' => $tiresServiceList,
             'typeList' => Type::model()->findAll(),
             'serviceList' => TiresService::model()->findAll(['condition' => 'is_fixed = 1', 'order' => 'pos']),
             'carByTypes' => $carByTypes,
+            'countCarsByType' => $countCarsByType,
+            'companyMarks' => $companyMarks,
+            'companyTypes' => $companyTypes,
+            'companyOnOff' => $companyOnOff,
+        ));
+    }
+
+    public function actionCarsDetailedStatistic( $type, $company = null )
+    {
+        $criteria = Car::model();
+        $companyModel = null;
+        if (!is_null($company)) {
+            $companyModel = Company::model()
+                ->findByPk( $company );
+            $criteria = $criteria
+                ->byCompany($company);
+        }
+
+        $typeModel = Type::model()
+            ->findByPk($type);
+
+        $criteria = $criteria
+            ->byType($type)
+            ->getDbCriteria();
+
+        $provider = new CActiveDataProvider('Car', array(
+            'criteria' => $criteria,
+            'pagination' => false,
+        ));
+
+        $this->render('cars_detailed_statistic', array(
+            'provider' => $provider,
+            'companyModel' => $companyModel,
+            'typeModel' => $typeModel,
         ));
     }
 
@@ -104,16 +151,18 @@ class CompanyController extends Controller
     {
         $model = Company::model()->findByPk((int)$id);
 
-        $cardModel = new Card();
-        $cardModel->company_id = $model->id;
+        $cardNew = new Card();
+        $cardNew->company_id = $model->id;
 
+        $cardSearch = new Card('search');
         if (isset($_GET['Card'])) {
-            $cardModel->attributes = $_GET['Card'];
+            $cardSearch->attributes = $_GET['Card'];
         }
 
         $this->render('cards', array(
             'model' => $model,
-            'cardModel' => $cardModel,
+            'cardNew' => $cardNew,
+            'cardSearch' => $cardSearch,
         ));
     }
 

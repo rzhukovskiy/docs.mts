@@ -13,4 +13,8 @@
         'list' => array('url' => false, 'name' => 'По типу ТС'),
     );
 
-    $this->renderPartial('/company/car/_types', array('carByTypes' => $carByTypes));
+    $this->renderPartial('_types', array(
+        'carByTypes' => $carByTypes,
+        'countCarsByType' => $countCarsByType,
+        'companyId' => $companyId,
+        ));

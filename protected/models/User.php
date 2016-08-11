@@ -55,7 +55,7 @@ class User extends CActiveRecord
             array('salt', 'length', 'max' => 5),
             array('active', 'length', 'max' => 1),
             array('email', 'unique'),
-            array('id, name, password, salt, email, active, create_date', 'safe', 'on' => 'search'),
+            array('id, name, password, salt, email, active, create_date, company_id', 'safe', 'on' => 'search'),
         );
     }
 
@@ -81,6 +81,7 @@ class User extends CActiveRecord
         $criteria->compare('name', $this->name, true);
         $criteria->compare('email', $this->email, true);
         $criteria->compare('active', $this->active);
+        $criteria->compare('company_id', $this->company_id);
         $criteria->compare('company.type', $this->companyType);
 
         return new CActiveDataProvider(get_class($this), array(

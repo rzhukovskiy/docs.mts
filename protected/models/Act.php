@@ -415,7 +415,7 @@ class Act extends CActiveRecord
     {
         $criteria = new CDbCriteria();
 
-        $criteria->with = ['car', 'truck'];
+        $criteria->with = ['car', 'truck', 'card', 'client'];
         $criteria->order = 'service_date DESC';
 
         $criteria->compare('income', 0);
@@ -514,6 +514,14 @@ class Act extends CActiveRecord
         $criteria->order = 'profit DESC';
 
         $this->getDbCriteria()->mergeWith($criteria);
+        return $this;
+    }
+
+    public function byType( $type )
+    {
+        $criteria = $this->getDbCriteria();
+        $criteria->compare('service', $type);
+
         return $this;
     }
 

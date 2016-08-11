@@ -10,5 +10,5 @@ $this->tabs = array(
     'cards' => array('url' => '#', 'name' => 'Карты'),
 );
 
-$this->renderPartial('card/_form', array('model' => $cardModel));
-$this->renderPartial('card/_list', array('model' => $cardModel));
+$this->renderPartial('card/_form', array('model' => $cardNew));
+$this->renderPartial('card/_list', array('model' => $cardSearch));

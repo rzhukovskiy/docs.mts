@@ -11,12 +11,17 @@ class UserController extends Controller
         $model->unsetAttributes();
         $model->companyType = $type;
 
+        $data = Company::model()
+            ->findAll('type = :type', array(':type' => isset($model->company->type) ? $model->company->type : $model->companyType));
+        $companyListData = CHtml::listData($data, 'id', 'name');
+
         if (isset($_GET['User'])) {
             $model->attributes = $_GET['User'];
         }
 
         $this->render('list', array(
             'model' => $model,
+            'companyListData' => $companyListData,
         ));
     }
 

@@ -1,22 +1,14 @@
+<?php
+    /**
+     * @var $this UniversalController
+     * @var $model Company
+     */
+?>
 <div class="contenttitle radiusbottom0">
     <h2 class="table"><span>Универсальные компании</span></h2>
 </div>
 <?php
-/**
- * @var $this UniversalController
- * @var $model Company
- */
-$type = $model->type;
-$attributes = array_values(array_filter($model->attributes));
-$model->unsetAttributes();
-$model->type = $type;
-echo CHtml::hiddenField('query', CJSON::encode($attributes));
-$this->widget('ext.jQueryHighlight.DJqueryHighlight', array(
-    'selector' => '.my-grid',
-    'words' => $attributes
-));
 $this->widget('zii.widgets.grid.CGridView', array(
-    'afterAjaxUpdate' => 'function(id, data){searchHighlight(id, data);}',
     'id' => 'company-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',

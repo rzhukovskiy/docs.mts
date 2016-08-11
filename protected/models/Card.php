@@ -73,8 +73,6 @@ class Card extends CActiveRecord
         $criteria->compare('company_id', $this->company_id);
         $criteria->compare('active', $this->active);
 
-        $criteria->compare('cardCompany.name', isset($this->cardCompany->name) ? $this->cardCompany->name : $this->cardCompany, true);
-
         $sort = new CSort;
         $sort->defaultOrder = 'company_id, number';
         $sort->applyOrder($criteria);
@@ -111,13 +109,15 @@ class Card extends CActiveRecord
                     $card->save();
                 }
                 $this->number = intval($numPointList[1]);
-            }
-            $existed = Card::model()->find('number = :number', [':number' => $this->number]);
-            if ($existed) {
-                Act::model()->updateAll(['is_fixed' => 1], 'card_id = :card_id', [':card_id' => $existed->id]);
-                $existed->company_id = $this->company_id;
-                $existed->save();
-                return false;
+            } else {
+                $existed = Card::model()->find('number = :number', [':number' => $this->number]);
+                if ($existed) {
+                    if ($existed->cardCompany->is_deleted) {
+                        $existed->company_id = $this->company_id;
+                        $existed->save();
+                    }
+                    return false;
+                }
             }
         }
         return true;
