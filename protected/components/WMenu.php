@@ -106,7 +106,7 @@ class WMenu extends CWidget
                         ? 'error?type=carwash'
                         : (Yii::app()->user->checkAccess(User::CLIENT_ROLE) || Yii::app()->user->model->company->type == Company::UNIVERSAL_TYPE ? Company::CARWASH_TYPE : Yii::app()->user->model->company->type),
                     'role'   => User::GUEST_ROLE,
-                    'sufix' => $this->getCountOfErrorActs(),
+                    'sufix' => Yii::app()->user->model->role == User::ADMIN_ROLE ? $this->getCountOfErrorActs() : '',
                 ),
             ]);
         }
