@@ -57,7 +57,7 @@ class ExportableGridBehavior extends CBehavior
     private function fillAct($actModel, $company, &$zip)
     {
         $dataList = $actModel->search()->getData();
-        if (!$dataList) {
+        if (!$dataList || !$company) {
             return;
         }
 

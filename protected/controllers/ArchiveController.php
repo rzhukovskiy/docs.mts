@@ -132,8 +132,11 @@ class ArchiveController extends Controller
                         $scope->save();
                     }
                 }
-                foreach ($oldScopes as $scope) {
-                    $scope->delete();
+                foreach ($oldScopes as $scopeId) {
+                    $scope = ActScope::model()->findByPk($scopeId);
+                    if ($scope) {
+                        $scope->delete();
+                    }
                 }
 
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : Yii::app()->createUrl('archive/error'));

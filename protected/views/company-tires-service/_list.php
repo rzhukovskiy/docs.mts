@@ -15,7 +15,7 @@
 <?php
 
 $this->widget('zii.widgets.grid.CGridView', array(
-    'id' => 'company-grid',
+    'id' => 'service-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
     'dataProvider' => $priceList->byPrice()->search(),

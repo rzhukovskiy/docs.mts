@@ -278,7 +278,7 @@ class ActController extends Controller
                         if ($scopeList['id'][$i]) {
                             $scope = ActScope::model()->findByPk($scopeList['id'][$i]);
                             if ($model->service == Company::TIRES_TYPE) {
-                                $scope->description = TiresService::model()->findByPk($scopeList['description'][$i])->description;
+                                $scope->description = TiresService::model()->find($scopeList['description'][$i])->description;
                             } else {
                                 $scope->description = $scopeList['description'][$i];
                             }

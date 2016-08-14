@@ -13,7 +13,7 @@
 <?php
 
 $this->widget('zii.widgets.grid.CGridView', array(
-    'id' => 'company-grid',
+    'id' => 'price-grid',
     'htmlOptions' => array('class' => 'my-grid'),
     'itemsCssClass' => 'stdtable grid',
     'dataProvider' => $priceList->search(),

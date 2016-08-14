@@ -125,4 +125,18 @@ class CompanyTiresService extends CActiveRecord
 
         return implode(", ", $types);
     }
+
+    public function beforeDelete()
+    {
+        CompanyTiresService::model()->deleteAll([
+            'condition' => 'company_id = :company_id AND price = :price AND tires_service_id = :service_id',
+            'params' => [
+                ':company_id' => $this->company_id,
+                ':price'      => $this->price,
+                ':service_id' => $this->tires_service_id,
+            ],
+        ]);
+
+        return false;
+    }
 }
