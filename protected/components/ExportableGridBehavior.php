@@ -179,7 +179,7 @@ class ExportableGridBehavior extends CBehavior
         $companyWorkSheet->getPageMargins()->setTop(2);
         $companyWorkSheet->getPageMargins()->setLeft(0.5);
         $companyWorkSheet->getRowDimension(1)->setRowHeight(1);
-        $companyWorkSheet->getRowDimension(10)->setRowHeight(100);
+        $companyWorkSheet->getRowDimension(10)->setRowHeight(120);
         $companyWorkSheet->getColumnDimension('A')->setWidth(2);
         $companyWorkSheet->getDefaultRowDimension()->setRowHeight(20);
 
@@ -669,10 +669,10 @@ class ExportableGridBehavior extends CBehavior
             $companyWorkSheet->setCellValue("E$row", "Заказчик");
 
             $row++; $row++;
-            $companyWorkSheet->setCellValue("B$row", "____________Мосесян Г.А.");
+            $companyWorkSheet->setCellValue("B$row", "_______Мосесян Г.А.");
 
             $companyWorkSheet->mergeCells("E$row:F$row");
-            $companyWorkSheet->setCellValue("E$row", "____________$company->contact");
+            $companyWorkSheet->setCellValue("E$row", "_______$company->contact");
 
             $row++; $row++;
             $companyWorkSheet->setCellValue("B$row", "М.П.");
@@ -757,8 +757,8 @@ class ExportableGridBehavior extends CBehavior
             if($company->is_split) {
                 $companyWorkSheet->mergeCells("G$row:J$row");
             }
-            $companyWorkSheet->setCellValue("B$row", "____________Мосесян Г.А.");
-            $companyWorkSheet->setCellValue("G$row", "____________$company->contact");
+            $companyWorkSheet->setCellValue("B$row", "______Мосесян Г.А.");
+            $companyWorkSheet->setCellValue("G$row", "______$company->contact");
 
             $row++; $row++;
             $companyWorkSheet->setCellValue("B$row", "М.П.");
