@@ -295,7 +295,8 @@ class ActController extends Controller
                         $scope->act_id = $model->id;
                         if ($scopeList[$sumName][$i]) {
                             $scope->income = $scope->expense = $scopeList[$sumName][$i];
-                        } elseif ($model->service == Company::TIRES_TYPE) {
+                        }
+                        if ($model->service == Company::TIRES_TYPE) {
                             $scope->description = TiresService::model()->findByPk($scopeList['description'][$i])->description;
                             $tiresService = CompanyTiresService::model()->find('company_id = :company_id AND tires_service_id = :tires_service_id',[
                                 ':company_id' => $model->partner->id,
