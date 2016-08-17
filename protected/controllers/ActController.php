@@ -270,63 +270,60 @@ class ActController extends Controller
             $totalExpense = 0;
             $totalIncome = 0;
             if (isset($_POST['Scope'])) {
-                $oldScopes = CHtml::listData($model->scope, 'id', 'id');
-                if (isset($_POST['Scope'])) {
-                    $scopeList = $_POST['Scope'];
-                    for ($i = 0; $i < count($scopeList[$sumName]) || $i < count($scopeList['description']); $i++) {
-                        $scope = new ActScope();
-                        if ($scopeList['id'][$i]) {
-                            $scope = ActScope::model()->findByPk($scopeList['id'][$i]);
-                            if ($model->service == Company::TIRES_TYPE) {
-                                $scope->description = TiresService::model()->find($scopeList['description'][$i])->description;
-                            } else {
-                                $scope->description = $scopeList['description'][$i];
-                            }
-                            $scope->amount = $scopeList['amount'][$i];
-                            if ($scopeList[$sumName][$i]) {
-                                $scope->$sumName = $scopeList[$sumName][$i];
-                                unset($oldScopes[$scopeList['id'][$i]]);
-                            }
-                            if (!$scope->save()) {
-                                print_r($scope->getErrors());
-                                die;
-                            }
-                        } elseif($scopeList['amount'][$i]) {
+                $oldScopes = CHtml::listData($model->scope, 'id', 'id');$scopeList = $_POST['Scope'];
+                for ($i = 0; $i < count($scopeList[$sumName]) || $i < count($scopeList['description']); $i++) {
+                    $scope = new ActScope();
+                    if ($scopeList['id'][$i]) {
+                        $scope = ActScope::model()->findByPk($scopeList['id'][$i]);
+                        if ($model->service == Company::TIRES_TYPE) {
+                            $scope->description = TiresService::model()->findByPk($scopeList['description'][$i])->description;
+                        } else {
                             $scope->description = $scopeList['description'][$i];
-                            $scope->amount = $scopeList['amount'][$i];
-                            $scope->act_id = $model->id;
-                            if ($scopeList[$sumName][$i]) {
-                                $scope->income = $scope->expense = $scopeList[$sumName][$i];
-                            } elseif ($model->service == Company::TIRES_TYPE) {
-                                $scope->description = TiresService::model()->findByPk($scopeList['description'][$i])->description;
-                                $tiresService = CompanyTiresService::model()->find('company_id = :company_id AND tires_service_id = :tires_service_id',[
-                                    ':company_id' => $model->partner->id,
-                                    ':tires_service_id' => $scopeList['description'][$i],
-                                ]);
-                                if ($tiresService && $tiresService->price) {
-                                    $scope->expense = $tiresService->price;
-                                } else {
-                                    $scope->expense = abs($scopeList['expense'][$i]);
-                                }
-                                $tiresService = CompanyTiresService::model()->find('company_id = :company_id AND tires_service_id = :tires_service_id',[
-                                    ':company_id' => $model->client->id,
-                                    ':tires_service_id' => $scopeList['description'][$i],
-                                ]);
-                                if ($tiresService && $tiresService->price) {
-                                    $scope->income = $tiresService->price;
-                                } else {
-                                    $scope->income = 1.2 * abs($scopeList['expense'][$i]);
-                                }
+                        }
+                        $scope->amount = $scopeList['amount'][$i];
+                        if ($scopeList[$sumName][$i]) {
+                            $scope->$sumName = $scopeList[$sumName][$i];
+                            unset($oldScopes[$scopeList['id'][$i]]);
+                        }
+                        if (!$scope->save()) {
+                            print_r($scope->getErrors());
+                            die;
+                        }
+                    } elseif($scopeList['amount'][$i]) {
+                        $scope->description = $scopeList['description'][$i];
+                        $scope->amount = $scopeList['amount'][$i];
+                        $scope->act_id = $model->id;
+                        if ($scopeList[$sumName][$i]) {
+                            $scope->income = $scope->expense = $scopeList[$sumName][$i];
+                        } elseif ($model->service == Company::TIRES_TYPE) {
+                            $scope->description = TiresService::model()->findByPk($scopeList['description'][$i])->description;
+                            $tiresService = CompanyTiresService::model()->find('company_id = :company_id AND tires_service_id = :tires_service_id',[
+                                ':company_id' => $model->partner->id,
+                                ':tires_service_id' => $scopeList['description'][$i],
+                            ]);
+                            if ($tiresService && $tiresService->price) {
+                                $scope->expense = $tiresService->price;
+                            } else {
+                                $scope->expense = abs($scopeList['expense'][$i]);
                             }
-                            if (!$scope->save()) {
-                                print_r($scope->getErrors());
-                                die;
+                            $tiresService = CompanyTiresService::model()->find('company_id = :company_id AND tires_service_id = :tires_service_id',[
+                                ':company_id' => $model->client->id,
+                                ':tires_service_id' => $scopeList['description'][$i],
+                            ]);
+                            if ($tiresService && $tiresService->price) {
+                                $scope->income = $tiresService->price;
+                            } else {
+                                $scope->income = 1.2 * abs($scopeList['expense'][$i]);
                             }
                         }
-
-                        $totalExpense += $scope->expense * $scope->amount;
-                        $totalIncome += $scope->income * $scope->amount;
+                        if (!$scope->save()) {
+                            print_r($scope->getErrors());
+                            die;
+                        }
                     }
+
+                    $totalExpense += $scope->expense * $scope->amount;
+                    $totalIncome += $scope->income * $scope->amount;
                 }
                 foreach ($oldScopes as $scopeId) {
                     $scope = ActScope::model()->findByPk($scopeId);
