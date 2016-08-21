@@ -772,7 +772,7 @@ class ExportableGridBehavior extends CBehavior
         }
         if ($this->companyType == Company::SERVICE_TYPE) {
             $first = $dataList[0];
-            $filename = "Акт $company->name - $first->number от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
+            $filename = "Акт $company->name - $first->number - $first->id от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
         } else {
             $filename = "Акт $company->name от " . date('m-Y', $this->time) . ".xls";
         }
@@ -1010,7 +1010,7 @@ class ExportableGridBehavior extends CBehavior
         }
         if ($this->companyType == Company::SERVICE_TYPE) {
             $first = $dataList[0];
-            $filename = "Счет $company->name - $first->number от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
+            $filename = "Счет $company->name - $first->number - $first->id от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
         } else {
             $filename = "Счет $company->name от " . date('m-Y', $this->time) . ".xls";
         }
