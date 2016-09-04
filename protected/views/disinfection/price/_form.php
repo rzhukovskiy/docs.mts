@@ -29,6 +29,12 @@ $form = $this->beginWidget('CActiveForm', array(
             <?=$form->textField($priceList, 'disinfection'); ?>
         </td>
         <td>
+            <?=$form->label($priceList, 'additional'); ?>
+        </td>
+        <td>
+            <?=$form->textField($priceList, 'additional'); ?>
+        </td>
+        <td>
             <?=$form->hiddenField($priceList, 'company_id'); ?>
             <?=CHtml::submitButton('Добавить', array('class' => 'submit radius2', 'style' => 'opacity: 1;')); ?>
         </td>

@@ -10,7 +10,7 @@ class ExportableGridBehavior extends CBehavior
     private $showCompany = false;
     private $companyType = Company::CARWASH_TYPE;
     private $time = null;
-    
+
 
     /**
      * @param Act $actModel
@@ -57,7 +57,7 @@ class ExportableGridBehavior extends CBehavior
     private function fillAct($actModel, $company, &$zip)
     {
         $dataList = $actModel->search()->getData();
-        if (!$dataList || !$company) {
+        if (!$dataList) {
             return;
         }
 
@@ -68,7 +68,7 @@ class ExportableGridBehavior extends CBehavior
                 }
                 break;
             case Company::DISINFECTION_TYPE:
-                $this->generateDisinfectionAct($company, $dataList, $zip);
+                $this->generateDisinfectCertificate($company, $dataList, $zip);
             default:
                 $this->generateAct($company, $dataList, $zip);
         }
@@ -79,77 +79,221 @@ class ExportableGridBehavior extends CBehavior
      * @param Act[] $dataList
      * @param ZipArchive $zip
      */
-    private function generateDisinfectionAct($company, $dataList, &$zip)
+    private function generateDisinfectCertificate($company, $dataList, &$zip)
     {
-        $fileType = 'Excel5';
-        $fileName = 'files/dis-tpl.xls';
+        $cols = ['A','B','C','D','E','F','G','H','I','J','K'];
 
-        // Read the file
-        $objReader = PHPExcel_IOFactory::createReader($fileType);
-        $this->objPHPExcel = $objReader->load($fileName);
-        $this->objPHPExcel->setActiveSheetIndex(0);
-        $companyWorkSheet = $this->objPHPExcel->getActiveSheet();
+        /** @var PHPExcel $objPHPExcel */
+        $objPHPExcel = null;
+        /** @var PHPExcel_Writer_IWriter $objWriter */
+        $objWriter = null;
+        /** @var PHPExcel_Worksheet $worksheet */
+        $worksheet = null;
 
-        $cnt = 0;
-        $shts = 2;
-        $files = 0;
-        foreach ($dataList as $data) {
-            $endDate = date_create($data->service_date);
+        $cnt = 1;
+        $startRow = 8;
+
+        $objPHPExcel = new PHPExcel();
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+        // Creating a workbook
+        $objPHPExcel->getProperties()->setCreator('Mtransservice');
+        $objPHPExcel->getProperties()->setTitle('Справка');
+        $objPHPExcel->getProperties()->setSubject('Справка');
+        $objPHPExcel->getProperties()->setDescription('');
+        $objPHPExcel->getProperties()->setCategory('');
+        $objPHPExcel->removeSheetByIndex(0);
+
+        //adding worksheet
+        $worksheet = new PHPExcel_Worksheet($objPHPExcel, 'справки');
+        $objPHPExcel->addSheet($worksheet);
+
+        $worksheet->getPageMargins()->setTop(0.3);
+        $worksheet->getPageMargins()->setLeft(0.5);
+        $worksheet->getPageMargins()->setRight(0.5);
+        $worksheet->getPageMargins()->setBottom(0.3);
+
+        $objPHPExcel->getDefaultStyle()->applyFromArray(array(
+            'font' => array(
+                'size' => 10,
+            )
+        ));
+
+        $worksheet->getColumnDimension('A')->setWidth(13);
+        $worksheet->getColumnDimension('B')->setWidth(15);
+        $worksheet->getColumnDimension('C')->setWidth(10);
+        $worksheet->getColumnDimension('D')->setWidth(10);
+        $worksheet->getColumnDimension('E')->setWidth(3);
+        $worksheet->getColumnDimension('F')->setWidth(3);
+        $worksheet->getColumnDimension('G')->setWidth(13);
+        $worksheet->getColumnDimension('H')->setWidth(15);
+        $worksheet->getColumnDimension('I')->setWidth(10);
+        $worksheet->getColumnDimension('J')->setWidth(10);
+        $worksheet->getColumnDimension('K')->setWidth(3);
+
+        foreach ($dataList as $act) {
+            $endDate = new \DateTime();
+            $endDate->setTimestamp(strtotime($act->service_date));
             $startDate = clone($endDate);
             date_add($endDate, date_interval_create_from_date_string("1 month"));
-            $startRow = 13;
-            $startCol = 2;
-            if ($cnt == 1 || $cnt == 3) {
-                $startCol = 8;
+
+            $startCol = 0;
+            if ($cnt == 2 || $cnt == 4) {
+                $startCol = 6;
             }
-            if ($cnt == 2 || $cnt == 3) {
-                $startRow = 40;
+            if ($cnt == 3) {
+                $startRow += 26;
             }
-            $companyWorkSheet->setCellValueByColumnAndRow($startCol, $startRow++, $company->name);
-            $companyWorkSheet->setCellValueByColumnAndRow($startCol, $startRow++, $data->mark->name);
-            $companyWorkSheet->setCellValueByColumnAndRow($startCol, $startRow++, $data->number);
-            $startRow++;
+            $row = $startRow;
+
+            $signImage = imagecreatefromjpeg('files/top.jpg');
+            $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+            $objDrawing->setName('Sample image');
+            $objDrawing->setDescription('Sample image');
+            $objDrawing->setImageResource($signImage);
+            $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+            $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+            $range = $cols[$startCol] . ($row - 7);
+            $objDrawing->setCoordinates($range);
+            $objDrawing->setWorksheet($worksheet);
+
+            $range = $cols[$startCol] . $row . ':' . $cols[$startCol + 3] . $row;
+            $worksheet->getStyle($range)->applyFromArray(array(
+                'alignment' => array(
+                    'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                )
+            ));
+            $worksheet->mergeCells($range);
+            $worksheet->setCellValueByColumnAndRow($startCol, $row, 'СПРАВКА');
+
+            $row++;
+            $range = $cols[$startCol] . $row . ':' . $cols[$startCol + 3] . $row;
+            $worksheet->getStyle($range)->applyFromArray(array(
+                'alignment' => array(
+                    'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                )
+            ));
+            $worksheet->mergeCells($range);
+            $worksheet->setCellValueByColumnAndRow($startCol, $row, 'о проведении дезинфекции транспорта');
+
+            $row++;
+
+            $row++;
+            $worksheet->setCellValueByColumnAndRow($startCol, $row, 'Выдана');
+            $range = $cols[$startCol + 1] . $row . ':' . $cols[$startCol + 3] . $row;
+            $worksheet->mergeCells($range);
+            $worksheet->getStyle($range)->getAlignment()->setWrapText(true);
+            $worksheet->setCellValueByColumnAndRow($startCol + 1, $row, $company->name);
+            $worksheet->getRowDimension($row)->setRowHeight(24);
+
+            $row++;
+            $worksheet->setCellValueByColumnAndRow($startCol, $row, 'Марка');
+            $worksheet->setCellValueByColumnAndRow($startCol + 1, $row, $act->mark->name);
+            $worksheet->getStyleByColumnAndRow($startCol, $row)->applyFromArray(array(
+                    'font' => array(
+                        'color' => array('argb' => 'FF006699'),
+                    ),
+                )
+            );
+
+            $row++;
+            $worksheet->setCellValueByColumnAndRow($startCol, $row, 'Гос. номер');
+            $worksheet->setCellValueByColumnAndRow($startCol + 1, $row, $act->number);
+            $worksheet->getStyleByColumnAndRow($startCol, $row)->applyFromArray(array(
+                    'font' => array(
+                        'color' => array('argb' => 'FF006699'),
+                    ),
+                )
+            );
+
+            $row++;
+            $worksheet->setCellValueByColumnAndRow($startCol, $row, 'Срок действия справки 1 (один) месяц');
+
             $text = "C " . $startDate->format('01.m.Y') . " по " . $endDate->format('01.m.Y');
-            $companyWorkSheet->setCellValueByColumnAndRow($startCol - 1, $startRow++, $text);
+            $worksheet->setCellValueByColumnAndRow($startCol, $row, $text);
+
+            $row++;
+
+            $row++;
+            $worksheet->setCellValueByColumnAndRow($startCol, $row, 'Региональный директор');
+
+            $row++;
+            $worksheet->setCellValueByColumnAndRow($startCol, $row, 'ООО «Международный Транспортный Сервис»');
+
+            $row++; $row++; $row++;
+            $worksheet->setCellValueByColumnAndRow($startCol, $row, 'Мосесян Г.А._____________');
+            $objDrawing = new PHPExcel_Worksheet_Drawing();
+            $objDrawing->setName('Sample image');
+            $objDrawing->setDescription('Sample image');
+            $objDrawing->setPath('files/post-small.png');
+            $range = $cols[$startCol + 2] . ($row - 3);
+            $objDrawing->setCoordinates($range);
+            $objDrawing->setWorksheet($worksheet);
+            $objDrawing = new PHPExcel_Worksheet_Drawing();
+            $objDrawing->setName('Sample image');
+            $objDrawing->setDescription('Sample image');
+            $objDrawing->setPath('files/sign.png');
+            $range = $cols[$startCol + 1] . ($row - 2);
+            $objDrawing->setCoordinates($range);
+            $objDrawing->setWorksheet($worksheet);
+
+            $row += 3;
+
+            $row++;
+            $range = $cols[$startCol] . $row . ':' . $cols[$startCol + 3] . $row;
+            $worksheet->mergeCells($range);
+            $worksheet->getStyle($range)->getAlignment()->setWrapText(true);
+            $text = "ИНН 3665100480 КПП 366501001 ОГРН 1143668022266 394065, Россия, Воронежская область," .
+                "г. Воронеж, ул. Героев Сибиряков, д. 24, кв. 116 \n Тел.: 8 800 55 008 55 \n " .
+                "E-Mail: mtransservice@mail.ru \n Web.: mtransservice.ru";
+            $worksheet->setCellValueByColumnAndRow($startCol, $row, $text);
+            $worksheet->getStyleByColumnAndRow($startCol, $row)->applyFromArray(array(
+                    'font' => array(
+                        'size' => 6,
+                    ),
+                )
+            );
+            $worksheet->getRowDimension($row)->setRowHeight(40);
+
+            if ($cnt == 2) {
+                $row++;
+                $worksheet->getStyle("A$row:K$row")
+                    ->applyFromArray(array(
+                            'borders' => array(
+                                'top' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'color' => array('argb' => 'FF000000'),
+                                ),
+                            ),
+                        )
+                    );
+                $borderStart = $startRow - 7;
+                $borderEnd = $borderStart + 50;
+                $worksheet->getStyle("E$borderStart:E$borderEnd")
+                    ->applyFromArray(array(
+                            'borders' => array(
+                                'right' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'color' => array('argb' => 'FF000000'),
+                                ),
+                            ),
+                        )
+                    );
+            }
 
             $cnt++;
-
-            if ($cnt == 4) {
-                if ($shts > 50) {
-                    $files++;
-                    //saving document
-                    $path = "acts/" . date('m-Y', $this->time);
-                    if (!is_dir($path)) {
-                        mkdir($path, 0755, 1);
-                    }
-                    $filename = "Справка $company->name от " . date('m-Y', $this->time) . "-$files.xls";
-                    $fullFilename = str_replace(' ', '_', "$path/" . str_replace('"', '', "$filename"));
-                    $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
-                    $objWriter->save($fullFilename);
-                    if ($zip) $zip->addFile($fullFilename, iconv('utf-8', 'cp866', $filename));
-
-                    $this->objPHPExcel = $objReader->load($fileName);
-                    $this->objPHPExcel->setActiveSheetIndex(0);
-                    $companyWorkSheet = $this->objPHPExcel->getActiveSheet();
-                } else {
-                    $newCompanyWorkSheet = $companyWorkSheet->copy();
-                    $newCompanyWorkSheet->setTitle('Лист ' . $shts);
-                    $this->objPHPExcel->addSheet($newCompanyWorkSheet);
-                    $companyWorkSheet = $newCompanyWorkSheet;
-                    $cnt = 0;
-                    $shts++;
-                }
+            if ($cnt == 5) {
+                $cnt = 0;
+                $startRow += 25;
             }
         }
 
-        //saving document
         $path = "acts/" . date('m-Y', $this->time);
         if (!is_dir($path)) {
             mkdir($path, 0755, 1);
         }
-        $filename = $files ? "Справка $company->name от " . date('m-Y', $this->time) . "-" . ++$files . ".xls" : "Справка $company->name от " . date('m-Y', $this->time) . ".xls";
+        $filename = "Справка $company->name от " . date('m-Y', $this->time) . ".xlsx";
         $fullFilename = str_replace(' ', '_', "$path/" . str_replace('"', '', "$filename"));
-        $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
         $objWriter->save($fullFilename);
         if ($zip) $zip->addFile($fullFilename, iconv('utf-8', 'cp866', $filename));
     }
@@ -179,7 +323,7 @@ class ExportableGridBehavior extends CBehavior
         $companyWorkSheet->getPageMargins()->setTop(2);
         $companyWorkSheet->getPageMargins()->setLeft(0.5);
         $companyWorkSheet->getRowDimension(1)->setRowHeight(1);
-        $companyWorkSheet->getRowDimension(10)->setRowHeight(120);
+        $companyWorkSheet->getRowDimension(10)->setRowHeight(100);
         $companyWorkSheet->getColumnDimension('A')->setWidth(2);
         $companyWorkSheet->getDefaultRowDimension()->setRowHeight(20);
 
@@ -330,9 +474,9 @@ class ExportableGridBehavior extends CBehavior
                     $companyWorkSheet->setCellValue("D$row", "№ КАРТЫ");
                     $companyWorkSheet->setCellValue("F$row", "МАРКА ТС");
                     if ($this->showCompany) {
-                        $companyWorkSheet->mergeCells("H$row:I$row");
+                        $companyWorkSheet->mergeCells("G$row:H$row");
                         $companyWorkSheet->setCellValue("G$row", "ГОСНОМЕР");
-                        $companyWorkSheet->setCellValue("H$row", "ГОРОД");
+                        $companyWorkSheet->setCellValue("I$row", "ГОРОД");
                     } else {
                         $companyWorkSheet->mergeCells("G$row:I$row");
                         $companyWorkSheet->setCellValue("G$row", "ГОСНОМЕР");
@@ -360,9 +504,9 @@ class ExportableGridBehavior extends CBehavior
                     $companyWorkSheet->setCellValueByColumnAndRow(3, $row, isset($data->card) ? $data->card->number : $data->card_id);
                     $companyWorkSheet->setCellValueByColumnAndRow(5, $row, isset($data->mark) ? $data->mark->name : "");
                     if ($this->showCompany) {
-                        $companyWorkSheet->mergeCells("H$row:I$row");
+                        $companyWorkSheet->mergeCells("G$row:H$row");
                         $companyWorkSheet->setCellValueByColumnAndRow(6, $row, $data->number);
-                        $companyWorkSheet->setCellValueByColumnAndRow(7, $row, $data->partner->address);
+                        $companyWorkSheet->setCellValueByColumnAndRow(8, $row, $data->partner->address);
                     } else {
                         $companyWorkSheet->mergeCells("G$row:I$row");
                         $companyWorkSheet->setCellValueByColumnAndRow(6, $row, $data->number);
@@ -437,14 +581,14 @@ class ExportableGridBehavior extends CBehavior
 
                     $companyWorkSheet->getStyle("B13:I$row")
                         ->applyFromArray(array(
-                            'borders' => array(
-                                'allborders' => array(
-                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
-                                    'color' => array('argb' => 'FF000000'),
+                                'borders' => array(
+                                    'allborders' => array(
+                                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                        'color' => array('argb' => 'FF000000'),
+                                    ),
                                 ),
-                            ),
-                        )
-                    );
+                            )
+                        );
                 }
                 break;
 
@@ -618,23 +762,23 @@ class ExportableGridBehavior extends CBehavior
 
                 $companyWorkSheet->getStyle('B12:F12')
                     ->applyFromArray(array(
-                        'font' => array(
-                            'bold' => true,
-                            'color' => array('argb' => 'FF006699'),
-                        ),
-                    )
-                );
+                            'font' => array(
+                                'bold' => true,
+                                'color' => array('argb' => 'FF006699'),
+                            ),
+                        )
+                    );
 
                 $companyWorkSheet->getStyle("B12:F$row")
                     ->applyFromArray(array(
-                        'borders' => array(
-                            'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
-                                'color' => array('argb' => 'FF000000'),
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'color' => array('argb' => 'FF000000'),
+                                ),
                             ),
-                        ),
-                    )
-                );
+                        )
+                    );
 
                 break;
         }
@@ -668,14 +812,29 @@ class ExportableGridBehavior extends CBehavior
             $companyWorkSheet->mergeCells("E$row:F$row");
             $companyWorkSheet->setCellValue("E$row", "Заказчик");
 
-            $row++; $row++;
-            $companyWorkSheet->setCellValue("B$row", "_______Мосесян Г.А.");
+            $row++;
+            //подпись
+            $objDrawing = new PHPExcel_Worksheet_Drawing();
+            $objDrawing->setName('Sample image');
+            $objDrawing->setDescription('Sample image');
+            $objDrawing->setPath('files/sign.png');
+            $objDrawing->setCoordinates("B$row");
+            $objDrawing->setWorksheet($companyWorkSheet);
+            $row++;
+            $companyWorkSheet->setCellValue("B$row", "____________Мосесян Г.А.");
 
             $companyWorkSheet->mergeCells("E$row:F$row");
-            $companyWorkSheet->setCellValue("E$row", "_______$company->contact");
+            $companyWorkSheet->setCellValue("E$row", "____________$company->contact");
 
             $row++; $row++;
-            $companyWorkSheet->setCellValue("B$row", "М.П.");
+            //печать
+            $objDrawing = new PHPExcel_Worksheet_Drawing();
+            $objDrawing->setName('Sample image');
+            $objDrawing->setDescription('Sample image');
+            $objDrawing->setPath('files/post.png');
+            $objDrawing->setCoordinates("B$row");
+            $objDrawing->setWorksheet($companyWorkSheet);
+
             $companyWorkSheet->setCellValue("E$row", "М.П.");
         } else {
             $row++;
@@ -750,18 +909,33 @@ class ExportableGridBehavior extends CBehavior
             }
 
 
-            $row++; $row++;
+            $row++;
+            //подпись
+            $objDrawing = new PHPExcel_Worksheet_Drawing();
+            $objDrawing->setName('Sample image');
+            $objDrawing->setDescription('Sample image');
+            $objDrawing->setPath('files/sign.png');
+            $objDrawing->setCoordinates("B$row");
+            $objDrawing->setWorksheet($companyWorkSheet);
+            $row++;
 
             $companyWorkSheet->mergeCells("B$row:E$row");
             $companyWorkSheet->mergeCells("G$row:I$row");
             if($company->is_split) {
                 $companyWorkSheet->mergeCells("G$row:J$row");
             }
-            $companyWorkSheet->setCellValue("B$row", "______Мосесян Г.А.");
-            $companyWorkSheet->setCellValue("G$row", "______$company->contact");
+            $companyWorkSheet->setCellValue("B$row", "____________Мосесян Г.А.");
+            $companyWorkSheet->setCellValue("G$row", "____________$company->contact");
 
             $row++; $row++;
-            $companyWorkSheet->setCellValue("B$row", "М.П.");
+            //печать
+            $objDrawing = new PHPExcel_Worksheet_Drawing();
+            $objDrawing->setName('Sample image');
+            $objDrawing->setDescription('Sample image');
+            $objDrawing->setPath('files/post.png');
+            $objDrawing->setCoordinates("B$row");
+            $objDrawing->setWorksheet($companyWorkSheet);
+
             $companyWorkSheet->setCellValue("G$row", "М.П.");
         }
 
@@ -772,7 +946,7 @@ class ExportableGridBehavior extends CBehavior
         }
         if ($this->companyType == Company::SERVICE_TYPE) {
             $first = $dataList[0];
-            $filename = "Акт $company->name - $first->number - $first->id от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
+            $filename = "Акт $company->name от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
         } else {
             $filename = "Акт $company->name от " . date('m-Y', $this->time) . ".xls";
         }
@@ -1002,6 +1176,13 @@ class ExportableGridBehavior extends CBehavior
         $row++;
         $companyWorkSheet->mergeCells("B$row:E$row");
         $companyWorkSheet->setCellValue("B$row", 'Мосесян Г.А.');
+        //подпись
+        $objDrawing = new PHPExcel_Worksheet_Drawing();
+        $objDrawing->setName('Sample image');
+        $objDrawing->setDescription('Sample image');
+        $objDrawing->setPath('files/sign.png');
+        $objDrawing->setCoordinates("C$row");
+        $objDrawing->setWorksheet($companyWorkSheet);
 
         //saving document
         $path = "acts/" . date('m-Y', $this->time);
@@ -1010,7 +1191,7 @@ class ExportableGridBehavior extends CBehavior
         }
         if ($this->companyType == Company::SERVICE_TYPE) {
             $first = $dataList[0];
-            $filename = "Счет $company->name - $first->number - $first->id от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
+            $filename = "Счет $company->name от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
         } else {
             $filename = "Счет $company->name от " . date('m-Y', $this->time) . ".xls";
         }
@@ -1049,5 +1230,4 @@ class ExportableGridBehavior extends CBehavior
             return false;
         });");
     }
-
 }

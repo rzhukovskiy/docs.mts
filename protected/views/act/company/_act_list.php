@@ -35,7 +35,7 @@ foreach($model->getClientsByType($model->companyType) as $actClient) {
             continue;
         }
         if($model->companyType == Company::DISINFECTION_TYPE) {
-            $filename = "Справка {$actClient->client->name} от " . date('m-Y', $time) . ".xls";
+            $filename = "Справка {$actClient->client->name} от " . date('m-Y', $time) . ".xlsx";
             $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
             if(file_exists($fullFilename)) {
                 echo CHtml::link($filename, '/' . $fullFilename) . '<br /><br />';
@@ -45,7 +45,7 @@ foreach($model->getClientsByType($model->companyType) as $actClient) {
 
             $files = 1;
             while (true) {
-                $filename = "Справка {$actClient->client->name} от " . date('m-Y', $time) . "-$files.xls";
+                $filename = "Справка {$actClient->client->name} от " . date('m-Y', $time) . "-$files.xlsx";
                 $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
                 if(file_exists($fullFilename)) {
                     echo CHtml::link($filename, '/' . $fullFilename) . '<br /><br />';

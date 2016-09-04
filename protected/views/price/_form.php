@@ -23,10 +23,7 @@ $form = $this->beginWidget('CActiveForm', array(
 ?>
 <table class="stdtable grid">
     <tr>
-        <td rowspan="2">
-            <?=$form->label($model, 'type_id'); ?>
-        </td>
-        <td rowspan="2">
+        <td colspan="2">
             <?=$form->dropDownList($model, 'type_id', CHtml::listData(Type::model()->findAll(array('order' => 'id')), 'id', 'name')); ?>
         </td>
         <td>
@@ -54,6 +51,12 @@ $form = $this->beginWidget('CActiveForm', array(
         </td>
     </tr>
     <tr>
+        <td>
+            <?=$model->company->type !='carwash' ? $form->label($model, 'additional') : ''; ?>
+        </td>
+        <td>
+            <?=$model->company->type !='carwash' ? $form->textField($model, 'additional') : ''; ?>
+        </td>
         <td>
             <?=$form->label($model, 'engine'); ?>
         </td>

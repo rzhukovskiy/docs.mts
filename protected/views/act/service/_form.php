@@ -77,6 +77,12 @@ if ($model->companyType == Company::TIRES_TYPE) {
             </th>
         <?php } ?>
 
+        <?php if ($model->companyType == Company::DISINFECTION_TYPE) { ?>
+            <th>
+                <?= $attributes['partner_service']; ?>
+            </th>
+        <?php } ?>
+
         <?php if ($model->companyType == Company::CARWASH_TYPE || $model->companyType == Company::DISINFECTION_TYPE) { ?>
             <th>
             </th>
@@ -120,6 +126,12 @@ if ($model->companyType == Company::TIRES_TYPE) {
                 </td>
                 <td>
                     <?= $form->fileField($model, 'screen'); ?>
+                </td>
+            <?php } ?>
+
+            <?php if ($model->companyType == Company::DISINFECTION_TYPE) { ?>
+                <td>
+                    <?= $form->dropDownList($model, 'partner_service', Act::$disinfectionList, array('style' => 'width:80px')); ?>
                 </td>
             <?php } ?>
 

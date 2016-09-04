@@ -61,10 +61,15 @@ class Act extends CActiveRecord
         7 => 'внутри+двигатель',
         8 => 'снаружи+внутри+двигатель',
     );
+    public static $disinfectionList = array(
+        5 => 'дезинфекция',
+        9 => 'доп. дезинфекция',
+    );
     public static $serviceList = array(
         3 => 'сервис',
         4 => 'шиномонатж',
         5 => 'дезинфекция',
+        9 => 'доп. дезинфекция',
     );
     public static $fullList = array(
         'снаружи',
@@ -73,10 +78,10 @@ class Act extends CActiveRecord
         'сервис',
         'шиномонтаж',
         'дезинфекция',
-        'снаружи+внутри',
         'снаружи+двигатель',
         'внутри+двигатель',
         'снаружи+внутри+двигатель',
+        'доп. дезинфекция',
     );
     public static $shortList = array(
         'мойка снаружи',
@@ -85,10 +90,10 @@ class Act extends CActiveRecord
         'сервис',
         'шиномонтаж',
         'дезинфекция',
-        'снаружи+внутри',
-        'снаружи+двигатель',
-        'внутри+двигатель',
-        'снаружи+внутри+двигатель',
+        'мойка снаружи+двигатель',
+        'мойка внутри+двигатель',
+        'мойка снаружи+внутри+двигатель',
+        'доп. дезинфекция',
     );
 
     public $month;
@@ -202,9 +207,6 @@ class Act extends CActiveRecord
             case Company::TIRES_TYPE:
                 $this->client_service = $this->partner_service = 4;
                 break;
-            case Company::DISINFECTION_TYPE:
-                $this->client_service = $this->partner_service = 5;
-                break;
         }
 
         if ($this->isNewRecord) {
@@ -239,6 +241,7 @@ class Act extends CActiveRecord
                     $washPrice->fullOutside + $washPrice->engine,
                     $washPrice->fullInside + $washPrice->engine,
                     $washPrice->fullOutside + $washPrice->fullInside + $washPrice->engine,
+                    $washPrice->additional,
                 );
 
                 $this->income = $servicePrice[$this->client_service];
@@ -271,6 +274,7 @@ class Act extends CActiveRecord
                     $washPrice->fullOutside + $washPrice->engine,
                     $washPrice->fullInside + $washPrice->engine,
                     $washPrice->fullOutside + $washPrice->fullInside + $washPrice->engine,
+                    $washPrice->additional,
                 );
 
                 $this->expense = $servicePrice[$this->partner_service];

@@ -124,7 +124,7 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array('style' => 'width: 80px; text-align:center;'),
             'value' => 'Act::$fullList[$data->partner_service]',
             'filter' => false,
-            'visible' => $model->companyType == Company::CARWASH_TYPE,
+            'visible' => in_array($model->companyType, [Company::CARWASH_TYPE, Company::DISINFECTION_TYPE]),
         ),
         array(
             'header' => 'Сумма',

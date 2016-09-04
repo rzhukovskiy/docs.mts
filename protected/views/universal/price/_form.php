@@ -53,8 +53,12 @@ $form = $this->beginWidget('CActiveForm', array(
         <td>
             <?=$form->textField($priceList, 'disinfection'); ?>
         </td>
-        <td></td>
-        <td></td>
+        <td>
+            <?=$form->label($priceList, 'additional'); ?>
+        </td>
+        <td>
+            <?=$form->textField($priceList, 'additional'); ?>
+        </td>
     </tr>
 </table>
 <?php $this->endWidget(); ?>

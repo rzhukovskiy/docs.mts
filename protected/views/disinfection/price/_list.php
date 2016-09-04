@@ -28,6 +28,10 @@ $this->widget('zii.widgets.grid.CGridView', array(
             'htmlOptions' => array(),
         ),
         array(
+            'name' => 'additional',
+            'htmlOptions' => array(),
+        ),
+        array(
             'class' => 'CButtonColumn',
             'template' => '{update}{delete}',
             'header' => '',
