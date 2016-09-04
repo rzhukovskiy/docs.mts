@@ -372,6 +372,7 @@ class Act extends CActiveRecord
         $criteria->compare('t.card_id', $this->card_id);
         $criteria->compare('t.number', $this->number, true);
         $criteria->compare('t.mark_id', $this->mark_id);
+        $criteria->compare('t.client_service', $this->client_service);
         $criteria->compare('service', $this->companyType);
         if ($this->is_closed) {
             $criteria->compare('t.is_closed', $this->is_closed);

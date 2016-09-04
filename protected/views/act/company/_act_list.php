@@ -43,16 +43,12 @@ foreach($model->getClientsByType($model->companyType) as $actClient) {
                 //echo "<span class='error'>$filename</span><br /><br />";
             }
 
-            $files = 1;
-            while (true) {
-                $filename = "Справка {$actClient->client->name} от " . date('m-Y', $time) . "-$files.xlsx";
-                $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
-                if(file_exists($fullFilename)) {
-                    echo CHtml::link($filename, '/' . $fullFilename) . '<br /><br />';
-                    $files++;
-                } else {
-                    break;
-                }
+            $filename = "Доп. справка {$actClient->client->name} от " . date('m-Y', $time) . ".xlsx";
+            $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
+            if(file_exists($fullFilename)) {
+                echo CHtml::link($filename, '/' . $fullFilename) . '<br /><br />';
+            } else {
+                //echo "<span class='error'>$filename</span><br /><br />";
             }
         }
         $filename = "Акт {$actClient->client->name} от " . date('m-Y', $time) . ".xls";
@@ -62,7 +58,22 @@ foreach($model->getClientsByType($model->companyType) as $actClient) {
         } else {
             //echo "<span class='error'>$filename</span><br /><br />";
         }
+        $filename = "Доп. акт {$actClient->client->name} от " . date('m-Y', $time) . ".xls";
+        $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
+        if(file_exists($fullFilename)) {
+            echo CHtml::link($filename, '/' . $fullFilename) . '<br /><br />';
+        } else {
+            //echo "<span class='error'>$filename</span><br /><br />";
+        }
+
         $filename = "Счет {$actClient->client->name} от " . date('m-Y', $time) . ".xls";
+        $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
+        if(file_exists($fullFilename)) {
+            echo CHtml::link($filename, '/' . $fullFilename) . '<br /><br />';
+        } else {
+            //echo "<span class='error'>$filename</span><br /><br />";
+        }
+        $filename = "Доп. счет {$actClient->client->name} от " . date('m-Y', $time) . ".xls";
         $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
         if(file_exists($fullFilename)) {
             echo CHtml::link($filename, '/' . $fullFilename) . '<br /><br />';

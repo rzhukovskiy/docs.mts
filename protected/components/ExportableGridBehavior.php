@@ -56,20 +56,37 @@ class ExportableGridBehavior extends CBehavior
      */
     private function fillAct($actModel, $company, &$zip)
     {
-        $dataList = $actModel->search()->getData();
-        if (!$dataList) {
-            return;
-        }
-
         switch ($this->companyType) {
             case Company::SERVICE_TYPE:
+                $dataList = $actModel->search()->getData();
+                if (!$dataList) {
+                    return;
+                }
                 foreach ($dataList as $data) {
                     $this->generateAct($company, array($data), $zip);
                 }
                 break;
             case Company::DISINFECTION_TYPE:
-                $this->generateDisinfectCertificate($company, $dataList, $zip);
+                $actModel->client_service = 5;
+                $dataList = $actModel->search()->getData();
+                if ($dataList) {
+                    $this->generateDisinfectCertificate($company, $dataList, $zip);
+                    $this->generateAct($company, $dataList, $zip);
+                }
+
+                $actModel->client_service = 9;
+                $dataList = $actModel->search()->getData();
+                if ($dataList) {
+                    $this->generateDisinfectCertificate($company, $dataList, $zip);
+                    $this->generateAct($company, $dataList, $zip);
+                }
+                $actModel->client_service = null;
+                break;
             default:
+                $dataList = $actModel->search()->getData();
+                if (!$dataList) {
+                    return;
+                }
                 $this->generateAct($company, $dataList, $zip);
         }
     }
@@ -81,6 +98,7 @@ class ExportableGridBehavior extends CBehavior
      */
     private function generateDisinfectCertificate($company, $dataList, &$zip)
     {
+        $clientService = 5;
         $cols = ['A','B','C','D','E','F','G','H','I','J','K'];
 
         /** @var PHPExcel $objPHPExcel */
@@ -132,6 +150,8 @@ class ExportableGridBehavior extends CBehavior
         $worksheet->getColumnDimension('K')->setWidth(3);
 
         foreach ($dataList as $act) {
+            $clientService = $act->client_service;
+
             $endDate = new \DateTime();
             $endDate->setTimestamp(strtotime($act->service_date));
             $startDate = clone($endDate);
@@ -292,7 +312,11 @@ class ExportableGridBehavior extends CBehavior
         if (!is_dir($path)) {
             mkdir($path, 0755, 1);
         }
-        $filename = "Справка $company->name от " . date('m-Y', $this->time) . ".xlsx";
+        if ($clientService == 9) {
+            $filename = "Доп. справка $company->name от " . date('m-Y', $this->time) . ".xlsx";
+        } else {
+            $filename = "Справка $company->name от " . date('m-Y', $this->time) . ".xlsx";
+        }
         $fullFilename = str_replace(' ', '_', "$path/" . str_replace('"', '', "$filename"));
         $objWriter->save($fullFilename);
         if ($zip) $zip->addFile($fullFilename, iconv('utf-8', 'cp866', $filename));
@@ -305,6 +329,7 @@ class ExportableGridBehavior extends CBehavior
      */
     private function generateAct($company, $dataList, &$zip)
     {
+        $clientService = 5;
         $this->objPHPExcel = new PHPExcel();
         $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
 
@@ -720,6 +745,7 @@ class ExportableGridBehavior extends CBehavior
                     $isParent = true;
                 }
                 foreach ($dataList as $data) {
+                    $clientService = $data->client_service;
                     if ($isParent && $currentId != $data->client_id) {
                         $row++;
 
@@ -948,7 +974,11 @@ class ExportableGridBehavior extends CBehavior
             $first = $dataList[0];
             $filename = "Акт $company->name от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
         } else {
-            $filename = "Акт $company->name от " . date('m-Y', $this->time) . ".xls";
+            if ($clientService == 9) {
+                $filename = "Доп. акт $company->name от " . date('m-Y', $this->time) . ".xls";
+            } else {
+                $filename = "Акт $company->name от " . date('m-Y', $this->time) . ".xls";
+            }
         }
         $fullFilename = str_replace(' ', '_', "$path/" . str_replace('"', '', "$filename"));
         $objWriter->save($fullFilename);
@@ -1193,7 +1223,11 @@ class ExportableGridBehavior extends CBehavior
             $first = $dataList[0];
             $filename = "Счет $company->name от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
         } else {
-            $filename = "Счет $company->name от " . date('m-Y', $this->time) . ".xls";
+            if ($clientService == 9) {
+                $filename = "Доп. счет $company->name от " . date('m-Y', $this->time) . ".xls";
+            } else {
+                $filename = "Счет $company->name от " . date('m-Y', $this->time) . ".xls";
+            }
         }
         $fullFilename = str_replace(' ', '_', "$path/" . str_replace('"', '', "$filename"));
         $objWriter->save($fullFilename);
