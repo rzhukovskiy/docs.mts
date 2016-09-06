@@ -35,20 +35,28 @@ foreach($model->getClientsByType($model->companyType) as $actClient) {
             continue;
         }
         if($model->companyType == Company::DISINFECTION_TYPE) {
-            $filename = "Справка {$actClient->client->name} от " . date('m-Y', $time) . ".xlsx";
-            $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
-            if(file_exists($fullFilename)) {
-                echo CHtml::link($filename, '/' . $fullFilename) . '<br /><br />';
-            } else {
-                //echo "<span class='error'>$filename</span><br /><br />";
+            $files = 0;
+            while (true) {
+                $files++;
+                $filename = "Справка {$actClient->client->name} от " . date('m-Y', $time) . "-$files.xlsx";
+                $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
+                if(file_exists($fullFilename)) {
+                    echo CHtml::link($filename, '/' . $fullFilename) . '<br /><br />';
+                } else {
+                    break;
+                }
             }
 
-            $filename = "Доп. справка {$actClient->client->name} от " . date('m-Y', $time) . ".xlsx";
-            $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
-            if(file_exists($fullFilename)) {
-                echo CHtml::link($filename, '/' . $fullFilename) . '<br /><br />';
-            } else {
-                //echo "<span class='error'>$filename</span><br /><br />";
+            $files = 0;
+            while (true) {
+                $files++;
+                $filename = "Доп. справка {$actClient->client->name} от " . date('m-Y', $time) . "-$files.xlsx";
+                $fullFilename = str_replace(' ', '_', str_replace('"', '', "$path/$filename"));
+                if(file_exists($fullFilename)) {
+                    echo CHtml::link($filename, '/' . $fullFilename) . '<br /><br />';
+                } else {
+                    break;
+                }
             }
         }
         $filename = "Акт {$actClient->client->name} от " . date('m-Y', $time) . ".xls";

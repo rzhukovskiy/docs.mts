@@ -98,6 +98,8 @@ class ExportableGridBehavior extends CBehavior
      */
     private function generateDisinfectCertificate($company, $dataList, &$zip)
     {
+        $files = 0;
+        $totalCount = 0;
         $clientService = 5;
         $cols = ['A','B','C','D','E','F','G','H','I','J','K'];
 
@@ -111,45 +113,48 @@ class ExportableGridBehavior extends CBehavior
         $cnt = 1;
         $startRow = 8;
 
-        $objPHPExcel = new PHPExcel();
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-
-        // Creating a workbook
-        $objPHPExcel->getProperties()->setCreator('Mtransservice');
-        $objPHPExcel->getProperties()->setTitle('Справка');
-        $objPHPExcel->getProperties()->setSubject('Справка');
-        $objPHPExcel->getProperties()->setDescription('');
-        $objPHPExcel->getProperties()->setCategory('');
-        $objPHPExcel->removeSheetByIndex(0);
-
-        //adding worksheet
-        $worksheet = new PHPExcel_Worksheet($objPHPExcel, 'справки');
-        $objPHPExcel->addSheet($worksheet);
-
-        $worksheet->getPageMargins()->setTop(0.3);
-        $worksheet->getPageMargins()->setLeft(0.5);
-        $worksheet->getPageMargins()->setRight(0.5);
-        $worksheet->getPageMargins()->setBottom(0.3);
-
-        $objPHPExcel->getDefaultStyle()->applyFromArray(array(
-            'font' => array(
-                'size' => 10,
-            )
-        ));
-
-        $worksheet->getColumnDimension('A')->setWidth(13);
-        $worksheet->getColumnDimension('B')->setWidth(15);
-        $worksheet->getColumnDimension('C')->setWidth(10);
-        $worksheet->getColumnDimension('D')->setWidth(10);
-        $worksheet->getColumnDimension('E')->setWidth(3);
-        $worksheet->getColumnDimension('F')->setWidth(3);
-        $worksheet->getColumnDimension('G')->setWidth(13);
-        $worksheet->getColumnDimension('H')->setWidth(15);
-        $worksheet->getColumnDimension('I')->setWidth(10);
-        $worksheet->getColumnDimension('J')->setWidth(10);
-        $worksheet->getColumnDimension('K')->setWidth(3);
-
         foreach ($dataList as $act) {
+            if (!$totalCount || !($totalCount % 80)) {
+                $files++;
+                $objPHPExcel = new PHPExcel();
+                $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+                // Creating a workbook
+                $objPHPExcel->getProperties()->setCreator('Mtransservice');
+                $objPHPExcel->getProperties()->setTitle('Справка');
+                $objPHPExcel->getProperties()->setSubject('Справка');
+                $objPHPExcel->getProperties()->setDescription('');
+                $objPHPExcel->getProperties()->setCategory('');
+                $objPHPExcel->removeSheetByIndex(0);
+
+                //adding worksheet
+                $worksheet = new PHPExcel_Worksheet($objPHPExcel, 'справки');
+                $objPHPExcel->addSheet($worksheet);
+
+                $worksheet->getPageMargins()->setTop(0.3);
+                $worksheet->getPageMargins()->setLeft(0.5);
+                $worksheet->getPageMargins()->setRight(0.5);
+                $worksheet->getPageMargins()->setBottom(0.3);
+
+                $objPHPExcel->getDefaultStyle()->applyFromArray(array(
+                    'font' => array(
+                        'size' => 10,
+                    )
+                ));
+
+                $worksheet->getColumnDimension('A')->setWidth(13);
+                $worksheet->getColumnDimension('B')->setWidth(15);
+                $worksheet->getColumnDimension('C')->setWidth(10);
+                $worksheet->getColumnDimension('D')->setWidth(10);
+                $worksheet->getColumnDimension('E')->setWidth(3);
+                $worksheet->getColumnDimension('F')->setWidth(3);
+                $worksheet->getColumnDimension('G')->setWidth(13);
+                $worksheet->getColumnDimension('H')->setWidth(15);
+                $worksheet->getColumnDimension('I')->setWidth(10);
+                $worksheet->getColumnDimension('J')->setWidth(10);
+                $worksheet->getColumnDimension('K')->setWidth(3);
+            }
+
             $clientService = $act->client_service;
 
             $endDate = new \DateTime();
@@ -302,24 +307,27 @@ class ExportableGridBehavior extends CBehavior
             }
 
             $cnt++;
+            $totalCount++;
             if ($cnt == 5) {
                 $cnt = 0;
                 $startRow += 25;
             }
-        }
 
-        $path = "acts/" . date('m-Y', $this->time);
-        if (!is_dir($path)) {
-            mkdir($path, 0755, 1);
+            if (!($totalCount % 80) || $totalCount == count($dataList)) {
+                $path = "acts/" . date('m-Y', $this->time);
+                if (!is_dir($path)) {
+                    mkdir($path, 0755, 1);
+                }
+                if ($clientService == 9) {
+                    $filename = "Доп. справка $company->name от " . date('m-Y', $this->time) . "-$files.xlsx";
+                } else {
+                    $filename = "Справка $company->name от " . date('m-Y', $this->time) . "-$files.xlsx";
+                }
+                $fullFilename = str_replace(' ', '_', "$path/" . str_replace('"', '', "$filename"));
+                $objWriter->save($fullFilename);
+                if ($zip) $zip->addFile($fullFilename, iconv('utf-8', 'cp866', $filename));
+            }
         }
-        if ($clientService == 9) {
-            $filename = "Доп. справка $company->name от " . date('m-Y', $this->time) . ".xlsx";
-        } else {
-            $filename = "Справка $company->name от " . date('m-Y', $this->time) . ".xlsx";
-        }
-        $fullFilename = str_replace(' ', '_', "$path/" . str_replace('"', '', "$filename"));
-        $objWriter->save($fullFilename);
-        if ($zip) $zip->addFile($fullFilename, iconv('utf-8', 'cp866', $filename));
     }
 
     /**
@@ -1211,6 +1219,13 @@ class ExportableGridBehavior extends CBehavior
         $objDrawing->setName('Sample image');
         $objDrawing->setDescription('Sample image');
         $objDrawing->setPath('files/sign.png');
+        $objDrawing->setCoordinates("C$row");
+        $objDrawing->setWorksheet($companyWorkSheet);
+        //печать
+        $objDrawing = new PHPExcel_Worksheet_Drawing();
+        $objDrawing->setName('Sample image');
+        $objDrawing->setDescription('Sample image');
+        $objDrawing->setPath('files/post.png');
         $objDrawing->setCoordinates("C$row");
         $objDrawing->setWorksheet($companyWorkSheet);
 
