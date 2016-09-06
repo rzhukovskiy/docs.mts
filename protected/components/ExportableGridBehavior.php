@@ -73,7 +73,7 @@ class ExportableGridBehavior extends CBehavior
                     $this->generateDisinfectCertificate($company, $dataList, $zip);
                     $this->generateAct($company, $dataList, $zip);
                 }
-
+                return;
                 $actModel->client_service = 9;
                 $dataList = $actModel->search()->getData();
                 if ($dataList) {
@@ -111,11 +111,12 @@ class ExportableGridBehavior extends CBehavior
         $worksheet = null;
 
         $cnt = 1;
-        $startRow = 8;
 
         foreach ($dataList as $act) {
             if (!$totalCount || !($totalCount % 80)) {
+                $startRow = 8;
                 $files++;
+
                 $objPHPExcel = new PHPExcel();
                 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 
@@ -246,21 +247,20 @@ class ExportableGridBehavior extends CBehavior
             $worksheet->setCellValueByColumnAndRow($startCol, $row, 'ООО «Международный Транспортный Сервис»');
 
             $row++; $row++; $row++;
+            $objDrawing = null;
             $worksheet->setCellValueByColumnAndRow($startCol, $row, 'Мосесян Г.А._____________');
             $objDrawing = new PHPExcel_Worksheet_Drawing();
-            $objDrawing->setName('Sample image');
-            $objDrawing->setDescription('Sample image');
             $objDrawing->setPath('files/post-small.png');
             $range = $cols[$startCol + 2] . ($row - 3);
             $objDrawing->setCoordinates($range);
             $objDrawing->setWorksheet($worksheet);
+            $objDrawing = null;
             $objDrawing = new PHPExcel_Worksheet_Drawing();
-            $objDrawing->setName('Sample image');
-            $objDrawing->setDescription('Sample image');
             $objDrawing->setPath('files/sign.png');
             $range = $cols[$startCol + 1] . ($row - 2);
             $objDrawing->setCoordinates($range);
             $objDrawing->setWorksheet($worksheet);
+            $objDrawing = null;
 
             $row += 3;
 
@@ -1226,7 +1226,7 @@ class ExportableGridBehavior extends CBehavior
         $objDrawing->setName('Sample image');
         $objDrawing->setDescription('Sample image');
         $objDrawing->setPath('files/post.png');
-        $objDrawing->setCoordinates("C$row");
+        $objDrawing->setCoordinates("D$row");
         $objDrawing->setWorksheet($companyWorkSheet);
 
         //saving document
