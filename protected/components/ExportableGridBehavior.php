@@ -235,7 +235,7 @@ class ExportableGridBehavior extends CBehavior
             $row++;
             $worksheet->setCellValueByColumnAndRow($startCol, $row, 'Срок действия справки 1 (один) месяц');
 
-            $text = "C " . $startDate->format('01.m.Y') . " по " . $endDate->format('01.m.Y');
+            $text = "C " . $startDate->format('d.m.Y') . " по " . $endDate->format('d.m.Y');
             $worksheet->setCellValueByColumnAndRow($startCol, $row, $text);
 
             $row++;
