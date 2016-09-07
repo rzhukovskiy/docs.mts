@@ -314,7 +314,7 @@ class ActController extends Controller
                             if ($tiresService && $tiresService->price) {
                                 $scope->income = $tiresService->price;
                             } else {
-                                $scope->income = 1.2 * abs($scopeList[$sumName][$i]);
+                                $scope->income = $scopeList[$sumName][$i];
                             }
                         }
                         if (!$scope->save()) {
