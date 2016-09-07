@@ -305,7 +305,7 @@ class ActController extends Controller
                             if ($tiresService && $tiresService->price) {
                                 $scope->expense = $tiresService->price;
                             } else {
-                                $scope->expense = abs($scopeList['expense'][$i]);
+                                $scope->expense = abs($scopeList[$sumName][$i]);
                             }
                             $tiresService = CompanyTiresService::model()->find('company_id = :company_id AND tires_service_id = :tires_service_id',[
                                 ':company_id' => $model->client->id,
@@ -314,7 +314,7 @@ class ActController extends Controller
                             if ($tiresService && $tiresService->price) {
                                 $scope->income = $tiresService->price;
                             } else {
-                                $scope->income = 1.2 * abs($scopeList['expense'][$i]);
+                                $scope->income = 1.2 * abs($scopeList[$sumName][$i]);
                             }
                         }
                         if (!$scope->save()) {
