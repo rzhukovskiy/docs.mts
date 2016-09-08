@@ -27,7 +27,7 @@ class ExportableGridBehavior extends CBehavior
             spl_autoload_register(array('YiiBase','autoload'));
 
             $zip = new ZipArchive();
-            $filename = "acts/" . date('m-Y', $this->time) . "/$actModel->companyType.zip";
+            $filename = "acts/" . date('m-Y', $this->time) . "/$actModel->companyType" . "/$actModel->companyType.zip";
 
             if ($zip->open($filename, ZipArchive::OVERWRITE) !== TRUE) {
                 $zip = null;
@@ -317,7 +317,7 @@ class ExportableGridBehavior extends CBehavior
             }
 
             if (!($totalCount % 80) || $totalCount == count($dataList)) {
-                $path = "acts/" . date('m-Y', $this->time);
+                $path = "acts/" . date('m-Y', $this->time) . "/$this->companyType";
                 if (!is_dir($path)) {
                     mkdir($path, 0755, 1);
                 }
@@ -510,9 +510,9 @@ class ExportableGridBehavior extends CBehavior
                     $companyWorkSheet->setCellValue("D$row", "№ КАРТЫ");
                     $companyWorkSheet->setCellValue("F$row", "МАРКА ТС");
                     if ($this->showCompany) {
-                        $companyWorkSheet->mergeCells("G$row:H$row");
                         $companyWorkSheet->setCellValue("G$row", "ГОСНОМЕР");
-                        $companyWorkSheet->setCellValue("I$row", "ГОРОД");
+                        $companyWorkSheet->mergeCells("H$row:I$row");
+                        $companyWorkSheet->setCellValue("H$row", "ГОРОД");
                     } else {
                         $companyWorkSheet->mergeCells("G$row:I$row");
                         $companyWorkSheet->setCellValue("G$row", "ГОСНОМЕР");
@@ -540,9 +540,9 @@ class ExportableGridBehavior extends CBehavior
                     $companyWorkSheet->setCellValueByColumnAndRow(3, $row, isset($data->card) ? $data->card->number : $data->card_id);
                     $companyWorkSheet->setCellValueByColumnAndRow(5, $row, isset($data->mark) ? $data->mark->name : "");
                     if ($this->showCompany) {
-                        $companyWorkSheet->mergeCells("G$row:H$row");
                         $companyWorkSheet->setCellValueByColumnAndRow(6, $row, $data->number);
-                        $companyWorkSheet->setCellValueByColumnAndRow(8, $row, $data->partner->address);
+                        $companyWorkSheet->mergeCells("H$row:I$row");
+                        $companyWorkSheet->setCellValueByColumnAndRow(7, $row, $data->partner->address);
                     } else {
                         $companyWorkSheet->mergeCells("G$row:I$row");
                         $companyWorkSheet->setCellValueByColumnAndRow(6, $row, $data->number);
@@ -584,7 +584,8 @@ class ExportableGridBehavior extends CBehavior
                         $companyWorkSheet->mergeCells("B$row:F$row");
                         $companyWorkSheet->setCellValue("B$row", "$num. $scope->description");
                         $companyWorkSheet->getStyle("B$row:F$row")->getAlignment()->setWrapText(true);
-                        if (mb_strlen($scope->description) > 55) {
+                        $companyWorkSheet->getStyle("B$row:F$row")->getAlignment()->setWrapText(true);
+                        if (mb_strlen($scope->description) > 30) {
                             $companyWorkSheet->getRowDimension($row)->setRowHeight(40);
                         }
                         $companyWorkSheet->setCellValue("G$row", $scope->amount);
@@ -950,9 +951,16 @@ class ExportableGridBehavior extends CBehavior
             $objDrawing->setName('Sample image');
             $objDrawing->setDescription('Sample image');
             $objDrawing->setPath('files/sign.png');
-            $objDrawing->setCoordinates("C$row");
-            $objDrawing->setWorksheet($companyWorkSheet);
-            $objDrawing->setOffsetX(50);
+
+            if ($this->companyType == Company::CARWASH_TYPE) {
+                $objDrawing->setCoordinates("C$row");
+                $objDrawing->setWorksheet($companyWorkSheet);
+                $objDrawing->setOffsetX(50);
+            } else {
+                $objDrawing->setCoordinates("C$row");
+                $objDrawing->setWorksheet($companyWorkSheet);
+                $objDrawing->setOffsetX(10);
+            }
             //печать
             $objDrawing = new PHPExcel_Worksheet_Drawing();
             $objDrawing->setPath('files/post.png');
@@ -977,13 +985,13 @@ class ExportableGridBehavior extends CBehavior
         }
 
         //saving document
-        $path = "acts/" . date('m-Y', $this->time);
+        $path = "acts/" . date('m-Y', $this->time) . "/$this->companyType";
         if (!is_dir($path)) {
             mkdir($path, 0755, 1);
         }
         if ($this->companyType == Company::SERVICE_TYPE) {
             $first = $dataList[0];
-            $filename = "Акт $company->name от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
+            $filename = "Акт {$company->name} - {$first->number} - {$first->id} от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
         } else {
             if ($clientService == 9) {
                 $filename = "Доп. акт $company->name от " . date('m-Y', $this->time) . ".xls";
@@ -1237,13 +1245,13 @@ class ExportableGridBehavior extends CBehavior
         $companyWorkSheet->setCellValue("B$row", 'Мосесян Г.А.__________');
 
         //saving document
-        $path = "acts/" . date('m-Y', $this->time);
+        $path = "acts/" . date('m-Y', $this->time) . "/$this->companyType";
         if (!is_dir($path)) {
             mkdir($path, 0755, 1);
         }
         if ($this->companyType == Company::SERVICE_TYPE) {
             $first = $dataList[0];
-            $filename = "Счет $company->name от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
+            $filename = "Счет {$company->name} - {$first->number} - {$first->id} от " . date('d-m-Y', strtotime($first->service_date)) . ".xls";
         } else {
             if ($clientService == 9) {
                 $filename = "Доп. счет $company->name от " . date('m-Y', $this->time) . ".xls";

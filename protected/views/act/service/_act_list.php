@@ -5,7 +5,7 @@
  */
 
 $time = strtotime($model->month . '-01 00:00:00');
-$path = "acts/" . date('m-Y', $time);
+$path = "acts/" . date('m-Y', $time) . "/$model->companyType";
 
 if(file_exists("$path/$model->companyType.zip")) {
     echo '<strong>' . CHtml::link('Скачать одним файлом', "/$path/$model->companyType.zip") . '</strong><br /><br />';
