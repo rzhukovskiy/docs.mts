@@ -312,8 +312,9 @@ class ExportableGridBehavior extends CBehavior
             $cnt++;
             $totalCount++;
             if ($cnt == 5) {
-                $cnt = 0;
-                $startRow += 25;
+                $cnt = 1;
+                $worksheet->setBreak( "A$row" , PHPExcel_Worksheet::BREAK_ROW );
+                $startRow += 24;
             }
 
             if (!($totalCount % 80) || $totalCount == count($dataList)) {
@@ -965,8 +966,6 @@ class ExportableGridBehavior extends CBehavior
             $objDrawing = new PHPExcel_Worksheet_Drawing();
             $objDrawing->setPath('files/post.png');
             $objDrawing->setCoordinates("D$row");
-            $objDrawing->setResizeProportional(true);
-            $objDrawing->setWidthAndHeight(150, 150);
             $objDrawing->setWorksheet($companyWorkSheet);
             $objDrawing->setOffsetX(30);
             $row++;
