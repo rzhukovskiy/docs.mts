@@ -117,7 +117,7 @@ class Company extends CActiveRecord
             'cars' => array(self::HAS_MANY, 'Car', 'company_id'),
             'acts' => array(self::HAS_MANY, 'Act', 'client_id'),
             'parent' => array(self::BELONGS_TO, 'Company', 'parent_id'),
-            'children' => array(self::HAS_MANY, 'Company', 'parent_id'),
+            'children' => array(self::HAS_MANY, 'Company', 'parent_id', 'on' => 'children.is_deleted = 0'),
             'services' => array(self::HAS_MANY, 'CompanyService', 'company_id'),
             'requisites' => array(self::HAS_MANY, 'Requisites', 'company_id'),
         );

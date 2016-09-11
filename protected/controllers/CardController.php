@@ -10,6 +10,7 @@ class CardController extends Controller
         if (isset($_GET['Card'])) {
             $model->attributes = $_GET['Card'];
         }
+        $model->active = 1;
 
         $this->render('list', array(
             'model' => $model,

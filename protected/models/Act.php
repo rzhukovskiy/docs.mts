@@ -448,6 +448,7 @@ class Act extends CActiveRecord
         $criteria = $this->getDbCriteria();
 
         $criteria->group = 'day';
+        $criteria->order = 't.service_date';
         $criteria->select = [
             'date_format(service_date, "%Y-%m-%d") as day',
             'COUNT(t.id) as amount',
@@ -465,6 +466,7 @@ class Act extends CActiveRecord
         $criteria = $this->getDbCriteria();
 
         $criteria->group = 'month';
+        $criteria->order = 't.service_date';
         $criteria->select = [
             'date_format(service_date, "%Y-%m") as month',
             'COUNT(t.id) as amount',

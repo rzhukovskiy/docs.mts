@@ -91,11 +91,10 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'visible' => Yii::app()->user->checkAccess(User::ADMIN_ROLE),
         ),
         array(
-            'name' => 'card_id',
-            'htmlOptions' => array('style' => 'width: 60px;'),
-            'value' => 'isset($data->card) ? $data->card->number : "error"',
-            'cssClassExpression' => '$data->hasError("card") ? "error" : ""',
-            'visible' => $model->companyType != Company::DISINFECTION_TYPE,
+            'name' => 'mark_id',
+            'htmlOptions' => array('style' => 'width: 80px; text-align:center;'),
+            'value' => 'isset($data->mark) ? $data->mark->name : ""',
+            'filter' => false,
         ),
         array(
             'name' => 'number',
@@ -108,16 +107,17 @@ $gridWidget = $this->widget('zii.widgets.grid.CGridView', array(
             'cssClassExpression' => '$data->hasError("truck") ? "error" : ""',
         ),
         array(
-            'name' => 'mark_id',
-            'htmlOptions' => array('style' => 'width: 80px; text-align:center;'),
-            'value' => 'isset($data->mark) ? $data->mark->name : ""',
-            'filter' => false,
-        ),
-        array(
             'name' => 'type_id',
             'htmlOptions' => array(),
             'filter' => false,
             'value' => '$data->type->name',
+        ),
+        array(
+            'name' => 'card_id',
+            'htmlOptions' => array('style' => 'width: 60px;'),
+            'value' => 'isset($data->card) ? $data->card->number : "error"',
+            'cssClassExpression' => '$data->hasError("card") ? "error" : ""',
+            'visible' => $model->companyType != Company::DISINFECTION_TYPE,
         ),
         array(
             'name' => 'partner_service',
