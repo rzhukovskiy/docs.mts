@@ -72,6 +72,7 @@ class Card extends CActiveRecord
         $criteria->compare('number', $this->number);
         $criteria->compare('company_id', $this->company_id);
         $criteria->compare('active', $this->active);
+        $criteria->compare('cardCompany.is_deleted', 0);
 
         $sort = new CSort;
         $sort->defaultOrder = 'company_id, number';

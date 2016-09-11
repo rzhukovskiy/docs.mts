@@ -75,7 +75,8 @@ class WMenu extends CWidget
                     'title'  => 'Кол-во ТС',
                     'class'  => 'empty',
                     'action' => 'list',
-                    'role'   => User::CLIENT_ROLE
+                    'role'   => User::CLIENT_ROLE,
+                    'visible' => false,
                 ),
                 'stat' => array(
                     'title'  => Yii::app()->user->role == User::ADMIN_ROLE ? 'Статистика партнеров' : 'Доходы',
