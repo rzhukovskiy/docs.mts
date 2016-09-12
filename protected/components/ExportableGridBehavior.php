@@ -172,16 +172,15 @@ class ExportableGridBehavior extends CBehavior
             }
             $row = $startRow;
 
-            $signImage = imagecreatefromjpeg('files/top.jpg');
-            $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+            $objDrawing = null;
+            $objDrawing = new PHPExcel_Worksheet_Drawing();
+            $objDrawing->setPath('files/top.jpg');
             $objDrawing->setName('Sample image');
             $objDrawing->setDescription('Sample image');
-            $objDrawing->setImageResource($signImage);
-            $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-            $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
             $range = $cols[$startCol] . ($row - 7);
             $objDrawing->setCoordinates($range);
             $objDrawing->setWorksheet($worksheet);
+            $objDrawing = null;
 
             $range = $cols[$startCol] . $row . ':' . $cols[$startCol + 3] . $row;
             $worksheet->getStyle($range)->applyFromArray(array(
