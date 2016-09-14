@@ -52,8 +52,6 @@ class User extends CActiveRecord
             array('password, email, company_id', 'required'),
             array('name, email, companyType', 'length', 'max' => 255),
             array('password, oldpassword', 'length', 'max' => 32),
-            array('salt', 'length', 'max' => 5),
-            array('active', 'length', 'max' => 1),
             array('email', 'unique'),
             array('id, name, password, salt, email, active, create_date, company_id', 'safe', 'on' => 'search'),
         );
