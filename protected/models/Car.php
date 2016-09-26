@@ -83,6 +83,7 @@ class Car extends CActiveRecord
 
         $criteria = new CDbCriteria;
         $criteria->with = array('mark', 'type');
+        $criteria->order = 'is_infected DESC, number';
 
         if (!Yii::app()->user->checkAccess(User::ADMIN_ROLE)) {
             $this->company_id = Yii::app()->user->model->company_id;
@@ -92,7 +93,6 @@ class Car extends CActiveRecord
         $criteria->compare('t.company_id', $this->company_id);
         $criteria->compare('t.mark_id', $this->mark_id);
         $criteria->compare('t.type_id', $this->type_id);
-        $criteria->compare('t.is_infected', $this->is_infected);
 
         $this->getDbCriteria()->mergeWith($criteria);
 
