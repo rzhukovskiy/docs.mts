@@ -47,8 +47,7 @@ class Car extends CActiveRecord
     {
         return array(
             array('company_id, number, type_id', 'required'),
-            array('number', 'unique'),
-            array('is_infected, month, external, mark_id, client_id, from_date, to_date', 'safe'),
+            array('number, is_infected, month, external, mark_id, client_id, from_date, to_date', 'safe'),
             array('service_count, id, type_id, is_infected, number, mark_id', 'safe', 'on' => 'search'),
         );
     }
@@ -325,6 +324,11 @@ class Car extends CActiveRecord
     public function beforeSave()
     {
         $this->number = mb_strtoupper(str_replace(' ', '', $this->number), 'UTF-8');
+        if ($existed = Car::model()->find('number = :number', [':number' => $this->number]) and $existed->id != $this->id) {
+            $existed->company_id = $this->company_id;
+            $existed->save();
+            return false;
+        }
         return true;
     }
 

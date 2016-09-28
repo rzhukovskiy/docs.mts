@@ -94,7 +94,6 @@ class CarController extends Controller
 
         if (isset($_POST['Car'])) {
             $model->attributes = $_POST['Car'];
-            $this->performAjaxValidation($model);
             $model->save();
         }
 

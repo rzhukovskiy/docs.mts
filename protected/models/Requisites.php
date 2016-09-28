@@ -36,7 +36,8 @@ class Requisites extends CActiveRecord
     public function rules()
     {
         return array(
-            array('company_id, contract','required'),
+            ['company_id','required'],
+            ['header, contract','string'],
 
         );
     }
