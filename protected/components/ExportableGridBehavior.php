@@ -824,6 +824,7 @@ class ExportableGridBehavior extends CBehavior
         //footer
         if ($this->companyType == Company::DISINFECTION_TYPE) {
             $row++;
+            $companyWorkSheet->setCellValue("E$row", "ВСЕГО");
             $companyWorkSheet->setCellValue("F$row", "$total");
 
             $row++;$row++;
