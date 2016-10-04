@@ -37,7 +37,7 @@ class Requisites extends CActiveRecord
     {
         return array(
             ['company_id','required'],
-            ['header, contract','string'],
+            ['header, contract','safe'],
 
         );
     }
