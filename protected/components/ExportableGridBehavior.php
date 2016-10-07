@@ -73,7 +73,7 @@ class ExportableGridBehavior extends CBehavior
                     $this->generateDisinfectCertificate($company, $dataList, $zip);
                     $this->generateAct($company, $dataList, $zip);
                 }
-                return;
+
                 $actModel->client_service = 9;
                 $dataList = $actModel->search()->getData();
                 if ($dataList) {
